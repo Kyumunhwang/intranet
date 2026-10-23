@@ -1,0 +1,58 @@
+[
+  {
+    "id": "sda1",
+    "student_id": "s1",
+    "attendance_date": "2026-10-23",
+    "status": "PRESENT",
+    "comment": ""
+  },
+  {
+    "id": "sda2",
+    "student_id": "s2",
+    "attendance_date": "2026-10-23",
+    "status": "PRESENT",
+    "comment": "병원 진료 후 09:10 입실"
+  },
+  {
+    "id": "sda3",
+    "student_id": "s3",
+    "attendance_date": "2026-10-23",
+    "status": "PRESENT",
+    "comment": ""
+  },
+  {
+    "id": "sda4",
+    "student_id": "s4",
+    "attendance_date": "2026-10-23",
+    "status": "PRESENT",
+    "comment": ""
+  },
+  {
+    "id": "sda5",
+    "student_id": "s5",
+    "attendance_date": "2026-10-23",
+    "status": "PRESENT",
+    "comment": ""
+  },
+  {
+    "id": "sda6",
+    "student_id": "s6",
+    "attendance_date": "2026-10-23",
+    "status": "PRESENT",
+    "comment": ""
+  },
+  {
+    "id": "sda7",
+    "student_id": "s7",
+    "attendance_date": "2026-10-23",
+    "status": "PRESENT",
+    "comment": ""
+  },
+  {
+    "id": "sda8",
+    "student_id": "s8",
+    "attendance_date": "2026-10-23",
+    "status": "PRESENT",
+    "comment": ""
+  }
+]

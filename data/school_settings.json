@@ -1,0 +1,12 @@
+[
+  {
+    "id": "s1",
+    "school_name": "등대글로벌스쿨 (Lighthouse International School)",
+    "logo_url": "/logo/lighthouse_logo.png",
+    "banner_logo_url": "/logo/lis_logo_2026.png",
+    "login_notice": "등대글로벌스쿨 교직원 전용 업무 포털입니다. 초기 비밀번호는 1234이며 최초 로그인 후 비밀번호를 변경해주시기 바랍니다.",
+    "global_notice": "2026학년도 1학기 교직원 워크숍 및 신학기 학사일정 안내",
+    "primary_color": "#2563EB",
+    "theme_mode": "light"
+  }
+]

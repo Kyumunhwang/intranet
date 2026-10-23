@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+
+<html lang="ko"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+          "sidebar-bg": "#0F172A",
+          "surface-container": "#e5eeff",
+          "on-primary-fixed-variant": "#003ea8",
+          "inverse-surface": "#213145",
+          "primary-fixed-dim": "#b4c5ff",
+          "status-warning": "#F59E0B",
+          "on-secondary": "#ffffff",
+          "on-background": "#0b1c30",
+          "surface-bright": "#f8f9ff",
+          "status-success-bg": "#ECFDF5",
+          "status-info": "#6366F1",
+          "on-tertiary": "#ffffff",
+          "on-tertiary-fixed": "#360f00",
+          "primary-container": "#2563eb",
+          "surface-container-lowest": "#ffffff",
+          "on-primary-container": "#eeefff",
+          "primary-fixed": "#dbe1ff",
+          "outline-variant": "#c3c6d7",
+          "secondary": "#565e74",
+          "on-error": "#ffffff",
+          "error": "#ba1a1a",
+          "surface": "#f8f9ff",
+          "surface-tint": "#0053db",
+          "tertiary-fixed": "#ffdbcd",
+          "status-success": "#10B981",
+          "status-danger-bg": "#FEF2F2",
+          "on-primary-fixed": "#00174b",
+          "tertiary": "#943700",
+          "tertiary-container": "#bc4800",
+          "status-danger": "#EF4444",
+          "on-surface-variant": "#434655",
+          "surface-dim": "#cbdbf5",
+          "inverse-on-surface": "#eaf1ff",
+          "on-tertiary-fixed-variant": "#7d2d00",
+          "outline": "#737686",
+          "surface-container-low": "#eff4ff",
+          "status-info-bg": "#EEF2FF",
+          "surface-variant": "#d3e4fe",
+          "on-surface": "#0b1c30",
+          "on-secondary-fixed-variant": "#3f465c",
+          "inverse-primary": "#b4c5ff",
+          "background": "#f8f9ff",
+          "surface-container-highest": "#d3e4fe",
+          "primary": "#004ac6",
+          "surface-white": "#FFFFFF",
+          "on-tertiary-container": "#ffede6",
+          "on-secondary-fixed": "#131b2e",
+          "error-container": "#ffdad6",
+          "on-primary": "#ffffff",
+          "status-warning-bg": "#FFFBEB",
+          "secondary-fixed": "#dae2fd",
+          "tertiary-fixed-dim": "#ffb596",
+          "secondary-container": "#dae2fd",
+          "on-secondary-container": "#5c647a",
+          "canvas-bg": "#F8FAFC",
+          "on-error-container": "#93000a",
+          "surface-container-high": "#dce9ff",
+          "secondary-fixed-dim": "#bec6e0"
+        },
+        "borderRadius": {
+          "DEFAULT": "0.125rem",
+          "lg": "0.25rem",
+          "xl": "0.5rem",
+          "full": "0.75rem"
+        },
+        "spacing": {
+          "space-xl": "1.5rem",
+          "space-lg": "1rem",
+          "space-md": "0.75rem",
+          "margin": "1.5rem",
+          "space-sm": "0.5rem",
+          "gutter": "1rem",
+          "space-xs": "0.25rem"
+        },
+        "fontFamily": {
+          "metric-stat": [
+            "Inter"
+          ],
+          "body-default": [
+            "Inter"
+          ],
+          "headline-xl": [
+            "Inter"
+          ],
+          "table-data": [
+            "Inter"
+          ],
+          "headline-lg": [
+            "Inter"
+          ],
+          "headline-md": [
+            "Inter"
+          ],
+          "table-header": [
+            "Inter"
+          ],
+          "label-xs": [
+            "Inter"
+          ],
+          "label-sm": [
+            "Inter"
+          ],
+          "body-medium": [
+            "Inter"
+          ]
+        },
+        "fontSize": {
+          "metric-stat": [
+            "24px",
+            {
+              "lineHeight": "32px",
+              "letterSpacing": "-0.02em",
+              "fontWeight": "700"
+            }
+          ],
+          "body-default": [
+            "14px",
+            {
+              "lineHeight": "20px",
+              "fontWeight": "400"
+            }
+          ],
+          "headline-xl": [
+            "24px",
+            {
+              "lineHeight": "32px",
+              "letterSpacing": "-0.02em",
+              "fontWeight": "700"
+            }
+          ],
+          "table-data": [
+            "13px",
+            {
+              "lineHeight": "18px",
+              "fontWeight": "400"
+            }
+          ],
+          "headline-lg": [
+            "20px",
+            {
+              "lineHeight": "28px",
+              "letterSpacing": "-0.015em",
+              "fontWeight": "600"
+            }
+          ],
+          "headline-md": [
+            "16px",
+            {
+              "lineHeight": "24px",
+              "letterSpacing": "-0.01em",
+              "fontWeight": "600"
+            }
+          ],
+          "table-header": [
+            "12px",
+            {
+              "lineHeight": "16px",
+              "letterSpacing": "0.02em",
+              "fontWeight": "600"
+            }
+          ],
+          "label-xs": [
+            "11px",
+            {
+              "lineHeight": "14px",
+              "letterSpacing": "0.03em",
+              "fontWeight": "600"
+            }
+          ],
+          "label-sm": [
+            "12px",
+            {
+              "lineHeight": "16px",
+              "fontWeight": "500"
+            }
+          ],
+          "body-medium": [
+            "14px",
+            {
+              "lineHeight": "20px",
+              "fontWeight": "500"
+            }
+          ]
+        }
+      },
+    },
+  }</script></head><body class="bg-canvas-bg font-body-default text-body-default text-on-surface antialiased"><aside class="fixed left-0 top-0 h-screen w-[250px] bg-sidebar-bg z-50 flex flex-col justify-between overflow-y-auto select-none shadow-[0_1px_8px_rgba(0,0,0,0.12)]"><div class="flex flex-col"><div class="h-[60px] flex items-center px-space-lg gap-space-sm bg-slate-950/40"><span class="material-symbols-outlined text-primary-fixed-dim text-[20px]">admin_panel_settings</span><div class="flex flex-col"><span class="font-headline-md text-headline-md text-slate-100 tracking-tight leading-tight">등대교육공동체</span><span class="font-label-xs text-label-xs text-slate-400 tracking-wider uppercase font-semibold">관리자 콘솔</span></div></div><div class="px-space-md py-space-sm"><div class="px-space-xs py-space-xs bg-slate-800/80 rounded flex items-center justify-between"><div class="flex items-center gap-space-xs"><span class="w-2 h-2 rounded-full bg-status-success"></span><span class="font-label-xs text-label-xs text-slate-300 font-medium">시스템 코어 가동중</span></div><span class="font-label-xs text-label-xs text-primary-fixed-dim bg-slate-700/60 px-space-xs rounded">v3.4</span></div></div><nav class="flex flex-col px-space-sm gap-space-md mt-space-xs" data-active-classes="bg-primary-container text-on-primary font-semibold shadow-sm"><div class="flex flex-col gap-space-xs"><span class="px-space-sm font-label-xs text-label-xs text-slate-400 uppercase tracking-wider font-semibold">관리자 홈</span><a class="flex items-center gap-space-sm px-space-sm py-space-xs rounded text-slate-300 hover:bg-slate-800 hover:text-slate-100 transition-colors font-body-medium text-body-medium" data-path="dashboard-home" href="#"><span class="material-symbols-outlined text-[18px]">dashboard</span>대시보드 홈</a><a class="flex items-center gap-space-sm px-space-sm py-space-xs rounded text-slate-300 hover:bg-slate-800 hover:text-slate-100 transition-colors font-body-medium text-body-medium" data-path="work-regulations" href="#"><span class="material-symbols-outlined text-[18px]">gavel</span>연차 및 근무 규정 관리</a></div><div class="flex flex-col gap-space-xs"><span class="px-space-sm font-label-xs text-label-xs text-slate-400 uppercase tracking-wider font-semibold">업무지원 &amp; 인사</span><a class="flex items-center gap-space-sm px-space-sm py-space-xs rounded text-slate-300 hover:bg-slate-800 hover:text-slate-100 transition-colors font-body-medium text-body-medium" data-path="attendance-overtime" href="#"><span class="material-symbols-outlined text-[18px]">pending_actions</span>교직원 근태 &amp; 초과근무</a><a class="flex items-center gap-space-sm px-space-sm py-space-xs rounded text-slate-300 hover:bg-slate-800 hover:text-slate-100 transition-colors font-body-medium text-body-medium" data-path="organization-roles" href="#"><span class="material-symbols-outlined text-[18px]">account_tree</span>부서·직책 및 다중역할</a><a class="flex items-center gap-space-sm px-space-sm py-space-xs rounded text-slate-300 hover:bg-slate-800 hover:text-slate-100 transition-colors font-body-medium text-body-medium" data-path="certificate-ledger" href="#"><span class="material-symbols-outlined text-[18px]">approval</span>제증명서 발급 &amp; 직인대장</a></div><div class="flex flex-col gap-space-xs"><span class="px-space-sm font-label-xs text-label-xs text-slate-400 uppercase tracking-wider font-semibold">인트라넷 &amp; 보안</span><a class="flex items-center gap-space-sm px-space-sm py-space-xs rounded text-slate-300 hover:bg-slate-800 hover:text-slate-100 transition-colors font-body-medium text-body-medium" data-path="form-builder" href="#"><span class="material-symbols-outlined text-[18px]">dynamic_form</span>전자결재 양식 빌더</a><a aria-current="page" class="flex items-center gap-space-sm px-space-sm py-space-xs rounded transition-colors bg-primary-container text-on-primary font-semibold shadow-sm" data-path="audit-security" href="#"><span class="material-symbols-outlined text-[18px]">security</span>감사 로그 &amp; IP 추적</a></div></nav></div><div class="p-space-md flex flex-col gap-space-xs"><div class="w-full rounded bg-slate-800/90 p-space-sm flex items-center gap-space-sm shadow-inner"><div class="w-7 h-7 rounded-full bg-primary-container flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-on-primary text-[16px]">lock</span></div><div class="flex flex-col overflow-hidden"><span class="font-label-xs text-label-xs text-slate-100 font-semibold truncate">Lighthouse Admin Tier-1</span><span class="font-label-xs text-label-xs text-slate-400 font-normal">전권 부여됨</span></div></div></div></aside><div class="pl-[250px]"><header class="fixed top-0 left-[250px] right-0 h-[60px] bg-surface-white/95 backdrop-blur-md z-40 flex items-center justify-between px-space-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="flex items-center gap-space-lg flex-1"><div class="flex items-center gap-space-sm shrink-0"><img alt="logo.png" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1XtqcQYl0SnlkasalNBrcoDaqMGCEzn2HgfyWc-HN_PHjrRwBqb-z-Y_o-dtn8AnLrlkakSVaWl0swl1VeqcI1E3TqHEZuell_jBXiHQsj-zqoqUC3h0T1-uiE2Nn5EL04onF6aMZWIJvyQrA8mH7QonUPKh0ImSw2GYhwTJT0xwFI3hW6yj3JICdx5FLCNYzWctlKcvvz7PMA0V_hUG0tLBCfdc6vhzdrG7gZ2D2UfvNo7QJlYywS0tTjD1RGavC4O3y1NQILK0w"/><span class="font-headline-md text-headline-md text-on-surface tracking-tight hidden xl:inline">등대교육공동체</span></div><div class="inline-flex items-center gap-space-xs px-space-md py-space-xs rounded-full bg-status-success-bg shrink-0"><span class="w-2 h-2 rounded-full bg-status-success animate-pulse"></span><span class="font-label-xs text-label-xs text-on-surface font-semibold">학교 공인 IP 211.104.88.24 인증됨</span></div><button class="inline-flex items-center gap-space-xs h-9 px-space-md rounded bg-primary text-on-primary hover:bg-primary-container font-label-sm text-label-sm shadow-sm transition-colors shrink-0" type="button"><span class="material-symbols-outlined text-[18px]">timer</span><span>출퇴근 체크</span></button><div class="relative max-w-md w-full hidden md:block"><span class="material-symbols-outlined absolute left-3 top-2.5 text-secondary text-[18px]">search</span><input class="w-full h-9 pl-9 pr-12 rounded bg-canvas-bg text-on-surface font-body-default text-body-default placeholder:text-secondary focus:outline-none focus:bg-surface-white shadow-inner" placeholder="교직원, 결재대장, 보안 감사 기록 통합 검색..." type="text"/><span class="absolute right-2.5 top-2 px-space-xs py-0.5 rounded bg-surface-container font-label-xs text-label-xs text-on-surface-variant font-mono">⌘K</span></div></div><div class="flex items-center gap-space-md shrink-0 ml-space-lg"><a class="inline-flex items-center gap-space-xs h-9 px-space-md rounded bg-surface-container-low text-on-surface-variant hover:bg-surface-container hover:text-on-surface font-label-sm text-label-sm transition-colors" href="#"><span class="material-symbols-outlined text-[16px]">logout</span><span>일반 업무 포털 복귀</span></a><div class="h-6 w-px bg-surface-container-high"></div><div class="flex items-center gap-space-sm pl-space-xs"><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div><div class="flex flex-col text-left"><div class="flex items-center gap-space-xs"><span class="font-label-sm text-label-sm text-on-surface font-semibold">김교사</span><span class="font-label-xs text-label-xs px-1 rounded bg-primary-container text-on-primary uppercase font-bold">Admin</span></div><span class="font-label-xs text-label-xs text-secondary">교무부장 · 관리자 권한</span></div></div></div></header><main class="relative pt-[60px] bg-canvas-bg min-h-screen w-full px-margin py-margin"><div class="flex flex-col w-full gap-space-lg">
+<!-- Breadcrumb & Page Header Bar -->
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-space-sm pb-space-xs">
+<div class="flex flex-col gap-space-xs">
+<div class="flex items-center gap-space-xs text-secondary font-label-sm text-label-sm">
+<span>관리자 콘솔</span>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span>보안 &amp; 감사</span>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span class="text-on-surface font-semibold">전사 감사 로그 및 접속 IP 정밀 추적</span>
+</div>
+<div class="flex items-center gap-space-md">
+<h1 class="font-headline-xl text-headline-xl text-on-surface tracking-tight">전사 통합 접속 IP &amp; 감사 로그 콘솔</h1>
+<span class="inline-flex items-center gap-space-xs px-space-xs py-0.5 rounded bg-status-info-bg text-status-info font-label-xs text-label-xs font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-status-info"></span>
+          REALTIME AUDIT ENGINE ACTIVE
+        </span>
+</div>
+</div>
+<div class="flex items-center gap-space-sm shrink-0">
+<button class="inline-flex items-center gap-space-xs h-9 px-space-md rounded bg-surface-white text-secondary hover:text-on-surface hover:bg-surface-container-low transition-colors font-label-sm text-label-sm shadow-sm" onclick="exportAuditReport()" type="button">
+<span class="material-symbols-outlined text-[18px]">download</span>
+<span>CSV/Excel 감사 보고서 내보내기</span>
+</button>
+<button class="inline-flex items-center gap-space-xs h-9 px-space-md rounded bg-primary text-on-primary hover:bg-primary-container transition-colors font-label-sm text-label-sm shadow-sm" onclick="openIpModal()" type="button">
+<span class="material-symbols-outlined text-[18px]">add_moderator</span>
+<span>새 공인 IP 등록</span>
+</button>
+</div>
+</div>
+<!-- Realtime Security KPI Tiles -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-gutter">
+<!-- Tile 1 -->
+<div class="bg-surface-white p-space-lg rounded-xl shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="font-label-xs text-label-xs text-secondary uppercase tracking-wider font-semibold">학교 공인 IP 정상 접속률</span>
+<div class="w-8 h-8 rounded-full bg-status-success-bg flex items-center justify-center text-status-success">
+<span class="material-symbols-outlined text-[20px]">verified_user</span>
+</div>
+</div>
+<div class="mt-space-md flex flex-col gap-space-xs">
+<div class="flex items-baseline gap-space-xs">
+<span class="font-metric-stat text-metric-stat text-on-surface">99.1%</span>
+<span class="font-label-sm text-label-sm text-status-success font-semibold flex items-center">
+<span class="material-symbols-outlined text-[16px]">arrow_drop_up</span>+0.3%
+          </span>
+</div>
+<p class="font-label-xs text-label-xs text-secondary truncate">지정 교내망(211.104.88.24 외 1건) 정상 인증</p>
+</div>
+<div class="mt-space-md w-full bg-surface-container-low h-1.5 rounded-full overflow-hidden">
+<div class="bg-status-success h-full w-[99.1%] rounded-full"></div>
+</div>
+</div>
+<!-- Tile 2 -->
+<div class="bg-surface-white p-space-lg rounded-xl shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="font-label-xs text-label-xs text-secondary uppercase tracking-wider font-semibold">외부 IP 출퇴근 차단 탐지</span>
+<div class="w-8 h-8 rounded-full bg-status-danger-bg flex items-center justify-center text-status-danger">
+<span class="material-symbols-outlined text-[20px]">gpp_bad</span>
+</div>
+</div>
+<div class="mt-space-md flex flex-col gap-space-xs">
+<div class="flex items-baseline gap-space-xs">
+<span class="font-metric-stat text-metric-stat text-status-danger">6건</span>
+<span class="font-label-xs text-label-xs text-status-danger font-semibold bg-status-danger-bg px-1 rounded">당월 누적</span>
+</div>
+<p class="font-label-xs text-label-xs text-secondary truncate">자택/LTE망 출퇴근 시도 100% 즉시 차단</p>
+</div>
+<div class="mt-space-md flex items-center gap-space-xs">
+<span class="w-2 h-2 rounded-full bg-status-danger animate-ping"></span>
+<span class="font-label-xs text-label-xs text-on-surface-variant font-medium">최근 탐지: 오늘 08:41 (175.223.xx.xx)</span>
+</div>
+</div>
+<!-- Tile 3 -->
+<div class="bg-surface-white p-space-lg rounded-xl shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="font-label-xs text-label-xs text-secondary uppercase tracking-wider font-semibold">관리자 핵심 변경 이벤트</span>
+<div class="w-8 h-8 rounded-full bg-status-warning-bg flex items-center justify-center text-status-warning">
+<span class="material-symbols-outlined text-[20px]">manage_accounts</span>
+</div>
+</div>
+<div class="mt-space-md flex flex-col gap-space-xs">
+<div class="flex items-baseline gap-space-xs">
+<span class="font-metric-stat text-metric-stat text-on-surface">28건</span>
+<span class="font-label-xs text-label-xs text-secondary font-medium">당월 집계</span>
+</div>
+<div class="flex items-center gap-space-xs font-label-xs text-label-xs text-secondary">
+<span>비번 1234 리셋: <b>18건</b></span>
+<span>•</span>
+<span>권한/연차: <b>10건</b></span>
+</div>
+</div>
+<div class="mt-space-md flex items-center justify-between text-secondary font-label-xs text-label-xs">
+<span>비인가 권한상승 시도 없음</span>
+<span class="text-status-success font-semibold">정상 감사중</span>
+</div>
+</div>
+<!-- Tile 4 -->
+<div class="bg-surface-white p-space-lg rounded-xl shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="font-label-xs text-label-xs text-secondary uppercase tracking-wider font-semibold">로그 보존 및 무결성 상태</span>
+<div class="w-8 h-8 rounded-full bg-status-info-bg flex items-center justify-center text-status-info">
+<span class="material-symbols-outlined text-[20px]">database</span>
+</div>
+</div>
+<div class="mt-space-md flex flex-col gap-space-xs">
+<div class="flex items-baseline gap-space-xs">
+<span class="font-metric-stat text-metric-stat text-on-surface">48,290건</span>
+<span class="font-label-xs text-label-xs text-status-info font-semibold">인덱싱 완료</span>
+</div>
+<p class="font-label-xs text-label-xs text-secondary truncate">WORM 방식 불변(Immutable) 스토리지 보존</p>
+</div>
+<div class="mt-space-md flex items-center justify-between text-secondary font-label-xs text-label-xs">
+<span>해시 서명 검증</span>
+<span class="text-status-success font-semibold flex items-center gap-0.5"><span class="material-symbols-outlined text-[14px]">done_all</span>일치 100%</span>
+</div>
+</div>
+</div>
+<!-- Network Whitelist & Perimeter Management Panel -->
+<div class="bg-surface-white rounded-xl shadow-sm p-space-lg flex flex-col gap-space-md">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-xs">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-primary text-[22px]">router</span>
+<div>
+<h2 class="font-headline-md text-headline-md text-on-surface">학교 공인 IP 및 출퇴근 인정 네트워크 정책 (Whitelist / Perimeter)</h2>
+<p class="font-label-sm text-label-sm text-secondary">등록된 게이트웨이 외부에서 발생하는 출퇴근 클릭은 즉시 거절되며, 원격 접속 시 별도 2단계 OTP 인가가 요구됩니다.</p>
+</div>
+</div>
+<div class="flex items-center gap-space-xs shrink-0">
+<span class="font-label-xs text-label-xs text-secondary font-medium">강제 차단 모드</span>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" id="strictIpToggle" type="checkbox"/>
+<div class="w-11 h-6 bg-surface-container rounded-full peer peer-checked:bg-primary-container peer-focus:outline-none transition-colors after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-full"></div>
+</label>
+</div>
+</div>
+<!-- Whitelist IP Table -->
+<div class="overflow-x-auto rounded bg-canvas-bg p-space-xs">
+<table class="w-full text-left font-table-data text-table-data border-collapse">
+<thead>
+<tr class="bg-surface-container-low text-secondary font-table-header text-table-header">
+<th class="py-space-xs px-space-md font-semibold">네트워크 식별자 / IP CIDR</th>
+<th class="py-space-xs px-space-md font-semibold">설명 및 할당 위치</th>
+<th class="py-space-xs px-space-md font-semibold">출퇴근 인정 여부</th>
+<th class="py-space-xs px-space-md font-semibold">최근 활성 감지</th>
+<th class="py-space-xs px-space-md font-semibold">상태</th>
+<th class="py-space-xs px-space-md font-semibold text-right">관리</th>
+</tr>
+</thead>
+<tbody class="text-on-surface divide-y divide-surface-container-high/40">
+<tr class="hover:bg-surface-white transition-colors">
+<td class="py-space-sm px-space-md font-mono font-medium text-primary">211.104.88.24 / 32</td>
+<td class="py-space-sm px-space-md">
+<div class="flex flex-col">
+<span class="font-body-medium text-body-medium text-on-surface">본관 교무실 및 행정실 메인 게이트웨이</span>
+<span class="font-label-xs text-label-xs text-secondary">KT GiGA School 광랜 기본 라우터 01</span>
+</div>
+</td>
+<td class="py-space-sm px-space-md">
+<span class="inline-flex items-center gap-space-xs px-space-xs py-0.5 rounded bg-status-success-bg text-status-success font-label-xs text-label-xs font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-status-success"></span>인가 (출퇴근 전용)
+              </span>
+</td>
+<td class="py-space-sm px-space-md text-secondary">방금 전 (11초 전)</td>
+<td class="py-space-sm px-space-md">
+<span class="font-label-xs text-label-xs text-on-surface font-semibold bg-surface-white px-2 py-0.5 rounded shadow-sm">운영 중</span>
+</td>
+<td class="py-space-sm px-space-md text-right">
+<button class="text-secondary hover:text-primary transition-colors p-1" title="설정 수정" type="button">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-white transition-colors">
+<td class="py-space-sm px-space-md font-mono font-medium text-primary">211.104.88.25 / 32</td>
+<td class="py-space-sm px-space-md">
+<div class="flex flex-col">
+<span class="font-body-medium text-body-medium text-on-surface">별관 과학실 / 강당 AP 공용 프록시</span>
+<span class="font-label-xs text-label-xs text-secondary">별관 2층 전산 분배함 L3 스위치 경유</span>
+</div>
+</td>
+<td class="py-space-sm px-space-md">
+<span class="inline-flex items-center gap-space-xs px-space-xs py-0.5 rounded bg-status-success-bg text-status-success font-label-xs text-label-xs font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-status-success"></span>인가 (출퇴근 전용)
+              </span>
+</td>
+<td class="py-space-sm px-space-md text-secondary">2026-03-05 08:32:10</td>
+<td class="py-space-sm px-space-md">
+<span class="font-label-xs text-label-xs text-on-surface font-semibold bg-surface-white px-2 py-0.5 rounded shadow-sm">운영 중</span>
+</td>
+<td class="py-space-sm px-space-md text-right">
+<button class="text-secondary hover:text-primary transition-colors p-1" title="설정 수정" type="button">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-white transition-colors">
+<td class="py-space-sm px-space-md font-mono font-medium text-secondary">112.170.92.140 / 32</td>
+<td class="py-space-sm px-space-md">
+<div class="flex flex-col">
+<span class="font-body-medium text-body-medium text-on-surface">등대 원격연수원 거점 VPN 게이트웨이</span>
+<span class="font-label-xs text-label-xs text-secondary">연구교원 한정 재택 결재 열람 허용 (출퇴근 체크는 제한)</span>
+</div>
+</td>
+<td class="py-space-sm px-space-md">
+<span class="inline-flex items-center gap-space-xs px-space-xs py-0.5 rounded bg-status-warning-bg text-status-warning font-label-xs text-label-xs font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-status-warning"></span>제한 (결재만 허용)
+              </span>
+</td>
+<td class="py-space-sm px-space-md text-secondary">어제 21:14:02</td>
+<td class="py-space-sm px-space-md">
+<span class="font-label-xs text-label-xs text-on-surface font-semibold bg-surface-white px-2 py-0.5 rounded shadow-sm">운영 중</span>
+</td>
+<td class="py-space-sm px-space-md text-right">
+<button class="text-secondary hover:text-primary transition-colors p-1" title="설정 수정" type="button">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Detailed Audit Filter Query Bar -->
+<div class="bg-surface-white rounded-xl shadow-sm p-space-lg flex flex-col gap-space-md">
+<div class="flex items-center justify-between pb-space-xs">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[20px]">filter_alt</span>
+<span class="font-headline-md text-headline-md text-on-surface">감사 로그 정밀 필터링</span>
+</div>
+<button class="inline-flex items-center gap-space-xs text-secondary hover:text-on-surface font-label-sm text-label-sm transition-colors" onclick="resetFilters()" type="button">
+<span class="material-symbols-outlined text-[16px]">restart_alt</span>
+<span>검색 조건 초기화</span>
+</button>
+</div>
+<!-- Filters Matrix -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-space-md">
+<!-- 1. Event Category -->
+<div class="flex flex-col gap-1">
+<label class="font-label-xs text-label-xs text-secondary uppercase tracking-wider font-semibold" for="filterCategory">이벤트 카테고리</label>
+<div class="relative">
+<select class="w-full h-9 pl-3 pr-8 rounded bg-canvas-bg text-on-surface font-body-default text-body-default focus:outline-none focus:bg-surface-white shadow-inner appearance-none" id="filterCategory">
+<option value="ALL">전체 이벤트 (ALL)</option>
+<option value="AUTH_LOGIN">AUTH_LOGIN (로그인/로그아웃)</option>
+<option value="ATTENDANCE_CLICK">ATTENDANCE_CLICK (출퇴근 시도)</option>
+<option value="APPROVAL_ACT">APPROVAL_ACT (결재/전결 처리)</option>
+<option value="PASSWORD_RESET">PASSWORD_RESET (비밀번호 리셋)</option>
+<option value="ADMIN_CHANGE">ADMIN_CHANGE (관리자 설정/조정)</option>
+<option value="DATA_DELETE">DATA_DELETE (영구 삭제/파기)</option>
+</select>
+<span class="material-symbols-outlined absolute right-2.5 top-2 text-secondary pointer-events-none text-[18px]">expand_more</span>
+</div>
+</div>
+<!-- 2. Staff Search -->
+<div class="flex flex-col gap-1">
+<label class="font-label-xs text-label-xs text-secondary uppercase tracking-wider font-semibold" for="filterStaff">교직원 성명 / 사번</label>
+<div class="relative">
+<input class="w-full h-9 pl-3 pr-8 rounded bg-canvas-bg text-on-surface font-body-default text-body-default focus:outline-none focus:bg-surface-white shadow-inner" id="filterStaff" placeholder="예: 김교사, T2024-001" type="text"/>
+<span class="material-symbols-outlined absolute right-2.5 top-2.5 text-secondary text-[16px]">person_search</span>
+</div>
+</div>
+<!-- 3. Target IP -->
+<div class="flex flex-col gap-1">
+<label class="font-label-xs text-label-xs text-secondary uppercase tracking-wider font-semibold" for="filterIp">클라이언트 접속 IP</label>
+<div class="relative">
+<input class="w-full h-9 pl-3 pr-8 rounded bg-canvas-bg text-on-surface font-body-default text-body-default focus:outline-none focus:bg-surface-white shadow-inner font-mono" id="filterIp" placeholder="211.104.88.x 또는 175.x" type="text"/>
+<span class="material-symbols-outlined absolute right-2.5 top-2.5 text-secondary text-[16px]">travel_explore</span>
+</div>
+</div>
+<!-- 4. Date Range -->
+<div class="flex flex-col gap-1">
+<label class="font-label-xs text-label-xs text-secondary uppercase tracking-wider font-semibold" for="filterDate">감사 기간</label>
+<input class="w-full h-9 px-3 rounded bg-canvas-bg text-on-surface font-body-default text-body-default focus:outline-none focus:bg-surface-white shadow-inner" id="filterDate" type="date" value="2026-03-05"/>
+</div>
+<!-- 5. Network Type -->
+<div class="flex flex-col gap-1">
+<label class="font-label-xs text-label-xs text-secondary uppercase tracking-wider font-semibold" for="filterNetType">외부 IP 여부</label>
+<div class="relative">
+<select class="w-full h-9 pl-3 pr-8 rounded bg-canvas-bg text-on-surface font-body-default text-body-default focus:outline-none focus:bg-surface-white shadow-inner appearance-none" id="filterNetType">
+<option value="ALL">전체 (교내망 + 외부망)</option>
+<option value="INTERNAL">교내 공인 IP만 (정상)</option>
+<option value="EXTERNAL">외부/비인가 IP만 (경고·차단)</option>
+</select>
+<span class="material-symbols-outlined absolute right-2.5 top-2 text-secondary pointer-events-none text-[18px]">expand_more</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Audit Log Master Table Container -->
+<div class="bg-surface-white rounded-xl shadow-sm overflow-hidden flex flex-col">
+<!-- Subheader with Record Count & Quick View Actions -->
+<div class="px-space-lg py-space-md bg-surface-white flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm">
+<span class="font-headline-md text-headline-md text-on-surface">정밀 추적 감사 레코드</span>
+<span class="px-space-xs py-0.5 rounded-full bg-surface-container font-label-xs text-label-xs text-on-surface-variant font-mono font-semibold" id="tableRecordCount">검색결과: 5건 표시 (총 48,290건 중)</span>
+</div>
+<div class="flex items-center gap-space-xs text-secondary font-label-sm text-label-sm">
+<span class="inline-flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-status-success"></span>정상 승인/인증</span>
+<span class="inline-flex items-center gap-1 ml-space-sm"><span class="w-2 h-2 rounded-full bg-status-warning"></span>주요 관리자 수정</span>
+<span class="inline-flex items-center gap-1 ml-space-sm"><span class="w-2 h-2 rounded-full bg-status-danger"></span>외부 차단/위험 경고</span>
+<span class="inline-flex items-center gap-1 ml-space-sm"><span class="w-2 h-2 rounded-full bg-status-info"></span>결재/전결 처리</span>
+</div>
+</div>
+<!-- Table Responsive Wrapper -->
+<div class="overflow-x-auto">
+<table class="w-full text-left font-table-data text-table-data border-collapse">
+<thead>
+<tr class="bg-surface-container-low text-secondary font-table-header text-table-header uppercase">
+<th class="py-space-sm px-space-md font-semibold tracking-wider">타임스탬프 (KST)</th>
+<th class="py-space-sm px-space-md font-semibold tracking-wider">수행자 (성명/ID/사번)</th>
+<th class="py-space-sm px-space-md font-semibold tracking-wider">활동 구분</th>
+<th class="py-space-sm px-space-md font-semibold tracking-wider">수행 상세 내역</th>
+<th class="py-space-sm px-space-md font-semibold tracking-wider">접속 클라이언트 IP</th>
+<th class="py-space-sm px-space-md font-semibold tracking-wider">User-Agent / 단말</th>
+<th class="py-space-sm px-space-md font-semibold tracking-wider text-right">스냅샷</th>
+</tr>
+</thead>
+<tbody class="text-on-surface divide-y divide-surface-container-high/40" id="auditTableBody">
+<!-- Row 1: External Blocked Attendance (Red) -->
+<tr class="hover:bg-status-danger-bg/40 transition-colors">
+<td class="py-space-sm px-space-md font-mono text-secondary whitespace-nowrap">
+              2026-03-05 <span class="text-on-surface font-semibold">08:41:19</span>
+</td>
+<td class="py-space-sm px-space-md">
+<div class="flex items-center gap-space-xs">
+<div class="w-6 h-6 rounded-full bg-error-container text-error flex items-center justify-center font-bold text-[10px]">이</div>
+<div class="flex flex-col">
+<span class="font-body-medium text-body-medium text-on-surface font-semibold">이지은 교사</span>
+<span class="font-label-xs text-label-xs text-secondary">jieun.lee@lighthouse.edu (T-2023-018)</span>
+</div>
+</div>
+</td>
+<td class="py-space-sm px-space-md whitespace-nowrap">
+<span class="inline-flex items-center gap-space-xs px-space-xs py-0.5 rounded bg-status-danger-bg text-status-danger font-label-xs text-label-xs font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-status-danger"></span>
+                출퇴근 차단 (외부망)
+              </span>
+</td>
+<td class="py-space-sm px-space-md">
+<div class="flex flex-col">
+<span class="font-body-default text-body-default text-error font-medium">자택/LTE망 출근 체크 시도 즉시 차단</span>
+<span class="font-label-xs text-label-xs text-secondary truncate max-w-xs">GPS 위도/경도 미일치 및 비인가 LTE 라우팅 감지됨</span>
+</div>
+</td>
+<td class="py-space-sm px-space-md whitespace-nowrap">
+<div class="flex items-center gap-1 font-mono text-on-surface">
+<span>175.223.49.88</span>
+<span class="px-1 py-0.2 rounded bg-error-container text-error font-label-xs text-[10px] font-semibold uppercase">외부 LTE</span>
+</div>
+</td>
+<td class="py-space-sm px-space-md text-secondary truncate max-w-[140px]" title="Mozilla/5.0 (iPhone; CPU iPhone OS 18_1 like Mac OS X) AppleWebKit/605.1.15 Mobile/15E148 Safari/604.1">
+              iOS 18.1 · Safari Mobile (iPhone 15 Pro)
+            </td>
+<td class="py-space-sm px-space-md text-right whitespace-nowrap">
+<button class="inline-flex items-center gap-space-xs px-2 py-1 rounded bg-surface-container-low hover:bg-surface-container text-primary font-label-xs text-label-xs font-semibold transition-colors" onclick="openJsonModal('EV-20260305-0091')" type="button">
+<span class="material-symbols-outlined text-[14px]">data_object</span>
+<span>JSON</span>
+</button>
+</td>
+</tr>
+<!-- Row 2: Password Reset by Admin (Warning Orange) -->
+<tr class="hover:bg-status-warning-bg/40 transition-colors">
+<td class="py-space-sm px-space-md font-mono text-secondary whitespace-nowrap">
+              2026-03-05 <span class="text-on-surface font-semibold">08:35:04</span>
+</td>
+<td class="py-space-sm px-space-md">
+<div class="flex items-center gap-space-xs">
+<div class="w-6 h-6 rounded-full bg-primary-container text-on-primary flex items-center justify-center font-bold text-[10px]">김</div>
+<div class="flex flex-col">
+<span class="font-body-medium text-body-medium text-on-surface font-semibold">김교사 (교무부장)</span>
+<span class="font-label-xs text-label-xs text-secondary">admin.kim@lighthouse.edu (ADMIN-01)</span>
+</div>
+</div>
+</td>
+<td class="py-space-sm px-space-md whitespace-nowrap">
+<span class="inline-flex items-center gap-space-xs px-space-xs py-0.5 rounded bg-status-warning-bg text-status-warning font-label-xs text-label-xs font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-status-warning"></span>
+                비밀번호 1234 리셋
+              </span>
+</td>
+<td class="py-space-sm px-space-md">
+<div class="flex flex-col">
+<span class="font-body-default text-body-default text-on-surface font-medium">대상: 박서연 교사 (T-2022-041) 계정 비밀번호 초기화</span>
+<span class="font-label-xs text-label-xs text-secondary">첫 로그인 시 강제 비밀번호 변경 플래그 강제 적용됨</span>
+</div>
+</td>
+<td class="py-space-sm px-space-md whitespace-nowrap">
+<div class="flex items-center gap-1 font-mono text-on-surface">
+<span>211.104.88.24</span>
+<span class="px-1 py-0.2 rounded bg-status-success-bg text-status-success font-label-xs text-[10px] font-semibold uppercase">교내 공인</span>
+</div>
+</td>
+<td class="py-space-sm px-space-md text-secondary truncate max-w-[140px]" title="Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/122.0.0.0">
+              Windows 11 · Chrome 122.0 Desktop
+            </td>
+<td class="py-space-sm px-space-md text-right whitespace-nowrap">
+<button class="inline-flex items-center gap-space-xs px-2 py-1 rounded bg-surface-container-low hover:bg-surface-container text-primary font-label-xs text-label-xs font-semibold transition-colors" onclick="openJsonModal('EV-20260305-0088')" type="button">
+<span class="material-symbols-outlined text-[14px]">data_object</span>
+<span>JSON</span>
+</button>
+</td>
+</tr>
+<!-- Row 3: Standard Attendance Clock-In Verified (Green) -->
+<tr class="hover:bg-status-success-bg/40 transition-colors">
+<td class="py-space-sm px-space-md font-mono text-secondary whitespace-nowrap">
+              2026-03-05 <span class="text-on-surface font-semibold">08:29:12</span>
+</td>
+<td class="py-space-sm px-space-md">
+<div class="flex items-center gap-space-xs">
+<div class="w-6 h-6 rounded-full bg-surface-container text-on-surface-variant flex items-center justify-center font-bold text-[10px]">최</div>
+<div class="flex flex-col">
+<span class="font-body-medium text-body-medium text-on-surface font-semibold">최동현 행정실장</span>
+<span class="font-label-xs text-label-xs text-secondary">dh.choi@lighthouse.edu (STAFF-2019)</span>
+</div>
+</div>
+</td>
+<td class="py-space-sm px-space-md whitespace-nowrap">
+<span class="inline-flex items-center gap-space-xs px-space-xs py-0.5 rounded bg-status-success-bg text-status-success font-label-xs text-label-xs font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-status-success"></span>
+                정상 출근 인증
+              </span>
+</td>
+<td class="py-space-sm px-space-md">
+<div class="flex flex-col">
+<span class="font-body-default text-body-default text-on-surface font-medium">정규 출근 타임스탬프 기록 완료</span>
+<span class="font-label-xs text-label-xs text-secondary">인증 방식: 교내 공인 게이트웨이 IP 매칭 통과</span>
+</div>
+</td>
+<td class="py-space-sm px-space-md whitespace-nowrap">
+<div class="flex items-center gap-1 font-mono text-on-surface">
+<span>211.104.88.24</span>
+<span class="px-1 py-0.2 rounded bg-status-success-bg text-status-success font-label-xs text-[10px] font-semibold uppercase">교내 공인</span>
+</div>
+</td>
+<td class="py-space-sm px-space-md text-secondary truncate max-w-[140px]" title="Mozilla/5.0 (Macintosh; Intel Mac OS X 14_3_1) AppleWebKit/537.36 Chrome/121.0">
+              macOS Sonoma · Chrome 121.0
+            </td>
+<td class="py-space-sm px-space-md text-right whitespace-nowrap">
+<button class="inline-flex items-center gap-space-xs px-2 py-1 rounded bg-surface-container-low hover:bg-surface-container text-primary font-label-xs text-label-xs font-semibold transition-colors" onclick="openJsonModal('EV-20260305-0074')" type="button">
+<span class="material-symbols-outlined text-[14px]">data_object</span>
+<span>JSON</span>
+</button>
+</td>
+</tr>
+<!-- Row 4: Approval Action Execution (Blue) -->
+<tr class="hover:bg-status-info-bg/40 transition-colors">
+<td class="py-space-sm px-space-md font-mono text-secondary whitespace-nowrap">
+              2026-03-05 <span class="text-on-surface font-semibold">08:15:39</span>
+</td>
+<td class="py-space-sm px-space-md">
+<div class="flex items-center gap-space-xs">
+<div class="w-6 h-6 rounded-full bg-secondary-container text-secondary flex items-center justify-center font-bold text-[10px]">정</div>
+<div class="flex flex-col">
+<span class="font-body-medium text-body-medium text-on-surface font-semibold">정민호 교장</span>
+<span class="font-label-xs text-label-xs text-secondary">principal@lighthouse.edu (DIR-0001)</span>
+</div>
+</div>
+</td>
+<td class="py-space-sm px-space-md whitespace-nowrap">
+<span class="inline-flex items-center gap-space-xs px-space-xs py-0.5 rounded bg-status-info-bg text-status-info font-label-xs text-label-xs font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-status-info"></span>
+                결재 전결 승인
+              </span>
+</td>
+<td class="py-space-sm px-space-md">
+<div class="flex flex-col">
+<span class="font-body-default text-body-default text-on-surface font-medium">기안 [2026-춘계-체험학습 계획안] 최종 전자결재 승인</span>
+<span class="font-label-xs text-label-xs text-secondary">문서 고유키: DOC-2026-0214 / 직인 발급 대장 연동 완료</span>
+</div>
+</td>
+<td class="py-space-sm px-space-md whitespace-nowrap">
+<div class="flex items-center gap-1 font-mono text-on-surface">
+<span>211.104.88.24</span>
+<span class="px-1 py-0.2 rounded bg-status-success-bg text-status-success font-label-xs text-[10px] font-semibold uppercase">교내 공인</span>
+</div>
+</td>
+<td class="py-space-sm px-space-md text-secondary truncate max-w-[140px]" title="Mozilla/5.0 (iPad; CPU OS 17_4 like Mac OS X)">
+              iPadOS 17.4 · Safari (iPad Pro 12.9)
+            </td>
+<td class="py-space-sm px-space-md text-right whitespace-nowrap">
+<button class="inline-flex items-center gap-space-xs px-2 py-1 rounded bg-surface-container-low hover:bg-surface-container text-primary font-label-xs text-label-xs font-semibold transition-colors" onclick="openJsonModal('EV-20260305-0062')" type="button">
+<span class="material-symbols-outlined text-[14px]">data_object</span>
+<span>JSON</span>
+</button>
+</td>
+</tr>
+<!-- Row 5: Admin Leave Force Override (Warning Orange) -->
+<tr class="hover:bg-status-warning-bg/40 transition-colors">
+<td class="py-space-sm px-space-md font-mono text-secondary whitespace-nowrap">
+              2026-03-05 <span class="text-on-surface font-semibold">08:02:11</span>
+</td>
+<td class="py-space-sm px-space-md">
+<div class="flex items-center gap-space-xs">
+<div class="w-6 h-6 rounded-full bg-primary-container text-on-primary flex items-center justify-center font-bold text-[10px]">김</div>
+<div class="flex flex-col">
+<span class="font-body-medium text-body-medium text-on-surface font-semibold">김교사 (교무부장)</span>
+<span class="font-label-xs text-label-xs text-secondary">admin.kim@lighthouse.edu (ADMIN-01)</span>
+</div>
+</div>
+</td>
+<td class="py-space-sm px-space-md whitespace-nowrap">
+<span class="inline-flex items-center gap-space-xs px-space-xs py-0.5 rounded bg-status-warning-bg text-status-warning font-label-xs text-label-xs font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-status-warning"></span>
+                연차 강제 조정
+              </span>
+</td>
+<td class="py-space-sm px-space-md">
+<div class="flex flex-col">
+<span class="font-body-default text-body-default text-on-surface font-medium">송하영 교사 연차 잔여일수 수동 보정 (+0.5일)</span>
+<span class="font-label-xs text-label-xs text-secondary">사유: 입학식 특별당직근무 대체휴무 반영</span>
+</div>
+</td>
+<td class="py-space-sm px-space-md whitespace-nowrap">
+<div class="flex items-center gap-1 font-mono text-on-surface">
+<span>211.104.88.24</span>
+<span class="px-1 py-0.2 rounded bg-status-success-bg text-status-success font-label-xs text-[10px] font-semibold uppercase">교내 공인</span>
+</div>
+</td>
+<td class="py-space-sm px-space-md text-secondary truncate max-w-[140px]" title="Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/122.0.0.0">
+              Windows 11 · Chrome 122.0 Desktop
+            </td>
+<td class="py-space-sm px-space-md text-right whitespace-nowrap">
+<button class="inline-flex items-center gap-space-xs px-2 py-1 rounded bg-surface-container-low hover:bg-surface-container text-primary font-label-xs text-label-xs font-semibold transition-colors" onclick="openJsonModal('EV-20260305-0041')" type="button">
+<span class="material-symbols-outlined text-[14px]">data_object</span>
+<span>JSON</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Table Pagination Footer -->
+<div class="px-space-lg py-space-sm bg-canvas-bg flex flex-col sm:flex-row items-center justify-between gap-space-sm">
+<div class="text-secondary font-label-xs text-label-xs">
+        1페이지 / 총 9,658페이지 (보안 감사 규정에 따라 모든 변경은 삭제 불가능합니다)
+      </div>
+<div class="flex items-center gap-space-xs">
+<button class="px-space-sm h-8 rounded bg-surface-white text-secondary hover:text-on-surface font-label-xs text-label-xs shadow-sm disabled:opacity-50" disabled="" type="button">
+<span class="material-symbols-outlined text-[16px]">chevron_left</span>
+</button>
+<button class="w-8 h-8 rounded bg-primary text-on-primary font-label-xs text-label-xs font-semibold shadow-sm" type="button">1</button>
+<button class="w-8 h-8 rounded bg-surface-white hover:bg-surface-container-low text-secondary font-label-xs text-label-xs shadow-sm" type="button">2</button>
+<button class="w-8 h-8 rounded bg-surface-white hover:bg-surface-container-low text-secondary font-label-xs text-label-xs shadow-sm" type="button">3</button>
+<span class="text-secondary px-1 text-label-xs font-mono">...</span>
+<button class="w-8 h-8 rounded bg-surface-white hover:bg-surface-container-low text-secondary font-label-xs text-label-xs shadow-sm" type="button">9658</button>
+<button class="px-space-sm h-8 rounded bg-surface-white text-secondary hover:text-on-surface font-label-xs text-label-xs shadow-sm" type="button">
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Modal: JSON Raw Payload Snapshot Viewer -->
+<div class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-space-md" id="jsonModalOverlay">
+<div class="bg-surface-white rounded-xl shadow-2xl max-w-2xl w-full flex flex-col overflow-hidden max-h-[85vh]">
+<!-- Modal Header -->
+<div class="px-space-lg py-space-md bg-sidebar-bg text-slate-100 flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-primary-fixed-dim text-[20px]">code_blocks</span>
+<div class="flex flex-col">
+<span class="font-headline-md text-headline-md font-semibold" id="modalEventId">감사 로그 메타데이터 JSON 스냅샷</span>
+<span class="font-label-xs text-label-xs text-slate-400">WORM 암호화 해시 서명 검증 완료</span>
+</div>
+</div>
+<button class="text-slate-400 hover:text-slate-100 transition-colors" onclick="closeJsonModal()" type="button">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+<!-- Modal Body (Code View) -->
+<div class="p-space-lg overflow-y-auto bg-slate-900 font-mono text-[12px] leading-relaxed text-slate-200">
+<pre class="whitespace-pre-wrap selection:bg-primary-container selection:text-on-primary" id="jsonPayloadDisplay"></pre>
+</div>
+<!-- Modal Footer -->
+<div class="px-space-lg py-space-sm bg-canvas-bg flex items-center justify-between">
+<div class="flex items-center gap-space-xs text-secondary font-label-xs text-label-xs">
+<span class="material-symbols-outlined text-status-success text-[16px]">lock</span>
+<span>SHA-256 전자서명 무결성 보호 대상</span>
+</div>
+<div class="flex items-center gap-space-xs">
+<button class="inline-flex items-center gap-space-xs h-8 px-space-md rounded bg-surface-white text-secondary hover:text-on-surface transition-colors font-label-sm text-label-sm shadow-sm" onclick="copyJsonPayload()" type="button">
+<span class="material-symbols-outlined text-[16px]">content_copy</span>
+<span id="copyBtnText">JSON 복사</span>
+</button>
+<button class="inline-flex items-center h-8 px-space-md rounded bg-primary text-on-primary hover:bg-primary-container transition-colors font-label-sm text-label-sm shadow-sm" onclick="closeJsonModal()" type="button">
+            닫기
+          </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Modal: Add New Public IP Whitelist -->
+<div class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-space-md" id="addIpModalOverlay">
+<div class="bg-surface-white rounded-xl shadow-2xl max-w-lg w-full flex flex-col overflow-hidden">
+<!-- Modal Header -->
+<div class="px-space-lg py-space-md bg-canvas-bg flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<div class="w-8 h-8 rounded-full bg-primary-container text-on-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-[18px]">add_moderator</span>
+</div>
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface">새 학교 공인 IP 등록</h3>
+<p class="font-label-xs text-label-xs text-secondary">인가된 교내 네트워크 게이트웨이를 정책에 추가합니다.</p>
+</div>
+</div>
+<button class="text-secondary hover:text-on-surface transition-colors" onclick="closeIpModal()" type="button">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+<!-- Modal Body -->
+<form class="p-space-lg flex flex-col gap-space-md" id="newIpForm" onsubmit="handleNewIpSubmit(event)">
+<div class="flex flex-col gap-1">
+<label class="font-label-xs text-label-xs text-secondary uppercase tracking-wider font-semibold">공인 IP 주소 또는 CIDR 블록 *</label>
+<input class="w-full h-9 px-3 rounded bg-canvas-bg text-on-surface font-body-default text-body-default focus:outline-none focus:bg-surface-white shadow-inner font-mono" placeholder="예: 211.104.88.26/32" required="" type="text"/>
+</div>
+<div class="flex flex-col gap-1">
+<label class="font-label-xs text-label-xs text-secondary uppercase tracking-wider font-semibold">위치 및 회선 용도 설명 *</label>
+<input class="w-full h-9 px-3 rounded bg-canvas-bg text-on-surface font-body-default text-body-default focus:outline-none focus:bg-surface-white shadow-inner" placeholder="예: 3호관 IT코딩실 &amp; 스마트도서관 L3 스위치" required="" type="text"/>
+</div>
+<div class="flex flex-col gap-1">
+<label class="font-label-xs text-label-xs text-secondary uppercase tracking-wider font-semibold">출퇴근 체크 권한 허용 여부</label>
+<div class="flex items-center gap-space-md mt-1">
+<label class="inline-flex items-center gap-space-xs text-on-surface font-label-sm text-label-sm cursor-pointer">
+<input checked="" class="text-primary focus:ring-0" name="ipAuthType" type="radio" value="ALLOW_ATTENDANCE"/>
+<span>출퇴근 인정 (정상 교내망)</span>
+</label>
+<label class="inline-flex items-center gap-space-xs text-on-surface font-label-sm text-label-sm cursor-pointer">
+<input class="text-primary focus:ring-0" name="ipAuthType" type="radio" value="READONLY_REMOTE"/>
+<span>업무 조회만 허용 (출퇴근 불가)</span>
+</label>
+</div>
+</div>
+<div class="p-space-sm bg-status-warning-bg rounded flex items-start gap-space-xs text-on-surface">
+<span class="material-symbols-outlined text-status-warning text-[18px] shrink-0 mt-0.5">warning</span>
+<span class="font-label-xs text-label-xs text-secondary">공인 IP 변경 및 추가는 최고 관리자(Tier-1) 보안 감사 대상에 즉시 영구 기록됩니다.</span>
+</div>
+<div class="pt-space-sm flex items-center justify-end gap-space-sm">
+<button class="h-9 px-space-md rounded bg-surface-white text-secondary hover:text-on-surface transition-colors font-label-sm text-label-sm shadow-sm" onclick="closeIpModal()" type="button">취소</button>
+<button class="h-9 px-space-md rounded bg-primary text-on-primary hover:bg-primary-container transition-colors font-label-sm text-label-sm shadow-sm" type="submit">등록 및 정책 즉시 반영</button>
+</div>
+</form>
+</div>
+</div>
+</div>
+<script>
+  // Sample Event JSON Payloads for inspection modal
+  const auditSnapshots = {
+    'EV-20260305-0091': {
+      eventId: "EV-20260305-0091",
+      timestampKST: "2026-03-05T08:41:19.402+09:00",
+      category: "ATTENDANCE_CLICK",
+      status: "BLOCKED_SUSPICIOUS",
+      severity: "CRITICAL_VIOLATION",
+      actor: {
+        userId: "jieun.lee@lighthouse.edu",
+        staffId: "T-2023-018",
+        name: "이지은",
+        department: "중등 2학년 담임 / 영어과"
+      },
+      action: "ATTENDANCE_CHECK_IN_REQUEST",
+      network: {
+        clientIp: "175.223.49.88",
+        isWhitelistedIp: false,
+        carrierIsp: "SK Telecom LTE Cellular",
+        geoCoordinatesReported: { lat: 37.5665, lng: 126.9780 },
+        schoolProximityMeters: 4230,
+        policyTriggered: "DISALLOW_EXTERNAL_PUNCH"
+      },
+      clientEnvironment: {
+        userAgent: "Mozilla/5.0 (iPhone; CPU iPhone OS 18_1 like Mac OS X) AppleWebKit/605.1.15 Mobile/15E148 Safari/604.1",
+        device: "Apple iPhone 15 Pro",
+        os: "iOS 18.1",
+        browser: "Mobile Safari 18.1"
+      },
+      cryptographicProof: {
+        signatureAlgorithm: "HMAC-SHA256",
+        recordChecksum: "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        immutableLedgerBlock: 48289
+      }
+    },
+    'EV-20260305-0088': {
+      eventId: "EV-20260305-0088",
+      timestampKST: "2026-03-05T08:35:04.118+09:00",
+      category: "PASSWORD_RESET",
+      status: "SUCCESS_AUDITED",
+      severity: "SECURITY_ADMIN_WARNING",
+      actor: {
+        userId: "admin.kim@lighthouse.edu",
+        staffId: "ADMIN-01",
+        name: "김교사",
+        roles: ["교무부장", "Lighthouse Tier-1 Admin"]
+      },
+      action: "FORCE_RESET_CREDENTIALS",
+      targetEntity: {
+        type: "STAFF_ACCOUNT",
+        targetUserId: "seoyeon.park@lighthouse.edu",
+        targetStaffId: "T-2022-041",
+        targetName: "박서연 교사"
+      },
+      details: {
+        tempPasswordApplied: "1234",
+        requirePasswordChangeOnNextLogin: true,
+        sessionRevocationTriggered: true
+      },
+      network: {
+        clientIp: "211.104.88.24",
+        isWhitelistedIp: true,
+        locationLabel: "본관 교무실 메인 게이트웨이"
+      },
+      cryptographicProof: {
+        signatureAlgorithm: "HMAC-SHA256",
+        recordChecksum: "c795b77e8a93...[VALIDATED]",
+        immutableLedgerBlock: 48288
+      }
+    },
+    'EV-20260305-0074': {
+      eventId: "EV-20260305-0074",
+      timestampKST: "2026-03-05T08:29:12.802+09:00",
+      category: "ATTENDANCE_CLICK",
+      status: "APPROVED_VERIFIED",
+      actor: {
+        userId: "dh.choi@lighthouse.edu",
+        staffId: "STAFF-2019",
+        name: "최동현",
+        title: "행정실장"
+      },
+      action: "PUNCH_IN_DAILY_WORK",
+      network: {
+        clientIp: "211.104.88.24",
+        isWhitelistedIp: true,
+        geoFenceMatched: true
+      },
+      cryptographicProof: {
+        signatureAlgorithm: "HMAC-SHA256",
+        immutableLedgerBlock: 48287
+      }
+    },
+    'EV-20260305-0062': {
+      eventId: "EV-20260305-0062",
+      timestampKST: "2026-03-05T08:15:39.914+09:00",
+      category: "APPROVAL_ACT",
+      status: "EXECUTED",
+      actor: {
+        userId: "principal@lighthouse.edu",
+        staffId: "DIR-0001",
+        name: "정민호 교장"
+      },
+      action: "FINAL_DOCUMENT_APPROVAL",
+      documentMeta: {
+        docId: "DOC-2026-0214",
+        title: "2026-춘계-체험학습 계획안",
+        officialSealAppended: true
+      },
+      network: {
+        clientIp: "211.104.88.24",
+        isWhitelistedIp: true
+      }
+    },
+    'EV-20260305-0041': {
+      eventId: "EV-20260305-0041",
+      timestampKST: "2026-03-05T08:02:11.231+09:00",
+      category: "ADMIN_CHANGE",
+      status: "EXECUTED",
+      actor: {
+        userId: "admin.kim@lighthouse.edu",
+        name: "김교사 (교무부장)"
+      },
+      action: "LEAVE_BALANCE_FORCE_OVERRIDE",
+      adjustment: {
+        targetStaff: "송하영 교사",
+        daysChanged: "+0.5",
+        reason: "입학식 특별당직근무 대체휴무 수동반영"
+      },
+      network: {
+        clientIp: "211.104.88.24",
+        isWhitelistedIp: true
+      }
+    }
+  };
+
+  // Open JSON Modal
+  function openJsonModal(eventId) {
+    const data = auditSnapshots[eventId] || { eventId: eventId, note: "추가 상세 데이터 인덱싱 진행 중" };
+    document.getElementById('modalEventId').innerText = `감사 로그 메타데이터 JSON: [${eventId}]`;
+    document.getElementById('jsonPayloadDisplay').textContent = JSON.stringify(data, null, 2);
+    document.getElementById('jsonModalOverlay').classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeJsonModal() {
+    document.getElementById('jsonModalOverlay').classList.add('hidden');
+    document.body.style.overflow = '';
+  }
+
+  function copyJsonPayload() {
+    const text = document.getElementById('jsonPayloadDisplay').textContent;
+    navigator.clipboard.writeText(text).then(() => {
+      const btn = document.getElementById('copyBtnText');
+      btn.innerText = '복사 완료!';
+      setTimeout(() => { btn.innerText = 'JSON 복사'; }, 2000);
+    });
+  }
+
+  // IP Modal Handlers
+  function openIpModal() {
+    document.getElementById('addIpModalOverlay').classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeIpModal() {
+    document.getElementById('addIpModalOverlay').classList.add('hidden');
+    document.body.style.overflow = '';
+  }
+
+  function handleNewIpSubmit(e) {
+    e.preventDefault();
+    alert('새 학교 공인 IP 등록 요청이 처리되었습니다. 보안 감사 블록체인에 영구 기록됩니다.');
+    closeIpModal();
+  }
+
+  function resetFilters() {
+    document.getElementById('filterCategory').value = 'ALL';
+    document.getElementById('filterStaff').value = '';
+    document.getElementById('filterIp').value = '';
+    document.getElementById('filterNetType').value = 'ALL';
+  }
+
+  function exportAuditReport() {
+    alert('2026-03-05 기준 전사 보안 감사 및 IP 추적 보고서(CSV/Excel) 패키지 암호화 생성을 시작합니다.');
+  }
+
+  // Keyboard accessibility
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      closeJsonModal();
+      closeIpModal();
+    }
+  });
+</script></main></div></body></html>

@@ -1,0 +1,65 @@
+[
+  {
+    "id": "p1",
+    "position_code": "PRINCIPAL",
+    "position_name": "교장 (Principal)",
+    "is_approver": true,
+    "approval_rank": 5
+  },
+  {
+    "id": "p2",
+    "position_code": "VICE_PRINCIPAL",
+    "position_name": "부교장 (Vice Principal)",
+    "is_approver": true,
+    "approval_rank": 4
+  },
+  {
+    "id": "p3",
+    "position_code": "DEAN_SEC",
+    "position_name": "중고등교감 (Secondary Dean)",
+    "is_approver": true,
+    "approval_rank": 3
+  },
+  {
+    "id": "p4",
+    "position_code": "DEAN_ELEM",
+    "position_name": "초등교감 (Elementary Dean)",
+    "is_approver": true,
+    "approval_rank": 3
+  },
+  {
+    "id": "p5",
+    "position_code": "CHAPLAIN",
+    "position_name": "교목 (School Chaplain)",
+    "is_approver": false,
+    "approval_rank": 2
+  },
+  {
+    "id": "p6",
+    "position_code": "DEPT_HEAD",
+    "position_name": "부장교사/팀장 (Dept Head/Leader)",
+    "is_approver": true,
+    "approval_rank": 2
+  },
+  {
+    "id": "p7",
+    "position_code": "HOMEROOM_TEACHER",
+    "position_name": "담임교사 (Homeroom Teacher)",
+    "is_approver": false,
+    "approval_rank": 1
+  },
+  {
+    "id": "p8",
+    "position_code": "SUBJECT_TEACHER",
+    "position_name": "교과교사 (Subject Teacher)",
+    "is_approver": false,
+    "approval_rank": 1
+  },
+  {
+    "id": "p9",
+    "position_code": "STAFF",
+    "position_name": "직원 (Staff)",
+    "is_approver": false,
+    "approval_rank": 1
+  }
+]

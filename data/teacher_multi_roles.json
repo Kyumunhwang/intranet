@@ -1,0 +1,26 @@
+[
+  {
+    "id": "mr1",
+    "teacher_id": "u2",
+    "dept_id": "d5",
+    "position_id": "p7",
+    "role_description": "중3-2 담임교사",
+    "is_primary": true
+  },
+  {
+    "id": "mr2",
+    "teacher_id": "u2",
+    "dept_id": "d5",
+    "position_id": "p8",
+    "role_description": "중고등 과학 전담교과",
+    "is_primary": false
+  },
+  {
+    "id": "mr3",
+    "teacher_id": "u2",
+    "dept_id": "d1",
+    "position_id": "p6",
+    "role_description": "융합과학 연구동아리 지도교사",
+    "is_primary": false
+  }
+]

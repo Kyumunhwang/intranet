@@ -1,0 +1,38 @@
+[
+  {
+    "id": "d1",
+    "dept_code": "ACADEMIC",
+    "dept_name": "교무부 (Academic Affairs)",
+    "sort_order": 1
+  },
+  {
+    "id": "d2",
+    "dept_code": "ADMIN",
+    "dept_name": "행정실 (Administration)",
+    "sort_order": 2
+  },
+  {
+    "id": "d3",
+    "dept_code": "FINANCE",
+    "dept_name": "재정실 (Finance Office)",
+    "sort_order": 3
+  },
+  {
+    "id": "d4",
+    "dept_code": "COUNSEL",
+    "dept_name": "상담실 (Counseling Center)",
+    "sort_order": 4
+  },
+  {
+    "id": "d5",
+    "dept_code": "MIDDLE_HIGH",
+    "dept_name": "중고등교육부 (Secondary Edu)",
+    "sort_order": 5
+  },
+  {
+    "id": "d6",
+    "dept_code": "ELEM",
+    "dept_name": "초등교육부 (Elementary Edu)",
+    "sort_order": 6
+  }
+]

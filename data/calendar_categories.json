@@ -1,0 +1,20 @@
+[
+  {
+    "id": "cc1",
+    "category_code": "ACADEMIC_ALL",
+    "category_name": "학사일정 전체 (School All)",
+    "color_hex": "#2563EB"
+  },
+  {
+    "id": "cc2",
+    "category_code": "DEPT",
+    "category_name": "부서별 일정 (Department)",
+    "color_hex": "#10B981"
+  },
+  {
+    "id": "cc3",
+    "category_code": "PERSONAL",
+    "category_name": "개인 일정 (Personal)",
+    "color_hex": "#8B5CF6"
+  }
+]

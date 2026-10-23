@@ -1,0 +1,32 @@
+[
+  {
+    "id": "r1",
+    "role_code": "SUPER_ADMIN",
+    "role_name": "최고관리자 (Super Admin)",
+    "is_system_role": true
+  },
+  {
+    "id": "r2",
+    "role_code": "ADMIN",
+    "role_name": "일반관리자 (System Admin)",
+    "is_system_role": true
+  },
+  {
+    "id": "r3",
+    "role_code": "APPROVER",
+    "role_name": "결재권자 (Approver)",
+    "is_system_role": false
+  },
+  {
+    "id": "r4",
+    "role_code": "TEACHER",
+    "role_name": "일반교직원 (Faculty/Staff)",
+    "is_system_role": false
+  },
+  {
+    "id": "r5",
+    "role_code": "VIEWER",
+    "role_name": "열람전용 (Viewer)",
+    "is_system_role": false
+  }
+]

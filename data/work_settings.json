@@ -1,0 +1,15 @@
+[
+  {
+    "id": "ws1",
+    "work_start_time": "08:30:00",
+    "work_end_time": "16:30:00",
+    "working_days": [
+      "MON",
+      "TUE",
+      "WED",
+      "THU",
+      "FRI"
+    ],
+    "require_school_ip_for_attendance": true
+  }
+]

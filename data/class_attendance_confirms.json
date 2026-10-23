@@ -1,0 +1,16 @@
+[
+  {
+    "id": "cac1",
+    "attendance_date": "2026-10-23",
+    "grade": 3,
+    "class_no": 2,
+    "is_confirmed": true,
+    "confirmed_by": "u2",
+    "confirmed_at": "2026-10-23T12:49:35.476Z",
+    "total_students": 8,
+    "present_count": 8,
+    "late_count": 0,
+    "absent_count": 0,
+    "sick_count": 0
+  }
+]

@@ -1,0 +1,20 @@
+[
+  {
+    "id": "bpr1",
+    "post_id": "post1",
+    "reader_id": "u1",
+    "read_at": "2026-10-23T08:05:00Z"
+  },
+  {
+    "id": "bpr2",
+    "post_id": "post1",
+    "reader_id": "u2",
+    "read_at": "2026-10-23T08:16:00Z"
+  },
+  {
+    "id": "bpr3",
+    "post_id": "post1",
+    "reader_id": "u4",
+    "read_at": "2026-10-23T08:00:00Z"
+  }
+]

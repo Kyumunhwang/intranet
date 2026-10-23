@@ -1,0 +1,30 @@
+[
+  {
+    "id": "ip1",
+    "ip_address": "211.104.88.24",
+    "description": "본관 교무실 공인 IP",
+    "ip_type": "SCHOOL_ALLOWED",
+    "is_active": true
+  },
+  {
+    "id": "ip2",
+    "ip_address": "211.104.88.25",
+    "description": "행정실/재정실 공인 IP",
+    "ip_type": "SCHOOL_ALLOWED",
+    "is_active": true
+  },
+  {
+    "id": "ip3",
+    "ip_address": "127.0.0.1",
+    "description": "로컬 개발/테스트 IP (교내망 가상화)",
+    "ip_type": "SCHOOL_ALLOWED",
+    "is_active": true
+  },
+  {
+    "id": "ip4",
+    "ip_address": "110.15.22.99",
+    "description": "인가되지 않은 외부 비인가 IP",
+    "ip_type": "BLOCKED",
+    "is_active": true
+  }
+]

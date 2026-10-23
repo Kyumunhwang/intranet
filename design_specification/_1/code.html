@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+
+<html lang="ko"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{width:6px;height:6px;}::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:3px;}::-webkit-scrollbar-track{background:transparent;}</style><script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "on-primary-fixed-variant": "#003ea8", "surface-variant": "#d3e4fe", "surface-tint": "#0053db", "sidebar-bg": "#0F172A", "error": "#ba1a1a", "secondary-fixed-dim": "#bec6e0", "status-danger": "#EF4444", "on-tertiary-container": "#ffede6", "tertiary-fixed": "#ffdbcd", "status-success-bg": "#ECFDF5", "on-secondary": "#ffffff", "primary": "#004ac6", "status-success": "#10B981", "surface-container-lowest": "#ffffff", "on-primary": "#ffffff", "inverse-surface": "#213145", "on-error": "#ffffff", "secondary-container": "#dae2fd", "canvas-bg": "#F8FAFC", "status-info": "#6366F1", "primary-fixed-dim": "#b4c5ff", "status-danger-bg": "#FEF2F2", "primary-container": "#2563eb", "secondary-fixed": "#dae2fd", "outline-variant": "#c3c6d7", "on-error-container": "#93000a", "on-tertiary-fixed-variant": "#7d2d00", "on-background": "#0b1c30", "status-info-bg": "#EEF2FF", "surface-bright": "#f8f9ff", "surface-container-highest": "#d3e4fe", "status-warning": "#F59E0B", "surface-white": "#FFFFFF", "on-primary-container": "#eeefff", "on-secondary-fixed": "#131b2e", "inverse-on-surface": "#eaf1ff", "tertiary": "#943700", "surface": "#f8f9ff", "on-tertiary-fixed": "#360f00", "tertiary-container": "#bc4800", "on-tertiary": "#ffffff", "on-secondary-container": "#5c647a", "on-secondary-fixed-variant": "#3f465c", "surface-container": "#e5eeff", "on-surface-variant": "#434655", "on-primary-fixed": "#00174b", "primary-fixed": "#dbe1ff", "status-warning-bg": "#FFFBEB", "inverse-primary": "#b4c5ff", "error-container": "#ffdad6", "secondary": "#565e74", "surface-container-high": "#dce9ff", "on-surface": "#0b1c30", "surface-dim": "#cbdbf5", "outline": "#737686", "surface-container-low": "#eff4ff", "background": "#f8f9ff", "tertiary-fixed-dim": "#ffb596" }, "borderRadius": { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" }, "spacing": { "space-md": "0.75rem", "space-lg": "1rem", "space-xs": "0.25rem", "gutter": "1rem", "space-sm": "0.5rem", "margin": "1.5rem", "space-xl": "1.5rem" }, "fontFamily": { "headline-lg": ["Inter"], "label-sm": ["Inter"], "table-header": ["Inter"], "metric-stat": ["Inter"], "label-xs": ["Inter"], "body-medium": ["Inter"], "body-default": ["Inter"], "headline-md": ["Inter"], "table-data": ["Inter"], "headline-xl": ["Inter"] }, "fontSize": { "headline-lg": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.015em", "fontWeight": "600" }], "label-sm": ["12px", { "lineHeight": "16px", "fontWeight": "500" }], "table-header": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "600" }], "metric-stat": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.02em", "fontWeight": "700" }], "label-xs": ["11px", { "lineHeight": "14px", "letterSpacing": "0.03em", "fontWeight": "600" }], "body-medium": ["14px", { "lineHeight": "20px", "fontWeight": "500" }], "body-default": ["14px", { "lineHeight": "20px", "fontWeight": "400" }], "headline-md": ["16px", { "lineHeight": "24px", "letterSpacing": "-0.01em", "fontWeight": "600" }], "table-data": ["13px", { "lineHeight": "18px", "fontWeight": "400" }], "headline-xl": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.02em", "fontWeight": "700" }] } } } };</script></head><body class="bg-canvas-bg font-body-default text-on-surface antialiased"><aside class="fixed left-0 top-0 h-full w-[250px] bg-sidebar-bg z-50 flex flex-col justify-between border-r border-slate-800 text-slate-300 select-none"><div class="flex flex-col flex-1 min-h-0"><div class="h-[60px] px-space-lg flex items-center gap-space-sm border-b border-slate-800/80 bg-slate-950/20"><div class="w-9 h-9 rounded-full overflow-hidden bg-white/10 flex items-center justify-center p-0.5 shrink-0"><img alt="등대교육공동체 로고" class="w-full h-full object-contain rounded-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAwKjEhSDGOVLIqv-YHMg24MxQDc-Y4SoUa4n0fd8dtWWyVq0Wgz2svSNiJpEl_OwMYg2gqjcAeJHwypdegIYSGj171kLxke2dMHcN3hn3CR4Whglt7dZrdUy04X9uNki3EsnWNd6S9qUkzs2o_XPGJD-dYyM6m_CQbI1AeMe7Tg3t936bIJ-7lPJiJMCCobI54ms8tRfykvhk6MBt-m5QdDjrFQLDwgb9l_a3G6kl-jmkpHo0EW84WxyiZpLdHtF717w"/></div><div class="flex flex-col min-w-0"><span class="font-headline-md text-slate-100 truncate text-[14px] leading-tight font-semibold">등대교육공동체 인트라넷</span><span class="font-label-xs text-slate-400 text-[10px] tracking-wider uppercase font-medium">교직원 포털 v1.0</span></div></div><div class="px-space-md py-space-sm"><div class="px-space-sm py-1 font-label-xs text-slate-400 uppercase tracking-wider text-[10px]">업무 메뉴</div></div><nav class="flex-1 px-space-md space-y-1 overflow-y-auto" data-active-classes="bg-primary-container text-white font-medium rounded-lg"><a class="flex items-center justify-between px-space-md py-2 rounded-lg text-slate-300 hover:bg-slate-800 hover:text-white transition-colors font-body-medium text-[13px]" data-path="home-dashboard" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[18px]">space_dashboard</span><span class="">홈 대시보드</span></div></a><a class="flex items-center justify-between px-space-md py-2 rounded-lg text-slate-300 hover:bg-slate-800 hover:text-white transition-colors font-body-medium text-[13px]" data-path="attendance-management" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[18px]">date_range</span><span class="">교직원 근태 / 연차</span></div></a><a class="flex items-center justify-between px-space-md py-2 rounded-lg text-slate-300 hover:bg-slate-800 hover:text-white transition-colors font-body-medium text-[13px]" data-path="student-attendance" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[18px]">groups</span><span class="">반별 학생출결 관리</span></div></a><a aria-current="page" class="flex items-center justify-between px-space-md py-2 transition-colors bg-primary-container text-white font-medium rounded-lg" data-path="electronic-approval" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[18px]">assignment_turned_in</span><span class="">전자결재</span></div><span class="px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-status-danger text-white">3</span></a><a class="flex items-center justify-between px-space-md py-2 rounded-lg text-slate-300 hover:bg-slate-800 hover:text-white transition-colors font-body-medium text-[13px]" data-path="academic-calendar" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[18px]">calendar_month</span><span class="">학사 일정관리</span></div></a><a class="flex items-center justify-between px-space-md py-2 rounded-lg text-slate-300 hover:bg-slate-800 hover:text-white transition-colors font-body-medium text-[13px]" data-path="electronic-board" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[18px]">feed</span><span class="">전자게시판</span></div></a><a class="flex items-center justify-between px-space-md py-2 rounded-lg text-slate-300 hover:bg-slate-800 hover:text-white transition-colors font-body-medium text-[13px]" data-path="faculty-directory" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[18px]">badge</span><span class="">교직원 조직도</span></div></a></nav></div><div class="p-space-md border-t border-slate-800 bg-slate-900/60"><div class="px-3 pt-3 pb-2 border-t border-slate-700/60 bg-slate-800/50 rounded-lg mx-2 mb-2"><img alt="등대교육공동체" class="w-full h-auto object-contain rounded" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAWpenxmdEa1R-YLnAuyzWW5jFntCpRVicdsTYgZt-e3iPOWAzl0aAktMJvRzHhiJpx-PO2_PHO-Cw2e8-VwdlQG9dw304HKW_PDnmHStc_y_UVwlRVATm1l1Kf5LuU_q1MuE38fxG9Md3_cXT67rwiqAWJ7enOxgc_asIKJ87dMPmWwAm3RlzB1_aHbAMQJ3DUBC9H0cLvzGW-96U1czb2O2Zf1StEohoVak1ocEFwBT77Mz8GnbbN" style="filter: brightness(1.2) contrast(1.1);"/></div><div class="rounded-lg bg-slate-800/80 p-space-sm border border-slate-700/60"><div class="flex items-center justify-between mb-1.5"><div class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-status-success inline-block animate-pulse"></span><span class="font-label-xs text-slate-200 text-[11px]">접속 상태 양호</span></div><span class="px-1.5 py-0.5 rounded text-[10px] bg-slate-700 text-slate-300 font-label-xs">학사모드</span></div><div class="flex items-center justify-between text-[11px] font-label-sm text-slate-400"><span class="text-slate-300 font-medium">2026학년도 1학기</span><span class="text-slate-400 text-[10px]">교내망 전용</span></div></div></div></aside><div class="pl-[250px]"><header class="fixed top-0 left-[250px] right-0 h-[60px] bg-surface-white border-b border-slate-200 z-40 flex items-center justify-between px-space-xl"><div class="flex items-center gap-space-md"><div class="flex items-center gap-1.5 px-space-sm py-1 rounded bg-status-success-bg text-emerald-700 border border-emerald-200 font-label-sm text-[12px]"><span class="w-2 h-2 rounded-full bg-status-success inline-block"></span><span class="font-semibold">학교 공인 IP 인증됨</span><span class="text-emerald-600 font-mono text-[11px]">211.104.88.24</span></div><div class="h-4 w-[1px] bg-slate-200 mx-space-xs"></div><div class="flex items-center gap-space-xs"><button class="h-9 px-space-md rounded-lg bg-primary-container text-white font-body-medium text-[13px] flex items-center gap-1 hover:bg-primary transition-all shadow-[0_1px_2px_rgba(0,0,0,0.06)]" type="button"><span class="material-symbols-outlined text-[16px]">login</span><span class="">출근 체크 08:15</span></button><button class="h-9 px-space-md rounded-lg bg-surface-white border border-slate-300 text-slate-700 font-body-medium text-[13px] flex items-center gap-1 hover:bg-slate-50 transition-all" type="button"><span class="material-symbols-outlined text-[16px]">logout</span><span class="">퇴근 체크</span></button></div></div><div class="flex items-center gap-space-md"><div class="relative flex items-center w-64"><input class="w-full h-9 pl-8 pr-10 text-[12px] bg-slate-50 border border-slate-300 rounded-lg text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-primary-container focus:bg-white transition-all font-body-default" placeholder="모든 문서, 게시글, 감사기록 검색..." type="text"/><span class="material-symbols-outlined absolute left-2.5 text-slate-400 text-[16px]">search</span><kbd class="absolute right-2 px-1.5 py-0.5 rounded bg-slate-200/70 border border-slate-300 text-slate-600 font-label-xs text-[10px] font-sans">⌘K</kbd></div><div class="relative flex items-center"><button class="w-9 h-9 rounded-lg flex items-center justify-center text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition-colors relative" type="button"><span class="material-symbols-outlined text-[20px]">notifications</span><span class="absolute top-2 right-2 w-2 h-2 rounded-full bg-status-danger ring-2 ring-white"></span></button></div><div class="h-4 w-[1px] bg-slate-200"></div><div class="flex items-center gap-space-sm pl-1"><img alt="Profile" class="w-8 h-8 rounded-full object-cover border border-slate-200" src="https://lh3.googleusercontent.com/aida/AEtjO1VZ67bo7h3wn3iJoMIDus6zklRGja-v6w6Ss0qga0OXj76y_n3_Le3TBJOfmjkDFpzsu8--nH8w-XTWjCZtNRmrl4f6AmCoK-SFBdxDAoImKUoRpvP6rHXj9dhv2HbXzHmnGn9OESfwm6F8QxREvLE6ZNLIX8xH00OyktvhTUpKuciVWEeU_17POv1mqhqrG7V8MCsPnNP_vM20Lg2k33auT316CcZ82xvXflKoJ7VwZEXWbIxFbgkbBw"/><div class="flex flex-col text-left"><div class="flex items-center gap-1.5"><span class="font-body-medium text-[13px] font-semibold text-slate-800 leading-none">김교사</span><span class="px-1.5 py-0.2 rounded text-[10px] bg-blue-50 text-blue-700 font-medium border border-blue-200">재직</span></div><span class="font-label-xs text-slate-500 text-[11px] leading-tight mt-0.5">중3-2 담임 · 과학교과</span></div></div><a class="h-9 px-space-md rounded-lg bg-slate-900 hover:bg-slate-800 text-white font-body-medium text-[12px] flex items-center gap-1.5 border border-slate-700 shadow-sm transition-all ml-1" data-path="admin-console" href="#"><span class="material-symbols-outlined text-[16px] text-amber-400">lock</span><span class="font-semibold tracking-tight">관리자 화면</span><span class="text-[10px] text-slate-400 font-mono">(Admin)</span></a></div></header><main class="relative pt-[60px] min-h-screen bg-canvas-bg"><div class="flex flex-col w-full">
+<!-- Interactive Top Action & Meta Ribbon -->
+<div class="px-space-xl py-space-md bg-surface-white border-b border-slate-200 sticky top-[60px] z-30 shadow-sm">
+<div class="max-w-[1780px] mx-auto flex flex-wrap items-center justify-between gap-space-md">
+<!-- Document Category Switcher -->
+<div class="flex items-center gap-1.5 p-1 bg-surface-container-low rounded-lg">
+<button class="px-space-md py-1.5 rounded text-[13px] font-body-medium bg-primary-container text-white shadow-sm flex items-center gap-1.5" type="button">
+<span class="material-symbols-outlined text-[16px]">beach_access</span>
+<span class="">휴가/연차계</span>
+</button>
+<button class="px-space-md py-1.5 rounded text-[13px] font-body-medium text-secondary hover:text-on-surface hover:bg-surface-white transition-all flex items-center gap-1.5" type="button">
+<span class="material-symbols-outlined text-[16px]">payments</span>
+<span class="">지출결의서</span>
+</button>
+<button class="px-space-md py-1.5 rounded text-[13px] font-body-medium text-secondary hover:text-on-surface hover:bg-surface-white transition-all flex items-center gap-1.5" type="button">
+<span class="material-symbols-outlined text-[16px]">commute</span>
+<span class="">출장신청서</span>
+</button>
+<button class="px-space-md py-1.5 rounded text-[13px] font-body-medium text-secondary hover:text-on-surface hover:bg-surface-white transition-all flex items-center gap-1.5" type="button">
+<span class="material-symbols-outlined text-[16px]">shopping_cart</span>
+<span class="">구매기안문</span>
+</button>
+<button class="px-space-md py-1.5 rounded text-[13px] font-body-medium text-secondary hover:text-on-surface hover:bg-surface-white transition-all flex items-center gap-1.5" type="button">
+<span class="material-symbols-outlined text-[16px]">article</span>
+<span class="">일반공문</span>
+</button>
+</div>
+<!-- Action Workflow Buttons -->
+<div class="flex items-center gap-2">
+<span class="text-[12px] font-label-xs text-secondary mr-2 flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-status-success animate-ping"></span>
+          자동 저장됨 (08:31)
+        </span>
+<button class="h-9 px-space-md rounded-lg bg-surface-white border border-slate-300 text-slate-700 text-[13px] font-body-medium hover:bg-slate-50 flex items-center gap-1.5 transition-colors" type="button">
+<span class="material-symbols-outlined text-[16px]">save</span>
+<span class="">임시저장</span>
+</button>
+<button class="h-9 px-space-md rounded-lg bg-surface-white border border-slate-300 text-slate-700 text-[13px] font-body-medium hover:bg-slate-50 flex items-center gap-1.5 transition-colors" onclick="window.print()" type="button">
+<span class="material-symbols-outlined text-[16px]">print</span>
+<span class="">공문서 PDF 인쇄/미리보기</span>
+</button>
+<button class="h-9 px-space-lg rounded-lg bg-primary-container hover:bg-primary text-white text-[13px] font-body-medium flex items-center gap-1.5 shadow-sm transition-all" id="btn-submit-draft" type="button">
+<span class="material-symbols-outlined text-[17px]">send</span>
+<span class="font-semibold">결재 상신하기</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Document Work Area: Balanced Widescreen Workstation Layout -->
+<div class="max-w-[1780px] w-full mx-auto px-6 py-6 flex flex-col xl:flex-row gap-6 items-start">
+<!-- LEFT: Official Korean School Document Container (A4 Form, Flexible Width) -->
+<div class="w-full xl:flex-1 bg-surface-white rounded-xl shadow-[0_4px_20px_rgba(15,23,42,0.06)] border border-slate-200/90 flex flex-col overflow-hidden min-w-0">
+<!-- Official Header Decoration -->
+<div class="bg-gradient-to-r from-primary to-primary-container h-1.5 w-full"></div>
+<div class="p-6 md:p-9 space-y-6">
+<!-- Official Title Block -->
+<div class="text-center relative pb-3 border-b-2 border-slate-900">
+<div class="font-label-xs text-secondary tracking-widest text-[11px] uppercase mb-1">등대교육공동체 행정 포털 서식 제 2026-14호</div>
+<h1 class="font-headline-xl text-slate-900 text-[26px] tracking-tight font-bold">휴가 / 연차 기안서</h1>
+<div class="sm:absolute right-0 bottom-3 mt-2 sm:mt-0 flex items-center justify-center gap-1.5">
+<span class="px-2 py-0.5 rounded text-[11px] font-label-xs bg-status-success-bg text-emerald-800 border border-emerald-300 font-semibold">보안규정 준수문서</span>
+</div>
+</div>
+<!-- Meta Table + Korean Stamp Approval Grid Box (Header Meta & Korean Stamp Box) -->
+<div class="grid grid-cols-1 lg:grid-cols-12 border border-slate-300 rounded overflow-hidden">
+<!-- Left: Official Document Meta Information (6 cols) -->
+<div class="lg:col-span-6 bg-slate-50/70 border-b lg:border-b-0 lg:border-r border-slate-300 text-[12px] font-body-default flex flex-col justify-between">
+<div class="divide-y divide-slate-200">
+<div class="grid grid-cols-3">
+<div class="px-3 py-2 bg-slate-100 font-semibold text-slate-700 border-r border-slate-200 flex items-center">문서번호</div>
+<div class="col-span-2 px-3 py-2 text-slate-900 font-mono font-medium flex items-center justify-between">
+<span class="">2026-교무-0042</span>
+<span class="text-[10px] text-primary bg-blue-50 px-1.5 py-0.5 rounded">자동채번</span>
+</div>
+</div>
+<div class="grid grid-cols-3">
+<div class="px-3 py-2 bg-slate-100 font-semibold text-slate-700 border-r border-slate-200 flex items-center">기안부서</div>
+<div class="col-span-2 px-3 py-2 text-slate-900 font-medium">교무기획부 (중학교)</div>
+</div>
+<div class="grid grid-cols-3">
+<div class="px-3 py-2 bg-slate-100 font-semibold text-slate-700 border-r border-slate-200 flex items-center">기안자</div>
+<div class="col-span-2 px-3 py-2 text-slate-900 font-medium flex items-center gap-2">
+<span class="">김교사</span>
+<span class="text-[11px] text-secondary font-normal">(중3-2 담임 / 과학교과)</span>
+</div>
+</div>
+<div class="grid grid-cols-3">
+<div class="px-3 py-2 bg-slate-100 font-semibold text-slate-700 border-r border-slate-200 flex items-center">기안일시</div>
+<div class="col-span-2 px-3 py-2 text-slate-900 font-mono text-[11px]">2026년 03월 25일 08:30</div>
+</div>
+<div class="grid grid-cols-3">
+<div class="px-3 py-2 bg-slate-100 font-semibold text-slate-700 border-r border-slate-200 flex items-center">보존연한</div>
+<div class="col-span-2 px-3 py-2 text-slate-900 font-medium flex items-center justify-between">
+<span class="">5년 (영구보존 대상 아님)</span>
+<span class="text-[10px] bg-slate-200 text-slate-700 px-1 rounded">기안규정 제12조</span>
+</div>
+</div>
+</div>
+<div class="p-2 bg-blue-50/50 border-t border-slate-200 text-[11px] text-primary flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[15px]">verified_user</span>
+<span class="">NEIS 전자인증 연동 대상 결재건</span>
+</div>
+</div>
+<!-- Right: Official Korean Stamp Box (동적 결재선 4단계 테이블) (6 cols) -->
+<div class="lg:col-span-6 bg-surface-white flex flex-col justify-between">
+<div class="flex items-stretch border-b border-slate-300 text-center text-[11px]">
+<div class="w-7 bg-slate-100 text-slate-700 font-bold flex items-center justify-center border-r border-slate-300 py-2 shrink-0">
+<span class="[writing-mode:vertical-rl] tracking-widest text-[11px]">결재선</span>
+</div>
+<!-- Step 1: 기안자 -->
+<div class="flex-1 flex flex-col border-r border-slate-300 min-w-0">
+<div class="bg-slate-50 py-1 font-semibold text-slate-700 border-b border-slate-200 truncate">기안</div>
+<div class="h-20 flex flex-col items-center justify-center p-1 relative bg-emerald-50/30">
+<!-- Digital Stamp Graphic -->
+<div class="w-12 h-12 rounded-full border-2 border-dashed border-status-success/80 flex flex-col items-center justify-center text-[10px] text-status-success leading-tight transform -rotate-6">
+<span class="font-bold text-[9px]">기안완료</span>
+<span class="font-bold text-[10px]">김교사</span>
+</div>
+<span class="text-[9px] text-slate-500 font-mono mt-0.5">03/25 08:30</span>
+</div>
+<div class="bg-slate-100/60 py-0.5 text-[10px] text-slate-600 font-medium border-t border-slate-200 truncate">김교사</div>
+</div>
+<!-- Step 2: 교무부장 (인주 스탬프 박제) -->
+<div class="flex-1 flex flex-col border-r border-slate-300 min-w-0">
+<div class="bg-slate-50 py-1 font-semibold text-slate-700 border-b border-slate-200 truncate">부서장</div>
+<div class="h-20 flex flex-col items-center justify-center p-1 relative bg-red-50/30">
+<!-- Realistic Red Korean Official Hanko / Stamp -->
+<div class="w-12 h-12 rounded-full border-2 border-red-600 flex flex-col items-center justify-center text-red-600 leading-none shadow-[0_0_2px_rgba(220,38,38,0.5)] transform rotate-3">
+<span class="text-[8px] font-bold tracking-tighter">교무부</span>
+<span class="text-[11px] font-bold tracking-widest my-0.5">승인</span>
+<span class="text-[8px] font-bold">이부장</span>
+</div>
+<span class="text-[9px] text-slate-500 font-mono mt-0.5">03/25 09:10</span>
+</div>
+<div class="bg-slate-100/60 py-0.5 text-[10px] text-slate-600 font-medium border-t border-slate-200 truncate">이부장</div>
+</div>
+<!-- Step 3: 교감 (대기) -->
+<div class="flex-1 flex flex-col border-r border-slate-300 bg-amber-50/20 min-w-0">
+<div class="bg-amber-50 py-1 font-semibold text-amber-900 border-b border-slate-200 truncate">교감</div>
+<div class="h-20 flex flex-col items-center justify-center p-1 relative">
+<span class="px-1.5 py-0.5 rounded-full text-[10px] bg-amber-100 text-amber-800 font-semibold border border-amber-300 animate-pulse text-center leading-tight">
+                    진행 대기
+                  </span>
+<span class="text-[9px] text-slate-400 font-mono mt-2">순번 #3</span>
+</div>
+<div class="bg-slate-100/60 py-0.5 text-[10px] text-slate-600 font-medium border-t border-slate-200 truncate">박교감</div>
+</div>
+<!-- Step 4: 교장 (미결) -->
+<div class="flex-1 flex flex-col min-w-0">
+<div class="bg-slate-50 py-1 font-semibold text-slate-500 border-b border-slate-200 truncate">교장</div>
+<div class="h-20 flex flex-col items-center justify-center p-1 text-slate-400">
+<span class="text-[11px] font-medium">미결</span>
+<span class="text-[9px] font-mono mt-1 text-slate-300 truncate">최종승인권자</span>
+</div>
+<div class="bg-slate-100/60 py-0.5 text-[10px] text-slate-500 font-medium border-t border-slate-200 truncate">이교장</div>
+</div>
+</div>
+<!-- Cooperating Badges Row -->
+<div class="px-3 py-1.5 bg-slate-50 border-t border-slate-200 flex flex-wrap items-center justify-between text-[11px] gap-1">
+<div class="flex items-center gap-1.5">
+<span class="px-1.5 py-0.5 rounded bg-blue-100 text-blue-800 font-semibold text-[10px]">전결 규정 적용</span>
+<span class="text-slate-600 text-[11px]">교감 전결 가능 건</span>
+</div>
+<div class="flex items-center gap-1 text-emerald-700 font-medium text-[11px]">
+<span class="material-symbols-outlined text-[14px]">check_circle</span>
+<span class="">합의: 행정실장 협조완료</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Form Title & Custom Attributes -->
+<div class="space-y-4 pt-2">
+<!-- Document Title Input -->
+<div>
+<label class="block font-label-sm text-slate-700 mb-1.5">
+              기안 문서 제목 <span class="text-status-danger">*</span>
+</label>
+<div class="relative">
+<input class="w-full h-11 px-3 text-[15px] font-semibold text-slate-900 bg-surface-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" type="text" value="연차 유급휴가 신청서 (2026-03-27 김교사)"/>
+<span class="absolute right-3 top-3 text-[11px] font-mono text-slate-400">NEIS 규격 연동</span>
+</div>
+</div>
+<!-- Structured Form Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-slate-50 p-4 rounded-lg border border-slate-200">
+<!-- 휴가 구분 Radio / Selector -->
+<div class="md:col-span-2">
+<label class="block font-label-sm text-slate-700 mb-2">
+                휴가 종류 구분 <span class="text-status-danger">*</span>
+</label>
+<div class="grid grid-cols-2 sm:grid-cols-6 gap-2">
+<label class="flex items-center justify-center gap-1.5 p-2 rounded-md bg-primary-container text-white text-[12px] font-semibold cursor-pointer shadow-xs">
+<input checked="" class="hidden" name="leave_type" type="radio"/>
+<span class="material-symbols-outlined text-[16px]">check</span>
+<span class="">연차</span>
+</label>
+<label class="flex items-center justify-center gap-1.5 p-2 rounded-md bg-white border border-slate-300 text-slate-700 hover:bg-slate-100 text-[12px] font-medium cursor-pointer transition-colors">
+<input class="hidden" name="leave_type" type="radio"/>
+<span class="">반차 (오전)</span>
+</label>
+<label class="flex items-center justify-center gap-1.5 p-2 rounded-md bg-white border border-slate-300 text-slate-700 hover:bg-slate-100 text-[12px] font-medium cursor-pointer transition-colors">
+<input class="hidden" name="leave_type" type="radio"/>
+<span class="">반차 (오후)</span>
+</label>
+<label class="flex items-center justify-center gap-1.5 p-2 rounded-md bg-white border border-slate-300 text-slate-700 hover:bg-slate-100 text-[12px] font-medium cursor-pointer transition-colors">
+<input class="hidden" name="leave_type" type="radio"/>
+<span class="">병가</span>
+</label>
+<label class="flex items-center justify-center gap-1.5 p-2 rounded-md bg-white border border-slate-300 text-slate-700 hover:bg-slate-100 text-[12px] font-medium cursor-pointer transition-colors">
+<input class="hidden" name="leave_type" type="radio"/>
+<span class="">특별휴가</span>
+</label>
+<label class="flex items-center justify-center gap-1.5 p-2 rounded-md bg-white border border-slate-300 text-slate-700 hover:bg-slate-100 text-[12px] font-medium cursor-pointer transition-colors">
+<input class="hidden" name="leave_type" type="radio"/>
+<span class="">공가</span>
+</label>
+</div>
+</div>
+<!-- 신청 기간 -->
+<div>
+<label class="block font-label-sm text-slate-700 mb-1">
+                신청 기간 <span class="text-status-danger">*</span>
+</label>
+<div class="flex items-center gap-2">
+<input class="h-9 px-2 text-[12px] bg-white border border-slate-300 rounded font-mono w-full" type="date" value="2026-03-27"/>
+<span class="text-slate-400 text-[12px]">~</span>
+<input class="h-9 px-2 text-[12px] bg-white border border-slate-300 rounded font-mono w-full" type="date" value="2026-03-27"/>
+</div>
+<div class="mt-1 text-[11px] text-slate-500 font-mono">08:30 ~ 16:30 (총 8시간 / 1일간)</div>
+</div>
+<!-- 연차 차감 일수 및 실시간 잔여 계산 배지 -->
+<div>
+<label class="block font-label-sm text-slate-700 mb-1">
+                연차 차감 계산 (auto_deduct_leave 연동)
+              </label>
+<div class="flex items-center gap-2">
+<div class="h-9 px-3 bg-white border border-slate-300 rounded flex items-center font-bold text-slate-900 text-[13px] w-28">
+                  - 1.0 일
+                </div>
+<div class="flex-1 bg-blue-50 border border-blue-200 rounded px-2.5 py-1 text-[11px] text-blue-900 flex items-center justify-between">
+<span class="">현재: <strong class="font-mono">11.5일</strong></span>
+<span class="material-symbols-outlined text-[13px]">arrow_forward</span>
+<span class="text-primary font-bold">승인 시 잔여: <strong class="font-mono">10.5일</strong></span>
+</div>
+</div>
+<div class="mt-1 text-[10px] text-slate-500">교원복무규정 제14조 근거 실시간 자동 차감 계산</div>
+</div>
+<!-- 업무 대행자 -->
+<div>
+<label class="block font-label-sm text-slate-700 mb-1">
+                직무 대행자 지정 <span class="text-status-danger">*</span>
+</label>
+<div class="flex items-center gap-2">
+<input class="h-9 px-2.5 text-[12px] bg-white border border-slate-300 rounded flex-1 text-slate-800" type="text" value="이교사 (중3-3 담임 / 수학)"/>
+<button class="h-9 px-2.5 bg-slate-200 hover:bg-slate-300 text-slate-700 text-[12px] font-medium rounded flex items-center gap-1 transition-colors" type="button">
+<span class="material-symbols-outlined text-[15px]">person_search</span>
+                  조직도
+                </button>
+</div>
+</div>
+<!-- 비상 연락처 -->
+<div>
+<label class="block font-label-sm text-slate-700 mb-1">
+                휴가 중 비상 연락처 <span class="text-status-danger">*</span>
+</label>
+<input class="h-9 px-2.5 text-[12px] bg-white border border-slate-300 rounded w-full font-mono text-slate-800" type="text" value="010-1234-5678 (비상시 자택 02-987-6543)"/>
+</div>
+</div>
+<!-- Rich Draft Content Area (기안 사유 및 세부내용) -->
+<div class="space-y-2 pt-2">
+<label class="block font-label-sm text-slate-700">
+              기안 사유 및 보강 대책 <span class="text-status-danger">*</span>
+</label>
+<div class="border border-slate-300 rounded-lg p-3.5 bg-white">
+<div class="text-[13px] text-slate-800 leading-relaxed space-y-3">
+<p class="">
+                  1. 관련 규정: 국가공무원 복무규정 제16조 및 교원휴가업무 처리기준(교육부 예규)<br/>
+                  2. 상기 본인은 개인 사정(직계존속 칠순 가족 행사 참석 및 가사 조력)으로 인하여 위와 같이 연차휴가를 신청하오니 허가하여 주시기 바랍니다.
+                </p>
+<!-- 수업 보강 계획 표 -->
+<div class="pt-2">
+<div class="font-semibold text-[12px] text-slate-800 mb-1.5 flex items-center gap-1">
+<span class="material-symbols-outlined text-[15px] text-primary">menu_book</span>
+<span class="">당일 담당 학급 및 교과 수업 대결/보강 계획서</span>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-[11px] border-collapse border border-slate-300 min-w-[500px]">
+<thead>
+<tr class="bg-slate-100 text-slate-700 text-center font-semibold">
+<th class="border border-slate-300 p-1.5 w-16">교시</th>
+<th class="border border-slate-300 p-1.5 w-24">학급 / 교과</th>
+<th class="border border-slate-300 p-1.5">보강 대책 및 진도 계획</th>
+<th class="border border-slate-300 p-1.5 w-28">보강 교사</th>
+<th class="border border-slate-300 p-1.5 w-20">확인인</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-200 text-center">
+<tr>
+<td class="border border-slate-300 p-1.5 font-medium">1교시</td>
+<td class="border border-slate-300 p-1.5 font-medium">3학년 2반 (과학)</td>
+<td class="border border-slate-300 p-1.5 text-left pl-2">자율학습 지도 및 3단원 탐구학습지 배부/수거 (학습지 사전 준비 완료)</td>
+<td class="border border-slate-300 p-1.5">이교사 (수학)</td>
+<td class="border border-slate-300 p-1.5 text-status-success font-semibold">[확인완료]</td>
+</tr>
+<tr>
+<td class="border border-slate-300 p-1.5 font-medium">3교시</td>
+<td class="border border-slate-300 p-1.5 font-medium">3학년 1반 (과학)</td>
+<td class="border border-slate-300 p-1.5 text-left pl-2">3/31(화) 5교시 수학시간과 사전 수업 맞교환 합의 완료 (진도 차질 없음)</td>
+<td class="border border-slate-300 p-1.5">박교사 (수학)</td>
+<td class="border border-slate-300 p-1.5 text-status-success font-semibold">[확인완료]</td>
+</tr>
+<tr>
+<td class="border border-slate-300 p-1.5 font-medium">조/종례</td>
+<td class="border border-slate-300 p-1.5 font-medium">3학년 2반 담임</td>
+<td class="border border-slate-300 p-1.5 text-left pl-2">학생 출결 체크, 알림장 지도 및 방과후 생활지도 이교사 대행</td>
+<td class="border border-slate-300 p-1.5">이교사 (부담임)</td>
+<td class="border border-slate-300 p-1.5 text-status-success font-semibold">[확인완료]</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p class="text-[12px] text-slate-600">
+                  붙임: 1. 가족관계증명서 사본 1부.<br/>
+                        2. 교과 수업 보강 및 결보강 승인 전표 1부.  끝.
+                </p>
+</div>
+</div>
+</div>
+<!-- Special Notes (특이사항 기재란 - 노란색 하이라이트 박스) -->
+<div class="p-3.5 rounded-lg bg-status-warning-bg border border-amber-300 text-amber-900 space-y-1">
+<div class="flex items-center gap-1.5 font-headline-md text-[13px] text-amber-800">
+<span class="material-symbols-outlined text-[17px] text-status-warning">error</span>
+<span class="">특이사항 및 교무행정 주의 메모</span>
+</div>
+<p class="text-[11px] leading-relaxed pl-5 text-amber-900/90 font-body-default">
+              * 기안일 기준 익주 월요일(3/30)은 1분기 학사평가 문항 공동출제 마감일이므로, 연차 기간 중 긴급 상황 발생 시 교과협의회 메신저로 즉시 연락 가능함을 확인하였습니다.
+            </p>
+</div>
+<!-- Attachments & Storage Section -->
+<div class="space-y-2 pt-2">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-slate-700 flex items-center gap-1">
+<span class="material-symbols-outlined text-[15px]">attach_file</span>
+<span class="">첨부파일 및 증빙 서류 (최대 30MB)</span>
+</span>
+<button class="text-[11px] text-primary hover:underline font-medium flex items-center gap-0.5" type="button">
+<span class="material-symbols-outlined text-[13px]">link</span>
+<span class="">학교 나이스(NEIS) 연동 링크 추가</span>
+</button>
+</div>
+<!-- Upload Area & File List -->
+<div class="border-2 border-dashed border-slate-300 rounded-lg p-3 bg-slate-50 flex flex-col md:flex-row items-center justify-between gap-3">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded bg-red-100 text-red-600 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[22px]">picture_as_pdf</span>
+</div>
+<div>
+<div class="text-[12px] font-medium text-slate-800 flex items-center gap-1.5">
+<span class="">증빙서류_가족관계증명서.pdf</span>
+<span class="text-[10px] text-slate-400 font-mono">1.2 MB</span>
+<span class="px-1.5 py-0.2 rounded text-[9px] bg-emerald-100 text-emerald-800 font-bold">바이러스 검사 통과</span>
+</div>
+<div class="text-[10px] text-slate-500 mt-0.5">업로드 일시: 2026-03-25 08:28:10 · 암호화 보관</div>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<button class="px-2.5 py-1 text-[11px] rounded bg-white border border-slate-300 text-slate-700 hover:bg-slate-100 flex items-center gap-1" type="button">
+<span class="material-symbols-outlined text-[14px]">visibility</span>
+                  미리보기
+                </button>
+<button class="p-1 rounded text-slate-400 hover:text-status-danger hover:bg-red-50" type="button">
+<span class="material-symbols-outlined text-[17px]">delete</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Document Footer Official Notice -->
+<div class="pt-5 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between text-slate-400 text-[11px]">
+<div class="">기안문서 고유 해시코드: <span class="font-mono text-slate-500">SHA256:7e9a2b8...c014f</span></div>
+<div class="font-medium mt-1 sm:mt-0 text-slate-500">등대교육공동체 교육행정정보시스템 (Edu-Intranet)</div>
+</div>
+</div>
+</div>
+<!-- RIGHT: Widescreen-Optimized Dedicated Approval Station Panel (380px ~ 420px Fixed Width for High Density Readability) -->
+<aside class="w-full xl:w-[410px] shrink-0 space-y-4 sticky top-[125px]">
+<!-- A) Interactive Approver Action Bar (결재 실행 데스크) -->
+<div class="bg-surface-white rounded-xl p-4 border border-slate-200/90 shadow-sm space-y-3">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-primary-container"></span>
+<span class="font-headline-md text-slate-900 text-[14px] font-bold">결재 실행 데스크</span>
+</div>
+<span class="px-2 py-0.5 rounded text-[11px] bg-amber-50 text-amber-800 font-semibold border border-amber-200 flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
+            현재 교감 대기중
+          </span>
+</div>
+<p class="text-[12px] text-secondary leading-snug">
+          로그인 계정(<strong>박교감</strong>) 권한으로 상신 문서를 승인, 전결, 또는 반려할 수 있습니다.
+        </p>
+<!-- Main Action Buttons -->
+<div class="grid grid-cols-2 gap-2 pt-1">
+<button class="h-10 px-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-body-medium text-[13px] font-semibold flex items-center justify-center gap-1.5 shadow-sm transition-all" type="button">
+<span class="material-symbols-outlined text-[17px]">verified</span>
+<span class="">승인 (서명 날인)</span>
+</button>
+<button class="h-10 px-2 rounded-lg bg-primary-container hover:bg-primary text-white font-body-medium text-[13px] font-semibold flex items-center justify-center gap-1.5 shadow-sm transition-all" type="button">
+<span class="material-symbols-outlined text-[17px]">bolt</span>
+<span class="">전결 승인</span>
+</button>
+<button class="h-9 px-2 rounded-lg bg-surface-white border border-red-300 text-status-danger hover:bg-red-50 font-body-medium text-[12px] font-semibold flex items-center justify-center gap-1 transition-all" onclick="document.getElementById('reject-modal').classList.toggle('hidden')" type="button">
+<span class="material-symbols-outlined text-[16px]">cancel</span>
+<span class="">반려 (사유 입력)</span>
+</button>
+<button class="h-9 px-2 rounded-lg bg-surface-white border border-slate-300 text-slate-600 hover:bg-slate-50 font-body-medium text-[12px] font-semibold flex items-center justify-center gap-1 transition-all" type="button">
+<span class="material-symbols-outlined text-[16px]">tune</span>
+<span class="">결재선 변경/단축</span>
+</button>
+</div>
+</div>
+<!-- B) Dynamic Approval Line Manager Panel & Stepper -->
+<div class="bg-surface-white rounded-xl p-4 border border-slate-200/90 shadow-sm space-y-3.5">
+<!-- Panel Header & Action Buttons -->
+<div class="flex items-center justify-between pb-2.5 border-b border-slate-200">
+<div>
+<span class="font-headline-md text-slate-900 text-[14px] font-bold block">결재선 상세 구성</span>
+<span class="text-[11px] text-secondary">표준 교원 결재 규칙 (3단계 + 최종)</span>
+</div>
+<span class="px-2 py-0.5 rounded text-[11px] font-mono text-primary bg-blue-50 font-medium">진행률 50%</span>
+</div>
+<!-- Line Quick Controls Bar -->
+<div class="flex items-center gap-1.5">
+<button class="flex-1 h-7 px-2 rounded bg-blue-50 hover:bg-blue-100 text-primary text-[11px] font-medium border border-blue-200 flex items-center justify-center gap-1 transition-colors" type="button">
+<span class="material-symbols-outlined text-[13px]">person_add</span>
+<span>+ 단축지정</span>
+</button>
+<button class="flex-1 h-7 px-2 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-medium flex items-center justify-center gap-1 transition-colors" type="button">
+<span class="material-symbols-outlined text-[13px]">diversity_3</span>
+<span>+ 협조 부서</span>
+</button>
+<button class="flex-1 h-7 px-2 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-medium flex items-center justify-center gap-1 transition-colors" type="button">
+<span class="material-symbols-outlined text-[13px]">visibility</span>
+<span>+ 공람자</span>
+</button>
+</div>
+<!-- Stepper Visualizer Pipeline -->
+<div class="space-y-2.5 pt-0.5">
+<!-- Step 1 Complete -->
+<div class="flex items-start gap-2.5 p-2.5 rounded-lg bg-slate-50 border border-slate-200">
+<div class="w-6 h-6 rounded-full bg-status-success text-white flex items-center justify-center text-[11px] font-bold shrink-0 mt-0.5 shadow-xs">
+              1
+            </div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center justify-between">
+<span class="text-[12.5px] font-bold text-slate-900">김교사 <span class="text-[11px] font-normal text-slate-500">(기안자 / 교무기획부)</span></span>
+<span class="px-1.5 py-0.2 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200 flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[11px]">check_circle</span> 기안완료
+                </span>
+</div>
+<div class="flex items-center gap-1.5 text-[10.5px] text-slate-500 mt-0.5 font-mono">
+<span class="material-symbols-outlined text-[12px] text-slate-400">schedule</span> 03/25 08:30 · 디지털 서명 인증
+              </div>
+<div class="mt-1 text-[11px] text-slate-600 bg-white p-2 rounded border border-slate-200/80 leading-snug">
+                "개인 사정(가족 행사)으로 수업 보강안 사전 협의 완료 후 기안합니다."
+              </div>
+</div>
+</div>
+<!-- Step 2 Complete -->
+<div class="flex items-start gap-2.5 p-2.5 rounded-lg bg-slate-50 border border-slate-200">
+<div class="w-6 h-6 rounded-full bg-status-success text-white flex items-center justify-center text-[11px] font-bold shrink-0 mt-0.5 shadow-xs">
+              2
+            </div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center justify-between">
+<span class="text-[12.5px] font-bold text-slate-900">이부장 <span class="text-[11px] font-normal text-slate-500">(교무부장)</span></span>
+<span class="px-1.5 py-0.2 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200 flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[11px]">check_circle</span> 승인완료
+                </span>
+</div>
+<div class="flex items-center gap-1.5 text-[10.5px] text-slate-500 mt-0.5 font-mono">
+<span class="material-symbols-outlined text-[12px] text-slate-400">schedule</span> 03/25 09:10 · 전자 인주 도장 인증
+              </div>
+<div class="mt-1 text-[11px] text-slate-700 bg-emerald-50/40 p-2 rounded border border-emerald-200/60 leading-snug">
+                "수업교환 및 1교시 자습대책 확인완료. 진도 운영 이상 없음 승인함."
+              </div>
+</div>
+</div>
+<!-- Step 3 In Progress (Current) -->
+<div class="flex items-start gap-2.5 p-2.5 rounded-lg bg-blue-50/70 border border-primary/40 relative ring-1 ring-primary/20">
+<div class="w-6 h-6 rounded-full bg-primary-container text-white flex items-center justify-center text-[11px] font-bold shrink-0 mt-0.5 shadow-xs">
+              3
+            </div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center justify-between">
+<span class="text-[12.5px] font-bold text-primary">박교감 <span class="text-[11px] font-semibold text-primary/80">(교감)</span></span>
+<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-800 animate-pulse border border-amber-300">
+                현재 대기중 · 서명 대기
+              </span>
+</div>
+<div class="text-[11px] text-slate-600 font-medium mt-0.5 flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-primary inline-block"></span>
+                관리자 전결 심사 가능 단계
+              </div>
+<div class="mt-2 flex items-center gap-1.5">
+<input class="h-8 text-[11px] bg-white border border-blue-300 rounded px-2 w-full focus:outline-none focus:ring-1 focus:ring-primary shadow-xs" placeholder="승인 또는 검토 의견을 입력하세요..." type="text"/>
+</div>
+</div>
+</div>
+<!-- Step 4 Pending -->
+<div class="flex items-start gap-2.5 p-2.5 rounded-lg bg-white border border-slate-200 opacity-70">
+<div class="w-6 h-6 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center text-[11px] font-bold shrink-0 mt-0.5">
+              4
+            </div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center justify-between">
+<span class="text-[12.5px] font-medium text-slate-700">이교장 <span class="text-[11px] text-slate-500">(교장)</span></span>
+<span class="px-1.5 py-0.2 rounded text-[10px] bg-slate-100 text-slate-500">최종 대기</span>
+</div>
+<div class="text-[11px] text-slate-400 mt-0.5 leading-snug">
+                교감 전결 처리 시 최종결재 생략 가능
+              </div>
+</div>
+</div>
+</div>
+<!-- C) 합의 / 협조 / 참조 교원 명단 (Collaboration & Reference) -->
+<div class="pt-3 border-t border-slate-200">
+<div class="flex items-center justify-between mb-2">
+<span class="font-label-sm text-slate-700 text-[12px] font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] text-slate-500">group</span>
+              합의 및 참조/열람 교원
+            </span>
+<span class="text-[11px] font-medium text-slate-500">총 3명</span>
+</div>
+<div class="space-y-1.5 text-[11px]">
+<!-- 최실장 -->
+<div class="flex items-center justify-between p-2 bg-slate-50 rounded-lg border border-slate-200">
+<div class="flex items-center gap-1.5">
+<span class="px-1.5 py-0.5 rounded bg-purple-100 text-purple-800 text-[10px] font-semibold">합의</span>
+<span class="font-medium text-slate-800">최실장 (행정실장)</span>
+</div>
+<span class="text-status-success font-semibold text-[10.5px] flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[12px]">check</span> 협조완료 (03/25 08:45)
+              </span>
+</div>
+<!-- 이교사 -->
+<div class="flex items-center justify-between p-2 bg-slate-50 rounded-lg border border-slate-200">
+<div class="flex items-center gap-1.5">
+<span class="px-1.5 py-0.5 rounded bg-slate-200 text-slate-700 text-[10px] font-medium">참조</span>
+<span class="font-medium text-slate-800">이교사 (수학·업무대행)</span>
+</div>
+<span class="text-slate-500 text-[10.5px]">기안열람 완료</span>
+</div>
+<!-- 과학과 교원 전체 -->
+<div class="flex items-center justify-between p-2 bg-slate-50 rounded-lg border border-slate-200">
+<div class="flex items-center gap-1.5">
+<span class="px-1.5 py-0.5 rounded bg-slate-200 text-slate-700 text-[10px] font-medium">공람</span>
+<span class="font-medium text-slate-800">과학과 교원 전체</span>
+</div>
+<span class="text-slate-400 text-[10.5px]">경조 및 진도공유 배부 예정</span>
+</div>
+</div>
+</div>
+</div>
+<!-- D) 교직원 휴가 결재 규정 안내 (Leave Regulation Policy Guidance) -->
+<div class="bg-surface-white rounded-xl p-4 border border-slate-200/90 shadow-sm text-[12px] space-y-2.5">
+<div class="flex items-center justify-between">
+<div class="font-headline-md text-slate-800 text-[13px] font-bold flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-primary">policy</span>
+<span class="">교직원 휴가 결재 규정 안내</span>
+</div>
+<span class="text-[10px] px-1.5 py-0.5 rounded bg-slate-100 text-slate-600 font-mono">교원복무 제14조</span>
+</div>
+<ul class="text-slate-600 text-[11px] space-y-2 leading-relaxed">
+<li class="flex items-start gap-1.5">
+<span class="material-symbols-outlined text-[13px] text-primary shrink-0 mt-0.5">check_circle</span>
+<span><strong>전결 처리 규정:</strong> 1일 이하의 연차 및 반차는 소속 학교 전결 규정에 의거 <strong>교감 또는 부서장 전결</strong>로 최종 처리가 완료될 수 있습니다.</span>
+</li>
+<li class="flex items-start gap-1.5">
+<span class="material-symbols-outlined text-[13px] text-primary shrink-0 mt-0.5">check_circle</span>
+<span><strong>보강 대책 필수:</strong> 정규 수업 결보강 대책 및 담당 교과 협의 합의가 누락된 기안은 결재선에서 반려될 수 있습니다.</span>
+</li>
+<li class="flex items-start gap-1.5">
+<span class="material-symbols-outlined text-[13px] text-primary shrink-0 mt-0.5">check_circle</span>
+<span><strong>NEIS 복무 연동:</strong> 결재가 최종 승인 완료되면 교육행정정보시스템(NEIS) 복무 장부에 즉시 반영되며 개인 잔여 연차가 자동 차감됩니다.</span>
+</li>
+</ul>
+</div>
+</aside>
+</div>
+<!-- Modal: Reject Reason Dialog (반려 사유 입력 모달) -->
+<div class="hidden fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4" id="reject-modal">
+<div class="bg-white rounded-xl max-w-md w-full shadow-2xl border border-slate-200 overflow-hidden transform transition-all">
+<div class="px-5 py-4 bg-red-50 border-b border-red-100 flex items-center justify-between">
+<div class="flex items-center gap-2 text-status-danger font-headline-md text-[14px] font-bold">
+<span class="material-symbols-outlined text-[18px]">report</span>
+<span class="">전자결재 반려 사유 입력</span>
+</div>
+<button class="text-slate-400 hover:text-slate-700" onclick="document.getElementById('reject-modal').classList.add('hidden')" type="button">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+</div>
+<div class="p-5 space-y-3">
+<p class="text-[12px] text-slate-600">
+          반려 사유는 기안자에게 즉각 사내 메신저 및 알림으로 통보되며, 재기안 시 피드백으로 활용됩니다.
+        </p>
+<div>
+<label class="block text-[11px] font-semibold text-slate-700 mb-1">반려 유형 선택</label>
+<select class="w-full h-9 text-[12px] border border-slate-300 rounded px-2 bg-white">
+<option>수업 보강 계획 보완 필요</option>
+<option>증빙 서류 누락 또는 미비</option>
+<option>학사 일정 중복 (학내 주요행사일)</option>
+<option>기타 사유</option>
+</select>
+</div>
+<div>
+<label class="block text-[11px] font-semibold text-slate-700 mb-1">세부 반려 의견</label>
+<textarea class="w-full p-2.5 text-[12px] border border-slate-300 rounded-lg focus:ring-1 focus:ring-status-danger focus:outline-none" placeholder="구체적인 보완 사항을 입력하십시오." rows="3"></textarea>
+</div>
+</div>
+<div class="px-5 py-3 bg-slate-50 border-t border-slate-200 flex justify-end gap-2">
+<button class="h-8 px-3 rounded bg-white border border-slate-300 text-slate-700 text-[12px] font-medium" onclick="document.getElementById('reject-modal').classList.add('hidden')" type="button">취소</button>
+<button class="h-8 px-3 rounded bg-status-danger hover:bg-red-700 text-white text-[12px] font-semibold" onclick="alert('결재 문서가 반려 처리되었습니다.'); document.getElementById('reject-modal').classList.add('hidden');" type="button">반려 확정</button>
+</div>
+</div>
+</div>
+</div>
+<script>
+  // Simple micro-interaction for submit button feedback
+  document.getElementById('btn-submit-draft')?.addEventListener('click', function() {
+    const btn = this;
+    const originalText = btn.innerHTML;
+    btn.innerHTML = '<span class="material-symbols-outlined text-[17px] animate-spin">refresh</span><span>상신 처리 중...</span>';
+    btn.disabled = true;
+    setTimeout(() => {
+      alert('기안서(2026-교무-0042)가 성공적으로 결재선에 상신되었습니다.');
+      btn.innerHTML = originalText;
+      btn.disabled = false;
+    }, 800);
+  });
+</script></main></div>
+</body></html>

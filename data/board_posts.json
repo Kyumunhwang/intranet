@@ -1,0 +1,24 @@
+[
+  {
+    "id": "post1",
+    "board_id": "b1",
+    "author_id": "u4",
+    "title": "[필독] 2026학년도 1학기 교직원 복무 규정 및 학교 공인 IP 출퇴근 지침",
+    "content_html": "<p>선생님 여러분 안녕하십니까. 교무부입니다.<br/>교내망(211.104.xx.xx) 환경에서만 출근/퇴근 인정 버튼이 활성화되오니 출근 직후 인트라넷 상단 퀵버튼을 통해 출결을 확정해 주시기 바랍니다.<br/>반별 학생 출결 또한 08:50 이전까지 확정해 주시기 바랍니다.</p>",
+    "is_must_read": true,
+    "is_pinned": true,
+    "view_count": 42,
+    "created_at": "2026-10-23T08:00:00Z"
+  },
+  {
+    "id": "post2",
+    "board_id": "b1",
+    "author_id": "u1",
+    "title": "[행정실] 10월 연차 정기 사용 독려 및 전자결재 사전 상신 안내",
+    "content_html": "<p>잔여 연차 일수를 확인하시고 휴가/연차원 기안을 진행해 주시기 바랍니다.</p>",
+    "is_must_read": false,
+    "is_pinned": false,
+    "view_count": 38,
+    "created_at": "2026-10-23T07:45:00Z"
+  }
+]

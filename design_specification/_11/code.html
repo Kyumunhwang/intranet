@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+
+<html lang="ko"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+          "sidebar-bg": "#0F172A",
+          "surface-container": "#e5eeff",
+          "on-primary-fixed-variant": "#003ea8",
+          "inverse-surface": "#213145",
+          "primary-fixed-dim": "#b4c5ff",
+          "status-warning": "#F59E0B",
+          "on-secondary": "#ffffff",
+          "on-background": "#0b1c30",
+          "surface-bright": "#f8f9ff",
+          "status-success-bg": "#ECFDF5",
+          "status-info": "#6366F1",
+          "on-tertiary": "#ffffff",
+          "on-tertiary-fixed": "#360f00",
+          "primary-container": "#2563eb",
+          "surface-container-lowest": "#ffffff",
+          "on-primary-container": "#eeefff",
+          "primary-fixed": "#dbe1ff",
+          "outline-variant": "#c3c6d7",
+          "secondary": "#565e74",
+          "on-error": "#ffffff",
+          "error": "#ba1a1a",
+          "surface": "#f8f9ff",
+          "surface-tint": "#0053db",
+          "tertiary-fixed": "#ffdbcd",
+          "status-success": "#10B981",
+          "status-danger-bg": "#FEF2F2",
+          "on-primary-fixed": "#00174b",
+          "tertiary": "#943700",
+          "tertiary-container": "#bc4800",
+          "status-danger": "#EF4444",
+          "on-surface-variant": "#434655",
+          "surface-dim": "#cbdbf5",
+          "inverse-on-surface": "#eaf1ff",
+          "on-tertiary-fixed-variant": "#7d2d00",
+          "outline": "#737686",
+          "surface-container-low": "#eff4ff",
+          "status-info-bg": "#EEF2FF",
+          "surface-variant": "#d3e4fe",
+          "on-surface": "#0b1c30",
+          "on-secondary-fixed-variant": "#3f465c",
+          "inverse-primary": "#b4c5ff",
+          "background": "#f8f9ff",
+          "surface-container-highest": "#d3e4fe",
+          "primary": "#004ac6",
+          "surface-white": "#FFFFFF",
+          "on-tertiary-container": "#ffede6",
+          "on-secondary-fixed": "#131b2e",
+          "error-container": "#ffdad6",
+          "on-primary": "#ffffff",
+          "status-warning-bg": "#FFFBEB",
+          "secondary-fixed": "#dae2fd",
+          "tertiary-fixed-dim": "#ffb596",
+          "secondary-container": "#dae2fd",
+          "on-secondary-container": "#5c647a",
+          "canvas-bg": "#F8FAFC",
+          "on-error-container": "#93000a",
+          "surface-container-high": "#dce9ff",
+          "secondary-fixed-dim": "#bec6e0"
+        },
+        "borderRadius": {
+          "DEFAULT": "0.125rem",
+          "lg": "0.25rem",
+          "xl": "0.5rem",
+          "full": "0.75rem"
+        },
+        "spacing": {
+          "space-xl": "1.5rem",
+          "space-lg": "1rem",
+          "space-md": "0.75rem",
+          "margin": "1.5rem",
+          "space-sm": "0.5rem",
+          "gutter": "1rem",
+          "space-xs": "0.25rem"
+        },
+        "fontFamily": {
+          "metric-stat": [
+            "Inter"
+          ],
+          "body-default": [
+            "Inter"
+          ],
+          "headline-xl": [
+            "Inter"
+          ],
+          "table-data": [
+            "Inter"
+          ],
+          "headline-lg": [
+            "Inter"
+          ],
+          "headline-md": [
+            "Inter"
+          ],
+          "table-header": [
+            "Inter"
+          ],
+          "label-xs": [
+            "Inter"
+          ],
+          "label-sm": [
+            "Inter"
+          ],
+          "body-medium": [
+            "Inter"
+          ]
+        },
+        "fontSize": {
+          "metric-stat": [
+            "24px",
+            {
+              "lineHeight": "32px",
+              "letterSpacing": "-0.02em",
+              "fontWeight": "700"
+            }
+          ],
+          "body-default": [
+            "14px",
+            {
+              "lineHeight": "20px",
+              "fontWeight": "400"
+            }
+          ],
+          "headline-xl": [
+            "24px",
+            {
+              "lineHeight": "32px",
+              "letterSpacing": "-0.02em",
+              "fontWeight": "700"
+            }
+          ],
+          "table-data": [
+            "13px",
+            {
+              "lineHeight": "18px",
+              "fontWeight": "400"
+            }
+          ],
+          "headline-lg": [
+            "20px",
+            {
+              "lineHeight": "28px",
+              "letterSpacing": "-0.015em",
+              "fontWeight": "600"
+            }
+          ],
+          "headline-md": [
+            "16px",
+            {
+              "lineHeight": "24px",
+              "letterSpacing": "-0.01em",
+              "fontWeight": "600"
+            }
+          ],
+          "table-header": [
+            "12px",
+            {
+              "lineHeight": "16px",
+              "letterSpacing": "0.02em",
+              "fontWeight": "600"
+            }
+          ],
+          "label-xs": [
+            "11px",
+            {
+              "lineHeight": "14px",
+              "letterSpacing": "0.03em",
+              "fontWeight": "600"
+            }
+          ],
+          "label-sm": [
+            "12px",
+            {
+              "lineHeight": "16px",
+              "fontWeight": "500"
+            }
+          ],
+          "body-medium": [
+            "14px",
+            {
+              "lineHeight": "20px",
+              "fontWeight": "500"
+            }
+          ]
+        }
+      },
+    },
+  }</script></head><body class="bg-canvas-bg font-body-default text-body-default text-on-surface antialiased"><aside class="fixed left-0 top-0 h-screen w-[250px] bg-sidebar-bg z-50 flex flex-col justify-between overflow-y-auto select-none shadow-[0_1px_8px_rgba(0,0,0,0.12)]"><div class="flex flex-col"><div class="h-[60px] flex items-center px-space-lg gap-space-sm bg-slate-950/40"><span class="material-symbols-outlined text-primary-fixed-dim text-[20px]">admin_panel_settings</span><div class="flex flex-col"><span class="font-headline-md text-headline-md text-slate-100 tracking-tight leading-tight">등대교육공동체</span><span class="font-label-xs text-label-xs text-slate-400 tracking-wider uppercase font-semibold">관리자 콘솔</span></div></div><div class="px-space-md py-space-sm"><div class="px-space-xs py-space-xs bg-slate-800/80 rounded flex items-center justify-between"><div class="flex items-center gap-space-xs"><span class="w-2 h-2 rounded-full bg-status-success"></span><span class="font-label-xs text-label-xs text-slate-300 font-medium">시스템 코어 가동중</span></div><span class="font-label-xs text-label-xs text-primary-fixed-dim bg-slate-700/60 px-space-xs rounded">v3.4</span></div></div><nav class="flex flex-col px-space-sm gap-space-md mt-space-xs" data-active-classes="bg-primary-container text-on-primary font-semibold shadow-sm"><div class="flex flex-col gap-space-xs"><span class="px-space-sm font-label-xs text-label-xs text-slate-400 uppercase tracking-wider font-semibold">관리자 홈</span><a class="flex items-center gap-space-sm px-space-sm py-space-xs rounded text-slate-300 hover:bg-slate-800 hover:text-slate-100 transition-colors font-body-medium text-body-medium" data-path="dashboard-home" href="#"><span class="material-symbols-outlined text-[18px]">dashboard</span>대시보드 홈</a><a class="flex items-center gap-space-sm px-space-sm py-space-xs rounded text-slate-300 hover:bg-slate-800 hover:text-slate-100 transition-colors font-body-medium text-body-medium" data-path="work-regulations" href="#"><span class="material-symbols-outlined text-[18px]">gavel</span>연차 및 근무 규정 관리</a></div><div class="flex flex-col gap-space-xs"><span class="px-space-sm font-label-xs text-label-xs text-slate-400 uppercase tracking-wider font-semibold">업무지원 &amp; 인사</span><a class="flex items-center gap-space-sm px-space-sm py-space-xs rounded text-slate-300 hover:bg-slate-800 hover:text-slate-100 transition-colors font-body-medium text-body-medium" data-path="attendance-overtime" href="#"><span class="material-symbols-outlined text-[18px]">pending_actions</span>교직원 근태 &amp; 초과근무</a><a class="flex items-center gap-space-sm px-space-sm py-space-xs rounded text-slate-300 hover:bg-slate-800 hover:text-slate-100 transition-colors font-body-medium text-body-medium" data-path="organization-roles" href="#"><span class="material-symbols-outlined text-[18px]">account_tree</span>부서·직책 및 다중역할</a><a aria-current="page" class="flex items-center gap-space-sm px-space-sm py-space-xs rounded transition-colors bg-primary-container text-on-primary font-semibold shadow-sm" data-path="certificate-ledger" href="#"><span class="material-symbols-outlined text-[18px]">approval</span>제증명서 발급 &amp; 직인대장</a></div><div class="flex flex-col gap-space-xs"><span class="px-space-sm font-label-xs text-label-xs text-slate-400 uppercase tracking-wider font-semibold">인트라넷 &amp; 보안</span><a class="flex items-center gap-space-sm px-space-sm py-space-xs rounded text-slate-300 hover:bg-slate-800 hover:text-slate-100 transition-colors font-body-medium text-body-medium" data-path="form-builder" href="#"><span class="material-symbols-outlined text-[18px]">dynamic_form</span>전자결재 양식 빌더</a><a class="flex items-center gap-space-sm px-space-sm py-space-xs rounded text-slate-300 hover:bg-slate-800 hover:text-slate-100 transition-colors font-body-medium text-body-medium" data-path="audit-security" href="#"><span class="material-symbols-outlined text-[18px]">security</span>감사 로그 &amp; IP 추적</a></div></nav></div><div class="p-space-md flex flex-col gap-space-xs"><div class="w-full rounded bg-slate-800/90 p-space-sm flex items-center gap-space-sm shadow-inner"><div class="w-7 h-7 rounded-full bg-primary-container flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-on-primary text-[16px]">lock</span></div><div class="flex flex-col overflow-hidden"><span class="font-label-xs text-label-xs text-slate-100 font-semibold truncate">Lighthouse Admin Tier-1</span><span class="font-label-xs text-label-xs text-slate-400 font-normal">전권 부여됨</span></div></div></div></aside><div class="pl-[250px]"><header class="fixed top-0 left-[250px] right-0 h-[60px] bg-surface-white/95 backdrop-blur-md z-40 flex items-center justify-between px-space-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="flex items-center gap-space-lg flex-1"><div class="flex items-center gap-space-sm shrink-0"><img alt="logo.png" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1XtqcQYl0SnlkasalNBrcoDaqMGCEzn2HgfyWc-HN_PHjrRwBqb-z-Y_o-dtn8AnLrlkakSVaWl0swl1VeqcI1E3TqHEZuell_jBXiHQsj-zqoqUC3h0T1-uiE2Nn5EL04onF6aMZWIJvyQrA8mH7QonUPKh0ImSw2GYhwTJT0xwFI3hW6yj3JICdx5FLCNYzWctlKcvvz7PMA0V_hUG0tLBCfdc6vhzdrG7gZ2D2UfvNo7QJlYywS0tTjD1RGavC4O3y1NQILK0w"/><span class="font-headline-md text-headline-md text-on-surface tracking-tight hidden xl:inline">등대교육공동체</span></div><div class="inline-flex items-center gap-space-xs px-space-md py-space-xs rounded-full bg-status-success-bg shrink-0"><span class="w-2 h-2 rounded-full bg-status-success animate-pulse"></span><span class="font-label-xs text-label-xs text-on-surface font-semibold">학교 공인 IP 211.104.88.24 인증됨</span></div><button class="inline-flex items-center gap-space-xs h-9 px-space-md rounded bg-primary text-on-primary hover:bg-primary-container font-label-sm text-label-sm shadow-sm transition-colors shrink-0" type="button"><span class="material-symbols-outlined text-[18px]">timer</span><span>출퇴근 체크</span></button><div class="relative max-w-md w-full hidden md:block"><span class="material-symbols-outlined absolute left-3 top-2.5 text-secondary text-[18px]">search</span><input class="w-full h-9 pl-9 pr-12 rounded bg-canvas-bg text-on-surface font-body-default text-body-default placeholder:text-secondary focus:outline-none focus:bg-surface-white shadow-inner" placeholder="교직원, 결재대장, 보안 감사 기록 통합 검색..." type="text"/><span class="absolute right-2.5 top-2 px-space-xs py-0.5 rounded bg-surface-container font-label-xs text-label-xs text-on-surface-variant font-mono">⌘K</span></div></div><div class="flex items-center gap-space-md shrink-0 ml-space-lg"><a class="inline-flex items-center gap-space-xs h-9 px-space-md rounded bg-surface-container-low text-on-surface-variant hover:bg-surface-container hover:text-on-surface font-label-sm text-label-sm transition-colors" href="#"><span class="material-symbols-outlined text-[16px]">logout</span><span>일반 업무 포털 복귀</span></a><div class="h-6 w-px bg-surface-container-high"></div><div class="flex items-center gap-space-sm pl-space-xs"><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div><div class="flex flex-col text-left"><div class="flex items-center gap-space-xs"><span class="font-label-sm text-label-sm text-on-surface font-semibold">김교사</span><span class="font-label-xs text-label-xs px-1 rounded bg-primary-container text-on-primary uppercase font-bold">Admin</span></div><span class="font-label-xs text-label-xs text-secondary">교무부장 · 관리자 권한</span></div></div></div></header><main class="relative pt-[60px] bg-canvas-bg min-h-screen w-full px-margin py-margin"><div class="flex flex-col w-full gap-space-lg">
+<!-- Breadcrumb & Control Action Bar -->
+<div class="flex flex-wrap items-center justify-between gap-space-md">
+<div class="flex flex-col gap-1">
+<nav class="flex items-center gap-space-xs font-label-xs text-label-xs text-secondary">
+<span>관리자 콘솔</span>
+<span class="material-symbols-outlined text-[13px]">chevron_right</span>
+<span>업무지원</span>
+<span class="material-symbols-outlined text-[13px]">chevron_right</span>
+<span class="font-semibold text-primary">제증명 발급 및 직인 날인 대장</span>
+</nav>
+<div class="flex items-center gap-space-sm">
+<h1 class="font-headline-xl text-headline-xl text-on-surface tracking-tight">교직원 제증명 발급 &amp; 직인대장 관리</h1>
+<span class="px-space-xs py-0.5 rounded bg-surface-container font-label-xs text-label-xs font-semibold text-primary">법정 영구보존부책</span>
+</div>
+</div>
+<div class="flex items-center gap-space-sm shrink-0">
+<button class="inline-flex items-center gap-space-xs h-9 px-space-md rounded bg-surface-container-low text-on-surface-variant hover:bg-surface-container font-label-sm text-label-sm transition-colors shadow-sm" type="button">
+<span class="material-symbols-outlined text-[18px]">verified</span>
+<span>진위확인 QR 검증기</span>
+</button>
+<button class="inline-flex items-center gap-space-xs h-9 px-space-md rounded bg-surface-container-low text-on-surface-variant hover:bg-surface-container font-label-sm text-label-sm transition-colors shadow-sm" type="button">
+<span class="material-symbols-outlined text-[18px]">file_download</span>
+<span>발급 대장 엑셀(.xlsx)</span>
+</button>
+<button class="inline-flex items-center gap-space-xs h-9 px-space-md rounded bg-primary text-on-primary hover:bg-primary-container font-label-sm text-label-sm transition-colors shadow-sm" onclick="document.getElementById('quick-issue-form').scrollIntoView({behavior: 'smooth'})" type="button">
+<span class="material-symbols-outlined text-[18px]">add</span>
+<span>새 증명서 즉시 발급</span>
+</button>
+</div>
+</div>
+<!-- Seal Security & Aggregate Statistics Banner -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-md">
+<!-- Seal Status Card -->
+<div class="lg:col-span-5 bg-surface-white rounded-xl shadow-sm p-space-lg flex flex-col justify-between">
+<div class="flex items-start justify-between gap-space-md">
+<div class="flex items-start gap-space-md">
+<div class="relative w-16 h-16 rounded-lg bg-surface-container-low p-1.5 flex items-center justify-center shrink-0 shadow-inner">
+<img alt="등대교육공동체 공식 관인" class="w-full h-full object-contain filter drop-shadow-[0_2px_4px_rgba(186,26,26,0.3)]" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCE7J9fPpG9tuBQ4wQqN4dpR9qjdfoDTXQEX-rTjAfHAj0EDKde_gctPj8qBbiMsuUY7_0g12ARTVH9XACCf-Vxt20oEXpsGqM1Ogkb-NCE-MnDDj7zZ_bBz0eYO6-BJCebzsg0M2hMP-1UNApvfuijo2NapPZXK5sTCyqrEoM3TS-iLQttn-kPIntCqFBwk2SMe55WuhtO5KugilsedPLRqE6ovQY1q4oRQnBU8u6uSWxhwFF-l8w8sahK63RCJeYdIw"/>
+<span class="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-status-success flex items-center justify-center text-white">
+<span class="material-symbols-outlined text-[12px]">verified_user</span>
+</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-space-xs">
+<span class="font-headline-md text-headline-md text-on-surface">등대교육공동체 공식 관인</span>
+<span class="px-space-xs py-0.5 rounded-full bg-status-success-bg text-status-success font-label-xs text-label-xs font-semibold">정상 인증</span>
+</div>
+<p class="font-body-default text-body-default text-secondary mt-0.5">전자서명 인증암호화 토큰 v4.1 연동 완료</p>
+<span class="font-label-xs text-label-xs text-on-surface-variant font-mono mt-1">직인고유식별키: SEC-LHEC-2024-OFFICIAL</span>
+</div>
+</div>
+<button class="inline-flex items-center gap-1 h-8 px-space-sm rounded bg-surface-container font-label-xs text-label-xs text-on-primary-fixed-variant hover:bg-surface-container-high transition-colors" type="button">
+<span class="material-symbols-outlined text-[15px]">security_update_good</span>
+<span>직인 관리/교체</span>
+</button>
+</div>
+<div class="mt-space-md pt-space-md flex items-center justify-between bg-surface-container-low rounded-lg px-space-md py-space-sm">
+<div class="flex items-center gap-space-xs text-secondary font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[16px] text-primary">bookmark</span>
+<span>최신 등록 발급 번호</span>
+</div>
+<div class="font-metric-stat text-headline-md font-bold text-primary tracking-tight font-mono">
+          2026-증명-0148호
+        </div>
+</div>
+</div>
+<!-- Aggregate Stats Cards -->
+<div class="lg:col-span-7 grid grid-cols-2 sm:grid-cols-4 gap-space-md">
+<div class="bg-surface-white rounded-xl shadow-sm p-space-md flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="font-table-header text-table-header text-secondary uppercase">2026 누적 발급</span>
+<span class="material-symbols-outlined text-primary text-[20px]">assignment_turned_in</span>
+</div>
+<div class="my-space-xs">
+<span class="font-metric-stat text-metric-stat text-on-surface tracking-tight">148</span>
+<span class="font-label-sm text-label-sm text-secondary ml-0.5">건</span>
+</div>
+<div class="flex items-center gap-1 font-label-xs text-label-xs text-status-success">
+<span class="material-symbols-outlined text-[14px]">trending_up</span>
+<span>전년동기대비 +18%</span>
+</div>
+</div>
+<div class="bg-surface-white rounded-xl shadow-sm p-space-md flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="font-table-header text-table-header text-secondary uppercase">재직증명서</span>
+<span class="material-symbols-outlined text-status-info text-[20px]">badge</span>
+</div>
+<div class="my-space-xs">
+<span class="font-metric-stat text-metric-stat text-primary tracking-tight">92</span>
+<span class="font-label-sm text-label-sm text-secondary ml-0.5">건</span>
+</div>
+<div class="font-label-xs text-label-xs text-secondary">
+          전체 건수의 62.1%
+        </div>
+</div>
+<div class="bg-surface-white rounded-xl shadow-sm p-space-md flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="font-table-header text-table-header text-secondary uppercase">경력증명서</span>
+<span class="material-symbols-outlined text-status-warning text-[20px]">history_edu</span>
+</div>
+<div class="my-space-xs">
+<span class="font-metric-stat text-metric-stat text-on-surface tracking-tight">34</span>
+<span class="font-label-sm text-label-sm text-secondary ml-0.5">건</span>
+</div>
+<div class="font-label-xs text-label-xs text-secondary">
+          경력합산 및 이직심사용
+        </div>
+</div>
+<div class="bg-surface-white rounded-xl shadow-sm p-space-md flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="font-table-header text-table-header text-secondary uppercase">갑근세·원천세</span>
+<span class="material-symbols-outlined text-secondary text-[20px]">receipt_long</span>
+</div>
+<div class="my-space-xs">
+<span class="font-metric-stat text-metric-stat text-on-surface tracking-tight">22</span>
+<span class="font-label-sm text-label-sm text-secondary ml-0.5">건</span>
+</div>
+<div class="font-label-xs text-label-xs text-secondary">
+          연말정산 소득증빙포함
+        </div>
+</div>
+</div>
+</div>
+<!-- Issuance Workspace Split View: Left (Fast Issuance Form) & Right (High-Fidelity Document Preview) -->
+<div class="grid grid-cols-1 xl:grid-cols-12 gap-space-lg items-start" id="quick-issue-form">
+<!-- Issuance Configuration Control Panel (5 Cols) -->
+<div class="xl:col-span-5 bg-surface-white rounded-xl shadow-sm p-space-lg flex flex-col gap-space-md">
+<div class="flex items-center justify-between pb-space-xs">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[22px]">print_connect</span>
+<h2 class="font-headline-lg text-headline-lg text-on-surface">쾌속 증명서 발급기</h2>
+</div>
+<span class="font-label-xs text-label-xs bg-surface-container-high text-on-primary-fixed-variant px-space-xs py-0.5 rounded font-mono">STEP 1 ~ 3</span>
+</div>
+<div class="flex flex-col gap-space-sm">
+<!-- Target Employee Search -->
+<div class="flex flex-col gap-1">
+<label class="font-label-sm text-label-sm text-on-surface-variant font-medium flex items-center justify-between">
+<span>대상 교직원 검색</span>
+<span class="text-primary font-label-xs text-label-xs cursor-pointer hover:underline">교직원 명부 연동</span>
+</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-2.5 text-secondary text-[18px]">person_search</span>
+<input class="w-full h-9 pl-9 pr-24 rounded bg-surface-container-low text-on-surface font-body-default text-body-default focus:outline-none focus:bg-surface-white shadow-inner" id="target-staff-input" placeholder="사번 또는 성명 입력..." type="text" value="김교사 (T-2018-04) - 교무부"/>
+<button class="absolute right-1.5 top-1 px-space-sm h-7 rounded bg-primary-container text-on-primary font-label-xs text-label-xs" type="button">조회</button>
+</div>
+<div class="px-space-sm py-1.5 rounded bg-surface-container-low text-secondary font-label-xs text-label-xs flex items-center justify-between">
+<span>재직상태: <strong class="text-status-success font-semibold">재직중</strong> (임용일: 2018-03-01)</span>
+<span>생년월일: 1985.04.12</span>
+</div>
+</div>
+<!-- Certificate Type Selector Chips -->
+<div class="flex flex-col gap-1.5">
+<label class="font-label-sm text-label-sm text-on-surface-variant font-medium">증명서 양식 종류</label>
+<div class="grid grid-cols-2 sm:grid-cols-3 gap-space-xs">
+<button class="cert-btn flex items-center justify-center gap-1.5 h-9 rounded px-space-sm text-on-primary bg-primary font-label-sm text-label-sm shadow-sm transition-all" type="button">
+<span class="material-symbols-outlined text-[16px]">task_alt</span>
+<span>재직증명서</span>
+</button>
+<button class="cert-btn flex items-center justify-center gap-1.5 h-9 rounded px-space-sm text-on-surface-variant bg-surface-container-low hover:bg-surface-container font-label-sm text-label-sm transition-all" type="button">
+<span>경력증명서</span>
+</button>
+<button class="cert-btn flex items-center justify-center gap-1.5 h-9 rounded px-space-sm text-on-surface-variant bg-surface-container-low hover:bg-surface-container font-label-sm text-label-sm transition-all" type="button">
+<span>퇴직증명서</span>
+</button>
+<button class="cert-btn flex items-center justify-center gap-1.5 h-9 rounded px-space-sm text-on-surface-variant bg-surface-container-low hover:bg-surface-container font-label-sm text-label-sm transition-all" type="button">
+<span>연차사용내역서</span>
+</button>
+<button class="cert-btn flex items-center justify-center gap-1.5 h-9 rounded px-space-sm text-on-surface-variant bg-surface-container-low hover:bg-surface-container font-label-sm text-label-sm transition-all" type="button">
+<span>강사위촉증명서</span>
+</button>
+<button class="cert-btn flex items-center justify-center gap-1.5 h-9 rounded px-space-sm text-on-surface-variant bg-surface-container-low hover:bg-surface-container font-label-sm text-label-sm transition-all" type="button">
+<span>원천징수영수증</span>
+</button>
+</div>
+</div>
+<!-- Purpose of Submission & Copies -->
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-space-sm">
+<div class="sm:col-span-2 flex flex-col gap-1">
+<label class="font-label-sm text-label-sm text-on-surface-variant font-medium">제출 용도</label>
+<input class="h-9 px-space-sm rounded bg-surface-container-low text-on-surface font-body-default text-body-default focus:outline-none focus:bg-surface-white shadow-inner" id="cert-purpose-input" type="text" value="금융기관(주택자금 대출 심사) 제출용"/>
+</div>
+<div class="flex flex-col gap-1">
+<label class="font-label-sm text-label-sm text-on-surface-variant font-medium">발급 부수</label>
+<select class="h-9 px-space-sm rounded bg-surface-container-low text-on-surface font-body-default text-body-default focus:outline-none focus:bg-surface-white shadow-inner">
+<option value="1">1부 (정본)</option>
+<option value="2">2부</option>
+<option value="3">3부</option>
+</select>
+</div>
+</div>
+<!-- Fast Purpose Tags -->
+<div class="flex flex-wrap items-center gap-1 text-label-xs font-label-xs text-secondary">
+<span>추천 용도:</span>
+<button class="px-2 py-0.5 rounded bg-surface-container-high hover:bg-surface-container text-on-surface-variant transition-colors" onclick="document.getElementById('cert-purpose-input').value='금융기관 제출용'" type="button">금융기관 제출용</button>
+<button class="px-2 py-0.5 rounded bg-surface-container-high hover:bg-surface-container text-on-surface-variant transition-colors" onclick="document.getElementById('cert-purpose-input').value='교육청 교원자격 심사용'" type="button">교육청 자격심사용</button>
+<button class="px-2 py-0.5 rounded bg-surface-container-high hover:bg-surface-container text-on-surface-variant transition-colors" onclick="document.getElementById('cert-purpose-input').value='관공서 제출용'" type="button">관공서 제출용</button>
+</div>
+<!-- Security & Auto Stamp Toggle -->
+<div class="p-space-md rounded-lg bg-surface-container-low flex flex-col gap-space-xs mt-1">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-status-success text-[20px]">verified</span>
+<div class="flex flex-col">
+<span class="font-body-medium text-body-medium text-on-surface font-semibold">학교 공식 직인 자동 날인</span>
+<span class="font-label-xs text-label-xs text-secondary">위변조 방지 2D 바코드 및 진위확인용 난수키 암호화 삽입</span>
+</div>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-secondary-container peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+<div class="flex items-center gap-space-sm pt-space-xs font-label-xs text-label-xs text-on-surface-variant">
+<span>발급 승인관: <strong>교무부장 김교사</strong></span>
+<span>•</span>
+<span>보안등급: <strong>Tier-1 행정증명</strong></span>
+</div>
+</div>
+<!-- Submission / Actions -->
+<div class="flex items-center gap-space-sm pt-space-xs">
+<button class="flex-1 inline-flex items-center justify-center gap-space-xs h-10 rounded bg-primary text-on-primary hover:bg-primary-container font-label-sm text-label-sm font-semibold transition-all shadow-md" type="button">
+<span class="material-symbols-outlined text-[18px]">picture_as_pdf</span>
+<span>미리보기 및 정식 발급 (PDF / 인쇄)</span>
+</button>
+<button class="inline-flex items-center justify-center w-10 h-10 rounded bg-surface-container-low text-on-surface hover:bg-surface-container transition-colors" title="프린터 직접 전송" type="button">
+<span class="material-symbols-outlined text-[20px]">print</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Right: High Resolution A4 Document Realistic Live Preview (7 Cols) -->
+<div class="xl:col-span-7 flex flex-col gap-space-xs">
+<div class="flex items-center justify-between px-space-xs">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-secondary text-[18px]">visibility</span>
+<span class="font-label-sm text-label-sm font-semibold text-secondary">실시간 발급 A4 문서 렌더링 뷰 (2026-증명-0149호 예정)</span>
+</div>
+<div class="flex items-center gap-space-sm">
+<span class="font-label-xs text-label-xs text-status-success flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-status-success animate-ping"></span>
+            고해상도 300DPI 렌더
+          </span>
+<button class="font-label-xs text-label-xs text-secondary hover:text-on-surface flex items-center gap-0.5" type="button">
+<span class="material-symbols-outlined text-[14px]">zoom_in</span> 100%
+          </button>
+</div>
+</div>
+<!-- Simulated White Paper Document -->
+<div class="relative w-full bg-surface-white rounded-xl shadow-lg p-8 sm:p-12 text-on-surface flex flex-col justify-between overflow-hidden aspect-[1/1.38]">
+<!-- Watermark / Security Underlay -->
+<div class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-[0.03] select-none">
+<img alt="watermark" class="w-[380px] h-[380px] object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCE7J9fPpG9tuBQ4wQqN4dpR9qjdfoDTXQEX-rTjAfHAj0EDKde_gctPj8qBbiMsuUY7_0g12ARTVH9XACCf-Vxt20oEXpsGqM1Ogkb-NCE-MnDDj7zZ_bBz0eYO6-BJCebzsg0M2hMP-1UNApvfuijo2NapPZXK5sTCyqrEoM3TS-iLQttn-kPIntCqFBwk2SMe55WuhtO5KugilsedPLRqE6ovQY1q4oRQnBU8u6uSWxhwFF-l8w8sahK63RCJeYdIw"/>
+</div>
+<!-- Document Header -->
+<div class="flex flex-col gap-6 relative z-10">
+<div class="flex items-center justify-between pb-2">
+<div class="flex flex-col">
+<span class="font-label-xs text-label-xs text-secondary tracking-widest font-mono">발급 제 2026 - 증명 - 0149 호</span>
+<span class="font-label-xs text-label-xs text-secondary">등대교육공동체 교무행정처</span>
+</div>
+<!-- Verification QR Mockup -->
+<div class="flex items-center gap-2 bg-surface-container-low p-1.5 rounded">
+<div class="w-10 h-10 bg-slate-900 rounded flex items-center justify-center text-white">
+<span class="material-symbols-outlined text-[24px]">qr_code_2</span>
+</div>
+<div class="flex flex-col text-left">
+<span class="font-label-xs text-[9px] text-secondary font-mono leading-tight">진위확인코드</span>
+<span class="font-label-xs text-[10px] font-bold text-slate-800 font-mono tracking-tighter">LH-9924-E82</span>
+</div>
+</div>
+</div>
+<div class="text-center my-2">
+<h3 class="font-metric-stat text-[28px] tracking-[0.25em] font-extrabold text-slate-900 underline underline-offset-8 decoration-slate-300">
+              재 직 증 명 서
+            </h3>
+<span class="font-label-xs text-label-xs text-secondary tracking-widest uppercase mt-1 block">Certificate of Employment</span>
+</div>
+<!-- Document Spec Data Table -->
+<div class="rounded bg-surface-container-low/60 overflow-hidden mt-4">
+<div class="grid grid-cols-4 font-table-data text-table-data">
+<div class="bg-surface-container-high/60 p-2.5 font-semibold text-secondary flex items-center justify-center">성 명</div>
+<div class="p-2.5 font-medium text-slate-900 flex items-center">김 교 사 (金敎師)</div>
+<div class="bg-surface-container-high/60 p-2.5 font-semibold text-secondary flex items-center justify-center">생년월일</div>
+<div class="p-2.5 font-medium text-slate-900 flex items-center">1985년 04월 12일</div>
+<div class="bg-surface-container-high/60 p-2.5 font-semibold text-secondary flex items-center justify-center">소 속</div>
+<div class="p-2.5 font-medium text-slate-900 flex items-center">등대교육공동체 교무행정부</div>
+<div class="bg-surface-container-high/60 p-2.5 font-semibold text-secondary flex items-center justify-center">직 위 (직급)</div>
+<div class="p-2.5 font-medium text-slate-900 flex items-center">교무부장 (전임교원)</div>
+<div class="bg-surface-container-high/60 p-2.5 font-semibold text-secondary flex items-center justify-center">재직기간</div>
+<div class="p-2.5 font-medium text-slate-900 col-span-3 flex items-center">
+                2018년 03월 01일 ~ 현재까지 재직 중 (근속 8년 0개월)
+              </div>
+<div class="bg-surface-container-high/60 p-2.5 font-semibold text-secondary flex items-center justify-center">용 도</div>
+<div class="p-2.5 font-medium text-slate-900 col-span-3 flex items-center">
+                금융기관(주택자금 대출 심사) 제출용
+              </div>
+</div>
+</div>
+<!-- Affirmation Statement -->
+<div class="text-center py-6 px-4">
+<p class="font-body-medium text-body-medium text-slate-800 leading-relaxed tracking-wide">
+              위 사람은 당 교육공동체에 재직하고 있음을 증명합니다.
+            </p>
+<p class="font-headline-md text-headline-md font-semibold text-slate-900 mt-6 tracking-wider">
+              2026년 03월 05일
+            </p>
+</div>
+</div>
+<!-- Document Footer with Official Seal Placement -->
+<div class="relative z-10 pt-4 flex flex-col items-center justify-center">
+<div class="relative flex items-center justify-center w-full max-w-md py-4">
+<span class="font-headline-xl text-[22px] tracking-[0.2em] font-bold text-slate-950 text-center">
+              등대교육공동체 대표 이사장
+            </span>
+<!-- Realistic Official Stamped Red Seal Imprint Overlapping Text -->
+<div class="absolute right-6 sm:right-10 top-1/2 -translate-y-1/2 w-20 h-20 pointer-events-none select-none transition-transform hover:scale-105">
+<img alt="등대교육공동체 직인 날인" class="w-full h-full object-contain filter drop-shadow-[0_2px_4px_rgba(186,26,26,0.35)] mix-blend-multiply opacity-95" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCE7J9fPpG9tuBQ4wQqN4dpR9qjdfoDTXQEX-rTjAfHAj0EDKde_gctPj8qBbiMsuUY7_0g12ARTVH9XACCf-Vxt20oEXpsGqM1Ogkb-NCE-MnDDj7zZ_bBz0eYO6-BJCebzsg0M2hMP-1UNApvfuijo2NapPZXK5sTCyqrEoM3TS-iLQttn-kPIntCqFBwk2SMe55WuhtO5KugilsedPLRqE6ovQY1q4oRQnBU8u6uSWxhwFF-l8w8sahK63RCJeYdIw"/>
+</div>
+</div>
+<div class="w-full text-center mt-4">
+<span class="font-label-xs text-[10px] text-secondary font-mono tracking-tight">
+              경기도 고양시 일산서구 덕이로 104-8 등대교육공동체 행정국 | TEL 031-925-5000 | 본 문서는 전자결재를 통해 직인이 정식 날인된 유효 문서입니다.
+            </span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Permanent Issuance Ledger Table (Statutory Compliance Section) -->
+<div class="bg-surface-white rounded-xl shadow-sm p-space-lg flex flex-col gap-space-md">
+<div class="flex flex-wrap items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[22px]">menu_book</span>
+<h2 class="font-headline-lg text-headline-lg text-on-surface">제증명서 영구 발급 대장</h2>
+<span class="px-space-xs py-0.5 rounded bg-surface-container font-label-xs text-label-xs text-secondary font-mono">총 148건 등재됨</span>
+</div>
+<!-- Filter & Search Controls within Ledger -->
+<div class="flex flex-wrap items-center gap-space-xs">
+<div class="relative w-56">
+<span class="material-symbols-outlined absolute left-2.5 top-2 text-secondary text-[16px]">search</span>
+<input class="w-full h-8 pl-8 pr-2 rounded bg-surface-container-low text-on-surface font-table-data text-table-data focus:outline-none focus:bg-surface-white shadow-inner" placeholder="성명, 발급번호, 용도 검색..." type="text"/>
+</div>
+<select class="h-8 px-2 rounded bg-surface-container-low text-on-surface font-table-data text-table-data">
+<option>모든 증명서 종류</option>
+<option>재직증명서</option>
+<option>경력증명서</option>
+<option>갑근세원천징수</option>
+</select>
+<select class="h-8 px-2 rounded bg-surface-container-low text-on-surface font-table-data text-table-data">
+<option>2026년도 전체</option>
+<option>2025년도</option>
+</select>
+</div>
+</div>
+<!-- Data Table Container -->
+<div class="w-full overflow-x-auto rounded-lg">
+<table class="w-full text-left font-table-data text-table-data">
+<thead class="bg-surface-container-low text-secondary font-table-header text-table-header">
+<tr>
+<th class="py-2.5 px-3">발급번호</th>
+<th class="py-2.5 px-3">발급일자</th>
+<th class="py-2.5 px-3">대상자 (사번)</th>
+<th class="py-2.5 px-3">생년월일</th>
+<th class="py-2.5 px-3">증명서 구분</th>
+<th class="py-2.5 px-3">제출처 및 용도</th>
+<th class="py-2.5 px-3">발급자</th>
+<th class="py-2.5 px-3">직인날인</th>
+<th class="py-2.5 px-3 text-right">보관본 및 조치</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100">
+<!-- Row 1 (Latest) -->
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="py-2.5 px-3 font-mono font-semibold text-primary">2026-증명-0148</td>
+<td class="py-2.5 px-3 font-mono text-secondary">2026-03-05 10:24</td>
+<td class="py-2.5 px-3 font-medium text-on-surface">김교사 <span class="text-secondary font-mono text-[11px]">(T-2018-04)</span></td>
+<td class="py-2.5 px-3 font-mono text-secondary">1985.04.12</td>
+<td class="py-2.5 px-3">
+<span class="inline-flex items-center px-2 py-0.5 rounded bg-surface-container font-label-xs text-label-xs text-primary font-medium">재직증명서</span>
+</td>
+<td class="py-2.5 px-3 max-w-[220px] truncate text-on-surface">국민은행 일산지점 (주택자금대출)</td>
+<td class="py-2.5 px-3 text-secondary">김교사 (교무부장)</td>
+<td class="py-2.5 px-3">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-status-success-bg font-label-xs text-label-xs text-status-success font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-status-success"></span>
+                관인날인완료
+              </span>
+</td>
+<td class="py-2.5 px-3 text-right">
+<div class="inline-flex items-center gap-1">
+<button class="p-1 rounded hover:bg-surface-container text-primary" title="PDF 보관본 다운로드" type="button">
+<span class="material-symbols-outlined text-[18px]">download</span>
+</button>
+<button class="p-1 rounded hover:bg-surface-container text-secondary" title="이력 감사 로그" type="button">
+<span class="material-symbols-outlined text-[18px]">history</span>
+</button>
+<button class="p-1 rounded hover:bg-status-danger-bg text-status-danger" title="발급 무효/취소" type="button">
+<span class="material-symbols-outlined text-[18px]">cancel</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="py-2.5 px-3 font-mono font-semibold text-primary">2026-증명-0147</td>
+<td class="py-2.5 px-3 font-mono text-secondary">2026-03-04 16:10</td>
+<td class="py-2.5 px-3 font-medium text-on-surface">박수학 <span class="text-secondary font-mono text-[11px]">(T-2020-11)</span></td>
+<td class="py-2.5 px-3 font-mono text-secondary">1991.08.20</td>
+<td class="py-2.5 px-3">
+<span class="inline-flex items-center px-2 py-0.5 rounded bg-surface-container font-label-xs text-label-xs text-primary font-medium">경력증명서</span>
+</td>
+<td class="py-2.5 px-3 max-w-[220px] truncate text-on-surface">경기도고양교육지원청 (1급 정교사 연수)</td>
+<td class="py-2.5 px-3 text-secondary">김교사 (교무부장)</td>
+<td class="py-2.5 px-3">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-status-success-bg font-label-xs text-label-xs text-status-success font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-status-success"></span>
+                관인날인완료
+              </span>
+</td>
+<td class="py-2.5 px-3 text-right">
+<div class="inline-flex items-center gap-1">
+<button class="p-1 rounded hover:bg-surface-container text-primary" title="PDF 보관본 다운로드" type="button">
+<span class="material-symbols-outlined text-[18px]">download</span>
+</button>
+<button class="p-1 rounded hover:bg-surface-container text-secondary" title="이력 감사 로그" type="button">
+<span class="material-symbols-outlined text-[18px]">history</span>
+</button>
+<button class="p-1 rounded hover:bg-status-danger-bg text-status-danger" title="발급 무효/취소" type="button">
+<span class="material-symbols-outlined text-[18px]">cancel</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="py-2.5 px-3 font-mono font-semibold text-primary">2026-증명-0146</td>
+<td class="py-2.5 px-3 font-mono text-secondary">2026-03-03 14:02</td>
+<td class="py-2.5 px-3 font-medium text-on-surface">이행정 <span class="text-secondary font-mono text-[11px]">(A-2019-02)</span></td>
+<td class="py-2.5 px-3 font-mono text-secondary">1988.11.03</td>
+<td class="py-2.5 px-3">
+<span class="inline-flex items-center px-2 py-0.5 rounded bg-surface-container-high font-label-xs text-label-xs text-secondary font-medium">원천징수부</span>
+</td>
+<td class="py-2.5 px-3 max-w-[220px] truncate text-on-surface">고양세무서 (소득확인서 서류보완)</td>
+<td class="py-2.5 px-3 text-secondary">김교사 (교무부장)</td>
+<td class="py-2.5 px-3">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-status-success-bg font-label-xs text-label-xs text-status-success font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-status-success"></span>
+                관인날인완료
+              </span>
+</td>
+<td class="py-2.5 px-3 text-right">
+<div class="inline-flex items-center gap-1">
+<button class="p-1 rounded hover:bg-surface-container text-primary" title="PDF 보관본 다운로드" type="button">
+<span class="material-symbols-outlined text-[18px]">download</span>
+</button>
+<button class="p-1 rounded hover:bg-surface-container text-secondary" title="이력 감사 로그" type="button">
+<span class="material-symbols-outlined text-[18px]">history</span>
+</button>
+<button class="p-1 rounded hover:bg-status-danger-bg text-status-danger" title="발급 무효/취소" type="button">
+<span class="material-symbols-outlined text-[18px]">cancel</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 4 (Voided Example) -->
+<tr class="hover:bg-surface-container-low/50 transition-colors opacity-75">
+<td class="py-2.5 px-3 font-mono font-semibold text-secondary line-through">2026-증명-0145</td>
+<td class="py-2.5 px-3 font-mono text-secondary">2026-03-02 09:15</td>
+<td class="py-2.5 px-3 font-medium text-secondary">정영어 <span class="text-secondary font-mono text-[11px]">(T-2021-08)</span></td>
+<td class="py-2.5 px-3 font-mono text-secondary">1993.02.14</td>
+<td class="py-2.5 px-3">
+<span class="inline-flex items-center px-2 py-0.5 rounded bg-surface-container-low font-label-xs text-label-xs text-secondary font-medium">재직증명서</span>
+</td>
+<td class="py-2.5 px-3 max-w-[220px] truncate text-secondary">신한카드 (신용카드 발급 신청 - 오기재 취소)</td>
+<td class="py-2.5 px-3 text-secondary">김교사 (교무부장)</td>
+<td class="py-2.5 px-3">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-status-danger-bg font-label-xs text-label-xs text-status-danger font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-status-danger"></span>
+                발급무효처리
+              </span>
+</td>
+<td class="py-2.5 px-3 text-right">
+<div class="inline-flex items-center gap-1">
+<span class="font-label-xs text-[11px] text-secondary">사유: 대상자 요청 취소</span>
+<button class="p-1 rounded hover:bg-surface-container text-secondary" title="감사사유 확인" type="button">
+<span class="material-symbols-outlined text-[18px]">receipt</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 5 -->
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="py-2.5 px-3 font-mono font-semibold text-primary">2026-증명-0144</td>
+<td class="py-2.5 px-3 font-mono text-secondary">2026-02-27 17:40</td>
+<td class="py-2.5 px-3 font-medium text-on-surface">최과학 <span class="text-secondary font-mono text-[11px]">(T-2017-03)</span></td>
+<td class="py-2.5 px-3 font-mono text-secondary">1982.07.09</td>
+<td class="py-2.5 px-3">
+<span class="inline-flex items-center px-2 py-0.5 rounded bg-surface-container font-label-xs text-label-xs text-primary font-medium">경력증명서</span>
+</td>
+<td class="py-2.5 px-3 max-w-[220px] truncate text-on-surface">한국과학창의재단 (우수교원 연구과제 공모)</td>
+<td class="py-2.5 px-3 text-secondary">김교사 (교무부장)</td>
+<td class="py-2.5 px-3">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-status-success-bg font-label-xs text-label-xs text-status-success font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-status-success"></span>
+                관인날인완료
+              </span>
+</td>
+<td class="py-2.5 px-3 text-right">
+<div class="inline-flex items-center gap-1">
+<button class="p-1 rounded hover:bg-surface-container text-primary" title="PDF 보관본 다운로드" type="button">
+<span class="material-symbols-outlined text-[18px]">download</span>
+</button>
+<button class="p-1 rounded hover:bg-surface-container text-secondary" title="이력 감사 로그" type="button">
+<span class="material-symbols-outlined text-[18px]">history</span>
+</button>
+<button class="p-1 rounded hover:bg-status-danger-bg text-status-danger" title="발급 무효/취소" type="button">
+<span class="material-symbols-outlined text-[18px]">cancel</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Table Pagination & Verification Status -->
+<div class="flex flex-wrap items-center justify-between gap-space-sm pt-space-xs font-label-xs text-label-xs text-secondary">
+<div class="flex items-center gap-2">
+<span>페이지 1 / 15 (1~5 / 총 148건)</span>
+<span>•</span>
+<span class="text-status-success flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">shield</span>
+          공공기록물 관리에 관한 법률 시행규칙 준수
+        </span>
+</div>
+<div class="flex items-center gap-1">
+<button class="w-7 h-7 rounded bg-surface-container-low hover:bg-surface-container flex items-center justify-center text-on-surface" type="button">
+<span class="material-symbols-outlined text-[16px]">chevron_left</span>
+</button>
+<button class="w-7 h-7 rounded bg-primary text-on-primary font-bold flex items-center justify-center" type="button">1</button>
+<button class="w-7 h-7 rounded bg-surface-container-low hover:bg-surface-container flex items-center justify-center text-on-surface" type="button">2</button>
+<button class="w-7 h-7 rounded bg-surface-container-low hover:bg-surface-container flex items-center justify-center text-on-surface" type="button">3</button>
+<span class="px-1">...</span>
+<button class="w-7 h-7 rounded bg-surface-container-low hover:bg-surface-container flex items-center justify-center text-on-surface" type="button">15</button>
+<button class="w-7 h-7 rounded bg-surface-container-low hover:bg-surface-container flex items-center justify-center text-on-surface" type="button">
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<script>
+  // Simple micro-interaction for certificate category buttons
+  document.querySelectorAll('.cert-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.cert-btn').forEach(b => {
+        b.classList.remove('bg-primary', 'text-on-primary');
+        b.classList.add('bg-surface-container-low', 'text-on-surface-variant');
+      });
+      this.classList.remove('bg-surface-container-low', 'text-on-surface-variant');
+      this.classList.add('bg-primary', 'text-on-primary');
+    });
+  });
+</script></main></div></body></html>

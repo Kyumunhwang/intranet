@@ -1,0 +1,114 @@
+[
+  {
+    "id": "t1",
+    "template_category": "ATTENDANCE_REQ",
+    "template_name": "휴가 / 연차원 (Leave Request)",
+    "auto_deduct_leave": true,
+    "default_approval_steps": [
+      {
+        "order": 1,
+        "role_desc": "기안자",
+        "type": "DRAFTER"
+      },
+      {
+        "order": 2,
+        "role_desc": "교무부장 (부서장)",
+        "approver_id": "u4",
+        "type": "APPROVAL"
+      },
+      {
+        "order": 3,
+        "role_desc": "교장 (최종결재)",
+        "approver_id": "u3",
+        "type": "APPROVAL"
+      }
+    ]
+  },
+  {
+    "id": "t2",
+    "template_category": "EXPENSE",
+    "template_name": "지출결의서 (Expense Resolution)",
+    "auto_deduct_leave": false,
+    "default_approval_steps": [
+      {
+        "order": 1,
+        "role_desc": "기안자",
+        "type": "DRAFTER"
+      },
+      {
+        "order": 2,
+        "role_desc": "부서장",
+        "approver_id": "u4",
+        "type": "APPROVAL"
+      },
+      {
+        "order": 3,
+        "role_desc": "행정실장/재정",
+        "approver_id": "u1",
+        "type": "APPROVAL"
+      },
+      {
+        "order": 4,
+        "role_desc": "교장",
+        "approver_id": "u3",
+        "type": "APPROVAL"
+      }
+    ]
+  },
+  {
+    "id": "t3",
+    "template_category": "GENERAL_DRAFT",
+    "template_name": "출장신청서 (Business Trip Request)",
+    "auto_deduct_leave": false,
+    "default_approval_steps": [
+      {
+        "order": 1,
+        "role_desc": "기안자",
+        "type": "DRAFTER"
+      },
+      {
+        "order": 2,
+        "role_desc": "부서장",
+        "approver_id": "u4",
+        "type": "APPROVAL"
+      },
+      {
+        "order": 3,
+        "role_desc": "교장",
+        "approver_id": "u3",
+        "type": "APPROVAL"
+      }
+    ]
+  },
+  {
+    "id": "t4",
+    "template_category": "PURCHASE",
+    "template_name": "구매기안문 (Purchase Draft)",
+    "auto_deduct_leave": false,
+    "default_approval_steps": [
+      {
+        "order": 1,
+        "role_desc": "기안자",
+        "type": "DRAFTER"
+      },
+      {
+        "order": 2,
+        "role_desc": "부서장",
+        "approver_id": "u4",
+        "type": "APPROVAL"
+      },
+      {
+        "order": 3,
+        "role_desc": "재정실",
+        "approver_id": "u1",
+        "type": "APPROVAL"
+      },
+      {
+        "order": 4,
+        "role_desc": "교장",
+        "approver_id": "u3",
+        "type": "APPROVAL"
+      }
+    ]
+  }
+]

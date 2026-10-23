@@ -1,0 +1,35 @@
+[
+  {
+    "id": "step1_1",
+    "doc_id": "doc1",
+    "step_order": 1,
+    "step_type": "APPROVAL",
+    "approver_id": "u2",
+    "step_status": "APPROVED",
+    "comment": "기안 제출",
+    "signature_snapshot": "김교사 [印]",
+    "acted_at": "2026-10-23T08:35:00Z"
+  },
+  {
+    "id": "step1_2",
+    "doc_id": "doc1",
+    "step_order": 2,
+    "step_type": "APPROVAL",
+    "approver_id": "u4",
+    "step_status": "WAITING",
+    "comment": null,
+    "signature_snapshot": null,
+    "acted_at": null
+  },
+  {
+    "id": "step1_3",
+    "doc_id": "doc1",
+    "step_order": 3,
+    "step_type": "APPROVAL",
+    "approver_id": "u3",
+    "step_status": "WAITING",
+    "comment": null,
+    "signature_snapshot": null,
+    "acted_at": null
+  }
+]

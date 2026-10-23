@@ -1,0 +1,15 @@
+[
+  {
+    "id": "sa1",
+    "teacher_id": "u2",
+    "work_date": "2026-10-23",
+    "check_in_time": "2026-10-23T08:15:22Z",
+    "check_out_time": "2026-10-23T14:43:43.011Z",
+    "check_in_ip": "211.104.88.24",
+    "check_out_ip": "211.104.88.24",
+    "is_valid_school_ip": true,
+    "attendance_status": "PRESENT",
+    "overtime_minutes": 0,
+    "memo": "정상 출근"
+  }
+]

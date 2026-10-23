@@ -1,0 +1,20 @@
+[
+  {
+    "id": "b1",
+    "board_code": "NOTICE_ALL",
+    "board_name": "전체 공지사항 (School Notice)",
+    "allow_comments": true
+  },
+  {
+    "id": "b2",
+    "board_code": "MEETING_LOG",
+    "board_name": "교무회의록 (Faculty Meeting)",
+    "allow_comments": true
+  },
+  {
+    "id": "b3",
+    "board_code": "ARCHIVE",
+    "board_name": "수업 및 행정 자료실 (Archive)",
+    "allow_comments": false
+  }
+]
