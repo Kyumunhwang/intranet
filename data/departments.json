@@ -1,8 +1,8 @@
 [
   {
     "id": "d1",
-    "dept_code": "ACADEMIC",
-    "dept_name": "교무부 (Academic Affairs)",
+    "dept_code": "ACAD",
+    "dept_name": "교무기획부 (Academic Affairs)",
     "sort_order": 1
   },
   {
@@ -18,21 +18,15 @@
     "sort_order": 3
   },
   {
-    "id": "d4",
-    "dept_code": "COUNSEL",
-    "dept_name": "상담실 (Counseling Center)",
-    "sort_order": 4
-  },
-  {
     "id": "d5",
-    "dept_code": "MIDDLE_HIGH",
-    "dept_name": "중고등교육부 (Secondary Edu)",
-    "sort_order": 5
+    "dept_code": "SEC",
+    "dept_name": "중고등 (Secondary Edu)",
+    "sort_order": 4
   },
   {
     "id": "d6",
     "dept_code": "ELEM",
-    "dept_name": "초등교육부 (Elementary Edu)",
-    "sort_order": 6
+    "dept_name": "초등 (Elementary Edu)",
+    "sort_order": 5
   }
 ]

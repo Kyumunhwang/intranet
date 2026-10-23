@@ -1,56 +1,98 @@
 [
   {
-    "id": "sda1",
-    "student_id": "s1",
+    "id": "sda-1",
+    "student_id": "s74",
     "attendance_date": "2026-10-23",
     "status": "PRESENT",
     "comment": ""
   },
   {
-    "id": "sda2",
-    "student_id": "s2",
+    "id": "sda-2",
+    "student_id": "s75",
     "attendance_date": "2026-10-23",
-    "status": "PRESENT",
+    "status": "LATE",
     "comment": "병원 진료 후 09:10 입실"
   },
   {
-    "id": "sda3",
-    "student_id": "s3",
+    "id": "sda-3",
+    "student_id": "s76",
     "attendance_date": "2026-10-23",
     "status": "PRESENT",
     "comment": ""
   },
   {
-    "id": "sda4",
-    "student_id": "s4",
+    "id": "sda-4",
+    "student_id": "s77",
+    "attendance_date": "2026-10-23",
+    "status": "EARLY_LEAVE",
+    "comment": "체험학습 조퇴"
+  },
+  {
+    "id": "sda-5",
+    "student_id": "s78",
     "attendance_date": "2026-10-23",
     "status": "PRESENT",
     "comment": ""
   },
   {
-    "id": "sda5",
-    "student_id": "s5",
+    "id": "sda-6",
+    "student_id": "s79",
+    "attendance_date": "2026-10-23",
+    "status": "SICK",
+    "comment": "독감 병결"
+  },
+  {
+    "id": "sda-7",
+    "student_id": "s80",
+    "attendance_date": "2026-10-23",
+    "status": "ABSENT",
+    "comment": "가족행사 결석"
+  },
+  {
+    "id": "sda-8",
+    "student_id": "s81",
     "attendance_date": "2026-10-23",
     "status": "PRESENT",
     "comment": ""
   },
   {
-    "id": "sda6",
-    "student_id": "s6",
+    "id": "sda-9",
+    "student_id": "s82",
     "attendance_date": "2026-10-23",
     "status": "PRESENT",
     "comment": ""
   },
   {
-    "id": "sda7",
-    "student_id": "s7",
+    "id": "sda-10",
+    "student_id": "s83",
     "attendance_date": "2026-10-23",
     "status": "PRESENT",
     "comment": ""
   },
   {
-    "id": "sda8",
-    "student_id": "s8",
+    "id": "sda-11",
+    "student_id": "s84",
+    "attendance_date": "2026-10-23",
+    "status": "PRESENT",
+    "comment": ""
+  },
+  {
+    "id": "sda-12",
+    "student_id": "s85",
+    "attendance_date": "2026-10-23",
+    "status": "PRESENT",
+    "comment": ""
+  },
+  {
+    "id": "sda-13",
+    "student_id": "s86",
+    "attendance_date": "2026-10-23",
+    "status": "PRESENT",
+    "comment": ""
+  },
+  {
+    "id": "sda-14",
+    "student_id": "s87",
     "attendance_date": "2026-10-23",
     "status": "PRESENT",
     "comment": ""

@@ -29,7 +29,7 @@ export default function CalendarPage() {
       color: 'bg-blue-600',
       textColor: 'text-blue-700 bg-blue-50 border border-blue-200',
       location: '본관 대강당',
-      owner: '박교무 (교무부장)',
+      owner: '황규문 (교감)',
     },
     {
       id: 'e2',
@@ -41,7 +41,7 @@ export default function CalendarPage() {
       color: 'bg-emerald-600',
       textColor: 'text-emerald-700 bg-emerald-50 border border-emerald-200',
       location: '본관 제2회의실',
-      owner: '김교사 (중고등부)',
+      owner: '이재원 (중고등학사팀)',
     },
     {
       id: 'e3',
@@ -53,7 +53,7 @@ export default function CalendarPage() {
       color: 'bg-emerald-600',
       textColor: 'text-emerald-700 bg-emerald-50 border border-emerald-200',
       location: '과학실험실',
-      owner: '김교사',
+      owner: '이재원',
     },
     {
       id: 'e4',
@@ -65,7 +65,7 @@ export default function CalendarPage() {
       color: 'bg-blue-600',
       textColor: 'text-blue-700 bg-blue-50 border border-blue-200',
       location: '시청각실',
-      owner: '이교장',
+      owner: '김바울 (교장)',
     },
   ];
 

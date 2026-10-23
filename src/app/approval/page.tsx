@@ -31,7 +31,7 @@ export default function ApprovalPage() {
   const [startDate, setStartDate] = useState('2026-10-28');
   const [endDate, setEndDate] = useState('2026-10-28');
   const [content, setContent] = useState(
-    '개인 사유로 인하여 아래와 같이 연차 휴가를 신청하오니 결재 바랍니다.\n- 일시: 2026년 10월 28일 (1일간)\n- 사유: 가족 행사 및 개인 건강검진\n- 수업 대강: 박교무 선생님 배정 완료'
+    '개인 사유로 인하여 아래와 같이 연차 휴가를 신청하오니 결재 바랍니다.\n- 일시: 2026년 10월 28일 (1일간)\n- 사유: 가족 행사 및 개인 건강검진\n- 수업 대강: 정성수 선생님 배정 완료'
   );
   const [specialNotes, setSpecialNotes] = useState('수업 보강 계획서 교무부 사전 제출 완료');
 
@@ -140,7 +140,7 @@ export default function ApprovalPage() {
         </div>
       )}
 
-      {/* CASE 1: 기안자(김교사) 화면 - 결재권자 탭이나 결재 버튼은 절대 보이지 않음! */}
+      {/* CASE 1: 기안자(이재원) 화면 - 결재권자 탭이나 결재 버튼은 절대 보이지 않음! */}
       {isDrafter && (
         <div className="space-y-5">
           {/* Category Switcher */}
@@ -204,8 +204,8 @@ export default function ApprovalPage() {
                   <div className="grid grid-cols-2 gap-x-6 gap-y-1 text-slate-600 font-medium">
                     <div>{t('문서번호:', 'Doc No:')} <span className="font-mono text-slate-900 font-bold">LIS-2026-교무-0042 (자동생성)</span></div>
                     <div>{t('기안일자:', 'Date:')} <span className="font-mono text-slate-900">2026.10.23</span></div>
-                    <div>{t('기안부서:', 'Dept:')} <span className="text-slate-900">중고등교육부</span></div>
-                    <div>{t('기안자:', 'Drafter:')} <span className="font-bold text-slate-900">김교사 (Grace Kim)</span></div>
+                    <div>{t('기안부서:', 'Dept:')} <span className="text-slate-900">중고등학사팀</span></div>
+                    <div>{t('기안자:', 'Drafter:')} <span className="font-bold text-slate-900">이재원 (Jay Lee)</span></div>
                   </div>
                 </div>
 
@@ -221,17 +221,17 @@ export default function ApprovalPage() {
                       </div>
                       <div className="h-14 flex flex-col items-center justify-center p-1">
                         <span className="text-[11px] font-bold text-rose-700 border border-rose-600 rounded-full px-2 py-0.2">
-                          김교사 [印]
+                          이재원 [印]
                         </span>
                         <span className="text-[9px] text-slate-400 mt-1">상신 예정</span>
                       </div>
                     </div>
                     <div className="w-24">
                       <div className="bg-slate-50 py-1 text-[11px] font-semibold text-slate-600 border-b border-slate-300">
-                        {t('교무부장', 'Dept Head')}
+                        {t('교감', 'Vice Principal')}
                       </div>
                       <div className="h-14 flex flex-col items-center justify-center p-1 text-[11px] text-slate-400">
-                        박교무
+                        황규문
                       </div>
                     </div>
                     <div className="w-24">
@@ -239,7 +239,7 @@ export default function ApprovalPage() {
                         {t('교장', 'Principal')}
                       </div>
                       <div className="h-14 flex flex-col items-center justify-center p-1 text-[11px] text-slate-400">
-                        이교장
+                        김바울
                       </div>
                     </div>
                   </div>
@@ -341,7 +341,7 @@ export default function ApprovalPage() {
                     [LIS-2026-교무-0042] 2026학년도 하반기 연차 휴가 신청서 (1일)
                   </div>
                   <div className="text-[11px] text-slate-500 mt-0.5">
-                    기안자: 김교사 (중고등부) · 기안일시: 2026.10.23 08:35
+                    기안자: 이재원 (중고등부) · 기안일시: 2026.10.23 08:35
                   </div>
                 </div>
               </div>
@@ -358,7 +358,7 @@ export default function ApprovalPage() {
                 <Stamp className="w-4 h-4 text-blue-700" />
                 <div>
                   <span className="font-bold text-blue-900 block text-xs">
-                    [1차 결재권자: 교무부장 박교무] 결재 처리
+                    [1차 결재권자: 교감 황규문] 결재 처리
                   </span>
                   <span className="text-[11px] text-blue-700">
                     아래 기안자 작성 원문을 검토하신 후 승인 또는 전결을 처리해 주십시오.
@@ -371,7 +371,7 @@ export default function ApprovalPage() {
                   onClick={() => handleDeptHeadApprove('APPROVE')}
                   className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg shadow-sm text-xs"
                 >
-                  교무부장 승인 (도장 찍기)
+                  교감 승인 (도장 찍기)
                 </button>
                 <button
                   type="button"
@@ -397,10 +397,10 @@ export default function ApprovalPage() {
                 <Stamp className="w-4 h-4 text-emerald-700" />
                 <div>
                   <span className="font-bold text-emerald-900 block text-xs">
-                    [최종 결재권자: 교장 이교장] 최종 결재 처리
+                    [최종 결재권자: 교장 김바울] 최종 결재 처리
                   </span>
                   <span className="text-[11px] text-emerald-700">
-                    교무부장 검토 승인 완료 문서를 확인 후 최종 승인 시 결재 도장이 날인되고 교사 연차가 자동 차감됩니다.
+                    교감 검토 승인 완료 문서를 확인 후 최종 승인 시 결재 도장이 날인되고 교사 연차가 자동 차감됩니다.
                   </span>
                 </div>
               </div>
@@ -438,8 +438,8 @@ export default function ApprovalPage() {
                   <div className="grid grid-cols-2 gap-x-6 gap-y-1 text-slate-600 font-medium">
                     <div>문서번호: <span className="font-mono text-slate-900 font-bold">LIS-2026-교무-0042</span></div>
                     <div>기안일자: <span className="font-mono text-slate-900">2026.10.23</span></div>
-                    <div>기안부서: <span className="text-slate-900">중고등교육부</span></div>
-                    <div>기안자: <span className="font-bold text-slate-900">김교사 (Grace Kim)</span></div>
+                    <div>기안부서: <span className="text-slate-900">중고등학사팀</span></div>
+                    <div>기안자: <span className="font-bold text-slate-900">이재원 (Jay Lee)</span></div>
                   </div>
                 </div>
 
@@ -455,20 +455,20 @@ export default function ApprovalPage() {
                       </div>
                       <div className="h-16 flex flex-col items-center justify-center p-1">
                         <span className="text-[11px] font-bold text-rose-700 border border-rose-600 rounded-full px-2 py-0.2">
-                          김교사 [印]
+                          이재원 [印]
                         </span>
                         <span className="text-[9px] text-slate-400 mt-1 font-mono">10.23 08:35</span>
                       </div>
                     </div>
                     <div className="w-24">
                       <div className="bg-slate-50 py-1 text-[11px] font-semibold text-slate-600 border-b border-slate-300">
-                        교무부장
+                        교감
                       </div>
                       <div className="h-16 flex flex-col items-center justify-center p-1">
                         {step2Status === 'APPROVED' ? (
                           <>
                             <span className="text-[11px] font-bold text-rose-700 border border-rose-600 rounded-full px-2 py-0.2">
-                              {isDelegated ? '박교무 [전결]' : '박교무 [印]'}
+                              {isDelegated ? '황규문 [전결]' : '황규문 [印]'}
                             </span>
                             <span className="text-[9px] text-slate-400 mt-1 font-mono">{step2Time || '10.23 09:10'}</span>
                           </>
@@ -487,7 +487,7 @@ export default function ApprovalPage() {
                         {step3Status === 'APPROVED' ? (
                           <>
                             <span className="text-[11px] font-bold text-rose-700 border border-rose-600 rounded-full px-2 py-0.2">
-                              이교장 [印]
+                              김바울 [印]
                             </span>
                             <span className="text-[9px] text-slate-400 mt-1 font-mono">{step3Time || '10.23 09:30'}</span>
                           </>

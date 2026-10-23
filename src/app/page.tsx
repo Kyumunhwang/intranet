@@ -34,22 +34,28 @@ export default function DashboardPage() {
 
   useEffect(() => {
     const initialStudents: Student[] = [
-      { id: 's1', student_no: '2026-M801', name: '강서준', grade: 'M8', status: 'ENROLLED' },
-      { id: 's2', student_no: '2026-M802', name: '김민재', grade: 'M8', status: 'ENROLLED' },
-      { id: 's3', student_no: '2026-M803', name: '김서연', grade: 'M8', status: 'ENROLLED' },
-      { id: 's4', student_no: '2026-M804', name: '박지우', grade: 'M8', status: 'ENROLLED' },
-      { id: 's5', student_no: '2026-M805', name: '이준혁', grade: 'M8', status: 'ENROLLED' },
-      { id: 's6', student_no: '2026-M806', name: '정예원', grade: 'M8', status: 'ENROLLED' },
-      { id: 's7', student_no: '2026-M807', name: '최도윤', grade: 'M8', status: 'ENROLLED' },
-      { id: 's8', student_no: '2026-M808', name: '한지민', grade: 'M8', status: 'ENROLLED' },
+      { id: 's74', student_no: '2026-M801', name: 'HAN, Yeju (한예주)', grade: 'M8', homeroom_teacher_id: 'u8', status: 'ENROLLED' },
+      { id: 's75', student_no: '2026-M802', name: 'HWANG, Hee (황희)', grade: 'M8', homeroom_teacher_id: 'u8', status: 'ENROLLED' },
+      { id: 's76', student_no: '2026-M803', name: 'JEONG, Raon (정라온)', grade: 'M8', homeroom_teacher_id: 'u8', status: 'ENROLLED' },
+      { id: 's77', student_no: '2026-M804', name: 'KIM, Eden (김이든)', grade: 'M8', homeroom_teacher_id: 'u8', status: 'ENROLLED' },
+      { id: 's78', student_no: '2026-M805', name: 'Kim, Hajin (김하진)', grade: 'M8', homeroom_teacher_id: 'u8', status: 'ENROLLED' },
+      { id: 's79', student_no: '2026-M806', name: 'LEE, Jeri (이재이)', grade: 'M8', homeroom_teacher_id: 'u8', status: 'ENROLLED' },
+      { id: 's80', student_no: '2026-M807', name: 'OH, Sion (오시온)', grade: 'M8', homeroom_teacher_id: 'u8', status: 'ENROLLED' },
+      { id: 's81', student_no: '2026-M808', name: 'PARK, Haon (박하온)', grade: 'M8', homeroom_teacher_id: 'u8', status: 'ENROLLED' },
+      { id: 's82', student_no: '2026-M809', name: 'SHIN, Hajun (신하준)', grade: 'M8', homeroom_teacher_id: 'u8', status: 'ENROLLED' },
+      { id: 's83', student_no: '2026-M810', name: 'SONG, La-Im (송라임)', grade: 'M8', homeroom_teacher_id: 'u8', status: 'ENROLLED' },
+      { id: 's84', student_no: '2026-M811', name: 'SONG, Sangyun (송상윤)', grade: 'M8', homeroom_teacher_id: 'u8', status: 'ENROLLED' },
+      { id: 's85', student_no: '2026-M812', name: 'YANG, Luis Heerahm (양희람)', grade: 'M8', homeroom_teacher_id: 'u8', status: 'ENROLLED' },
+      { id: 's86', student_no: '2026-M813', name: 'YOO, Hajoon (유하준)', grade: 'M8', homeroom_teacher_id: 'u8', status: 'ENROLLED' },
+      { id: 's87', student_no: '2026-M814', name: 'YOON, Seokhyeon (윤석현)', grade: 'M8', homeroom_teacher_id: 'u8', status: 'ENROLLED' },
     ];
     setStudents(initialStudents);
 
     const map: Record<string, { status: StudentAttendanceStatus; comment: string }> = {};
     initialStudents.forEach((s) => {
       map[s.id] = {
-        status: s.id === 's2' ? 'LATE' : s.id === 's4' ? 'EARLY_LEAVE' : 'PRESENT',
-        comment: s.id === 's2' ? '병원 진료' : s.id === 's4' ? '조퇴' : '',
+        status: s.id === 's75' ? 'LATE' : s.id === 's77' ? 'EARLY_LEAVE' : 'PRESENT',
+        comment: s.id === 's75' ? '병원 진료' : s.id === 's77' ? '체험학습 조퇴' : '',
       };
     });
     setAttendanceMap(map);
@@ -60,7 +66,7 @@ export default function DashboardPage() {
       grade: 3,
       class_no: 2,
       is_confirmed: true,
-      confirmed_by: '김교사',
+      confirmed_by: '이재원',
       confirmed_at: '08:50',
       total_students: 8,
       present_count: 6,
@@ -299,7 +305,7 @@ export default function DashboardPage() {
               >
                 {['T1', 'E1', 'E2', 'E3', 'E4', 'E5', 'M6', 'M7', 'M8', 'H9', 'H10', 'H11', 'H12'].map((g) => (
                   <option key={g} value={g}>
-                    {g} 학년 {g === 'M8' ? '(담임: 김교사)' : ''}
+                    {g} 학년 {g === 'M8' ? '(담임: 이재원)' : ''}
                   </option>
                 ))}
               </select>
@@ -514,7 +520,7 @@ export default function DashboardPage() {
                     <span>[필독] 2026학년도 1학기 교직원 복무 규정 및 학교 공인 IP 출퇴근 지침</span>
                   </Link>
                 </td>
-                <td className="py-3 px-4 font-semibold text-slate-800">박교무 (교무부)</td>
+                <td className="py-3 px-4 font-semibold text-slate-800">황규문 (교감)</td>
                 <td className="py-3 px-4 text-center font-mono text-slate-500">2026.10.23</td>
                 <td className="py-3 px-4 text-center">
                   <span className="px-2 py-0.5 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200 inline-flex items-center gap-1">

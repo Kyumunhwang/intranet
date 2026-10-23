@@ -148,9 +148,9 @@ export function logAuditAction(params: {
   const logs = readJson<AuditLog[]>('audit_and_access_logs.json', []);
   const newLog: AuditLog = {
     id: `log_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
-    actor_id: params.actor_id || 'u2',
-    actor_email: params.actor_email || 'kim.teacher@lighthouse.org',
-    actor_name: params.actor_name || '김교사',
+    actor_id: params.actor_id || 'u8',
+    actor_email: params.actor_email || 'jay.lee@lighthouse.org',
+    actor_name: params.actor_name || '이재원',
     action_category: params.action_category,
     action_detail: params.action_detail,
     client_ip: params.client_ip,
@@ -409,7 +409,7 @@ export function createApprovalDocument(params: {
     approver_id: params.drafter_id,
     step_status: 'APPROVED',
     comment: '기안 상신 완료',
-    signature_snapshot: '김교사 [印]',
+    signature_snapshot: '이재원 [印]',
     acted_at: new Date().toISOString(),
   });
 

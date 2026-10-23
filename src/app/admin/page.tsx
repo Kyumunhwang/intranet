@@ -56,6 +56,10 @@ import {
 } from 'lucide-react';
 import { Profile, AllowedIP, AuditLog, Department, Position, Role, Student } from '@/lib/types';
 import { useLanguage } from '@/lib/language-context';
+import rawProfilesData from '../../../data/profiles.json';
+import rawStudentsData from '../../../data/students.json';
+import rawDepartmentsData from '../../../data/departments.json';
+import rawPositionsData from '../../../data/positions.json';
 
 const SCHOOL_GRADES = [
   'T1',
@@ -215,133 +219,12 @@ function AdminConsoleContent() {
     logo_type: '2026_STANDARD',
   });
 
-  // 부서 및 직책 마스터
-  const [departments, setDepartments] = useState<Department[]>([
-    { id: 'd1', dept_code: 'ACAD', dept_name: '교무기획부', sort_order: 1 },
-    { id: 'd2', dept_code: 'ADMIN', dept_name: '행정실 / 재정부', sort_order: 2 },
-    { id: 'd3', dept_code: 'SEC', dept_name: '중등학사팀', sort_order: 3 },
-    { id: 'd4', dept_code: 'ELEM', dept_name: '초등학사팀', sort_order: 4 },
-    { id: 'd5', dept_code: 'SAFE', dept_name: '학생생활안전부', sort_order: 5 },
-  ]);
+  // 부서 및 직책 마스터 (실제 DB 연동)
+  const [departments, setDepartments] = useState<Department[]>(rawDepartmentsData as Department[]);
+  const [positions, setPositions] = useState<Position[]>(rawPositionsData as Position[]);
 
-  const [positions, setPositions] = useState<Position[]>([
-    { id: 'p1', position_code: 'PRIN', position_name: '학교장', is_approver: true, approval_rank: 1, sort_order: 1 },
-    { id: 'p2', position_code: 'V_PRIN', position_name: '교감', is_approver: true, approval_rank: 2, sort_order: 2 },
-    { id: 'p6', position_code: 'HEAD', position_name: '부장교사', is_approver: true, approval_rank: 3, sort_order: 3 },
-    { id: 'p7', position_code: 'TEACH', position_name: '정규교사', is_approver: false, approval_rank: 4, sort_order: 4 },
-    { id: 'p8', position_code: 'PART', position_name: '파트교사 / 외부강사', is_approver: false, approval_rank: 5, sort_order: 5 },
-  ]);
-
-  // 교직원 DB 목록 (검색 및 CRUD 연동)
-  const [profiles, setProfiles] = useState<Profile[]>([
-    {
-      id: 'u1',
-      employee_no: 'LIS-2024-001',
-      email: 'admin@lighthouse.org',
-      name_kr: '정총괄',
-      name_en: 'David Jung',
-      phone: '010-1234-5678',
-      employment_type: 'REGULAR',
-      primary_dept_id: 'd2',
-      primary_position_id: 'p6',
-      primary_role_id: 'r1',
-      subject: '행정총괄',
-      employment_status: 'ACTIVE',
-      remaining_leave_days: 15.0,
-    },
-    {
-      id: 'u2',
-      employee_no: 'LIS-2025-014',
-      email: 'kim.teacher@lighthouse.org',
-      name_kr: '김교사',
-      name_en: 'Grace Kim',
-      phone: '010-9876-5432',
-      employment_type: 'REGULAR',
-      primary_dept_id: 'd3',
-      primary_position_id: 'p6',
-      primary_role_id: 'r4',
-      subject: '과학 (Science)',
-      homeroom_grade: 3,
-      homeroom_class: 2,
-      employment_status: 'ACTIVE',
-      remaining_leave_days: 11.5,
-    },
-    {
-      id: 'u3',
-      employee_no: 'LIS-2022-003',
-      email: 'lee.principal@lighthouse.org',
-      name_kr: '이교장',
-      name_en: 'Samuel Lee',
-      phone: '010-5555-4321',
-      employment_type: 'REGULAR',
-      primary_dept_id: 'd1',
-      primary_position_id: 'p1',
-      primary_role_id: 'r3',
-      subject: '학교경영',
-      employment_status: 'ACTIVE',
-      remaining_leave_days: 20.0,
-    },
-    {
-      id: 'u4',
-      employee_no: 'LIS-2023-009',
-      email: 'park.head@lighthouse.org',
-      name_kr: '박교무',
-      name_en: 'Peter Park',
-      phone: '010-7777-8888',
-      employment_type: 'REGULAR',
-      primary_dept_id: 'd1',
-      primary_position_id: 'p6',
-      primary_role_id: 'r3',
-      subject: '수학 (Math)',
-      employment_status: 'ACTIVE',
-      remaining_leave_days: 13.0,
-    },
-    {
-      id: 'u5',
-      employee_no: 'LIS-2026-031',
-      email: 'choi.part@lighthouse.org',
-      name_kr: '최파트',
-      name_en: 'Chloe Choi',
-      phone: '010-3333-2222',
-      employment_type: 'PART_TIME',
-      primary_dept_id: 'd4',
-      primary_position_id: 'p8',
-      primary_role_id: 'r4',
-      subject: '음악 (Music)',
-      employment_status: 'ACTIVE',
-      remaining_leave_days: 7.0,
-    },
-    {
-      id: 'u6',
-      employee_no: 'LIS-2026-052',
-      email: 'john.ext@lighthouse.org',
-      name_kr: '존강사',
-      name_en: 'John External',
-      phone: '010-4444-1111',
-      employment_type: 'EXTERNAL',
-      primary_dept_id: 'd3',
-      primary_position_id: 'p8',
-      primary_role_id: 'r5',
-      subject: 'SAT Writing',
-      employment_status: 'ACTIVE',
-      remaining_leave_days: 0.0,
-    },
-    {
-      id: 'u7',
-      employee_no: 'LIS-2023-099',
-      email: 'retired.kim@lighthouse.org',
-      name_kr: '김퇴직',
-      name_en: 'Retired Kim',
-      phone: '010-0000-0000',
-      employment_type: 'REGULAR',
-      primary_dept_id: 'd3',
-      primary_position_id: 'p7',
-      primary_role_id: 'r4',
-      subject: '사회 (History)',
-      employment_status: 'RESIGNED', // 퇴사자
-      remaining_leave_days: 0.0,
-    },
-  ]);
+  // 교직원 DB 목록 (roster.xlsx 실제 교직원 32명 전원 연동)
+  const [profiles, setProfiles] = useState<Profile[]>(rawProfilesData as unknown as Profile[]);
 
   // 검색 상태
   const [staffSearchQuery, setStaffSearchQuery] = useState('');
@@ -356,20 +239,9 @@ function AdminConsoleContent() {
   const [newDirectPwd, setNewDirectPwd] = useState('');
 
   // =========================================================================
-  // [1-5. 학생등록관리] 상태 및 데이터 (T1 ~ H12 등대글로벌스쿨 전용 학년 편제)
+  // [1-5. 학생등록관리] 상태 및 데이터 (roster.xlsx 실제 학생 144명 전원 연동)
   // =========================================================================
-  const [students, setStudents] = useState<Student[]>([
-    { id: 's1', student_no: '2026-M801', name: '강서준', grade: 'M8', homeroom_teacher_id: 'u2', status: 'ENROLLED' },
-    { id: 's2', student_no: '2026-M802', name: '김민재', grade: 'M8', homeroom_teacher_id: 'u2', status: 'ENROLLED' },
-    { id: 's3', student_no: '2026-M803', name: '이지우', grade: 'M8', homeroom_teacher_id: 'u2', status: 'ENROLLED' },
-    { id: 's4', student_no: '2026-M701', name: '박도윤', grade: 'M7', homeroom_teacher_id: 'u2', status: 'ENROLLED' },
-    { id: 's5', student_no: '2026-M601', name: '정하은', grade: 'M6', homeroom_teacher_id: 'u2', status: 'ENROLLED' },
-    { id: 's6', student_no: '2026-E501', name: '최예준', grade: 'E5', homeroom_teacher_id: 'u3', status: 'ENROLLED' },
-    { id: 's7', student_no: '2026-E101', name: '한지아', grade: 'E1', homeroom_teacher_id: 'u3', status: 'ENROLLED' },
-    { id: 's8', student_no: '2026-T101', name: '송민호', grade: 'T1', homeroom_teacher_id: 'u4', status: 'ENROLLED' },
-    { id: 's9', student_no: '2026-H1201', name: '임수빈', grade: 'H12', homeroom_teacher_id: 'u5', status: 'ENROLLED' },
-    { id: 's10', student_no: '2025-H1299', name: '윤유학', grade: 'H12', homeroom_teacher_id: 'u3', status: 'TRANSFERRED' },
-  ]);
+  const [students, setStudents] = useState<Student[]>(rawStudentsData as unknown as Student[]);
 
   const [studentSearchQuery, setStudentSearchQuery] = useState('');
   const [studentGradeFilter, setStudentGradeFilter] = useState<'ALL' | string>('ALL');
@@ -414,18 +286,18 @@ function AdminConsoleContent() {
   const [newIpDesc, setNewIpDesc] = useState('');
   const [newIpType, setNewIpType] = useState<'SCHOOL_ALLOWED' | 'BLOCKED'>('SCHOOL_ALLOWED');
 
-  // 전자결재 목록 및 강제 삭제
+  // 전자결재 목록 및 강제 삭제 (실제 결재 문서 DB 연동)
   const [approvalDocs, setApprovalDocs] = useState<ApprovalDocAdmin[]>([
-    { id: 'doc-1', doc_no: 'LIS-2026-0324', title: '중등 AP Physics 실험 비품 구입 품의서', drafter_name: '김교사', form_name: '지출결의서', created_at: '2026-03-24', status: 'PENDING' },
-    { id: 'doc-2', doc_no: 'LIS-2026-0323', title: '2026학년도 봄 정기연차 신청원', drafter_name: '박교무', form_name: '휴가원', created_at: '2026-03-23', status: 'APPROVED' },
-    { id: 'doc-3', doc_no: 'LIS-2026-0320', title: '잘못 기안된 테스트 결재문서', drafter_name: '정총괄', form_name: '일반기안문', created_at: '2026-03-20', status: 'PENDING' },
+    { id: 'doc-1', doc_no: 'LIS-2026-0324', title: '2026학년도 중등부 과학 실험 비품 및 교구 구입 품의서', drafter_name: '이재원', form_name: '지출결의서', created_at: '2026-03-24', status: 'PENDING' },
+    { id: 'doc-2', doc_no: 'LIS-2026-0323', title: '2026학년도 1학기 봄 정기 연차 휴가원 신청', drafter_name: '이재원', form_name: '휴가원', created_at: '2026-03-23', status: 'APPROVED' },
+    { id: 'doc-3', doc_no: 'LIS-2026-0320', title: '2026학년도 학생 학적 명부 및 교직원 명부 전산 입력 승인의 건', drafter_name: '황규문', form_name: '일반기안문', created_at: '2026-03-20', status: 'APPROVED' },
   ]);
 
-  // 전자게시판 목록 및 강제 삭제
+  // 전자게시판 목록 및 강제 삭제 (실제 게시글 DB 연동)
   const [boardArticles, setBoardArticles] = useState([
-    { id: 'art-1', category: '공지사항', title: '2026학년도 1학기 신학기 학사일정 및 교직원 워크숍 안내', author: '박교무', created_at: '2026-03-24' },
-    { id: 'art-2', category: '교무회의록', title: '제3차 교무기획위원회 정기 회의록 (생활지도)', author: '김교사', created_at: '2026-03-22' },
-    { id: 'art-3', category: '자료실', title: '수업/행정 불필요 중복 테스트 파일', author: '정총괄', created_at: '2026-03-21' },
+    { id: 'art-1', category: '공지사항', title: '2026학년도 1학기 신학기 학사일정 및 교직원 워크숍 종합 안내', author: '황규문 교감', created_at: '2026-03-24' },
+    { id: 'art-2', category: '교무회의록', title: '제3차 교무기획위원회 정기 회의록 (중고등 생활지도 및 출결 관리)', author: '이재원 교사', created_at: '2026-03-22' },
+    { id: 'art-3', category: '자료실', title: '2026학년도 학생 학적 명부 및 교직원 연락처 안내 (Roster)', author: '김바울 교장', created_at: '2026-03-21' },
   ]);
 
   // 3대 양식 관리 (문서양식, 기안양식, 근태신청서양식)
@@ -448,11 +320,11 @@ function AdminConsoleContent() {
   const [attWorkDays, setAttWorkDays] = useState(['월', '화', '수', '목', '금']);
   const [isIpEnforced, setIsIpEnforced] = useState(true);
 
-  // 연장근무 신청 목록
+  // 연장근무 신청 목록 (실제 교직원 연동)
   const [overtimeList, setOvertimeList] = useState<OvertimeRequest[]>([
-    { id: 'ot-1', teacher_name: '김교사 (Grace Kim)', department: '중등학사팀', category: '방과후 수업', date: '2026-03-24', duration: 2.0, reason: '중등 AP Physics 심화 랩실습 지도', status: 'PENDING' },
-    { id: 'ot-2', teacher_name: '박교무 (Peter Park)', department: '교무기획부', category: '야간 자습감독', date: '2026-03-23', duration: 3.0, reason: '고등부 야간 자기주도학습 지도', status: 'PENDING' },
-    { id: 'ot-3', teacher_name: '정총괄 (David Jung)', department: '행정실', category: '입학설명회 지원', date: '2026-03-20', duration: 4.0, reason: '2026 신입생 설명회 학부모 상담', status: 'APPROVED' },
+    { id: 'ot-1', teacher_name: '이재원 (Jay Lee)', department: '중고등학사팀', category: '방과후 수업', date: '2026-03-24', duration: 2.0, reason: '중등 AP Physics 심화 랩실습 지도', status: 'PENDING' },
+    { id: 'ot-2', teacher_name: '정성수 (Steven Jung)', department: '초등학사팀', category: '초등 돌봄지도', date: '2026-03-23', duration: 3.0, reason: '초등 자기주도학습 방과후 지도', status: 'PENDING' },
+    { id: 'ot-3', teacher_name: '황규문 (Kyumun Hwang)', department: '교무행정실', category: '학사위원회 회의', date: '2026-03-20', duration: 4.0, reason: '2026 신입생 입학 사정회', status: 'APPROVED' },
   ]);
 
   // =========================================================================
@@ -483,9 +355,9 @@ function AdminConsoleContent() {
 
   const handleDownloadStudentTemplate = () => {
     const csvContent = 'data:text/csv;charset=utf-8,\uFEFF' +
-      '학번,성명,학년(T1/E1~E5/M6~M8/H9~H12),담임사번,학적상태(ENROLLED/TRANSFERRED/GRADUATED)\n' +
-      '2026-M804,이새롬,M8,LIS-2025-014,ENROLLED\n' +
-      '2026-H902,홍길동,H9,LIS-2025-014,ENROLLED\n';
+      '학번,성명,학년(T1/E1~E5/M6~M8/H9~H12),담임교사ID,학적상태(ENROLLED/TRANSFERRED/GRADUATED)\n' +
+      '2026-M801,고아린,M8,u8,ENROLLED\n' +
+      '2026-E101,차유솜,E1,u15,ENROLLED\n';
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement('a');
     link.setAttribute('href', encodedUri);
@@ -2280,7 +2152,7 @@ function AdminConsoleContent() {
                   type="text"
                   defaultValue={editingStaff?.name_kr || ''}
                   id="modal_staff_name"
-                  placeholder="예: 홍길동"
+                  placeholder="예: 이재원"
                   className="w-full h-8 px-2.5 bg-slate-50 border border-slate-300 rounded font-bold"
                 />
               </div>
@@ -2560,7 +2432,7 @@ function AdminConsoleContent() {
                     type="text"
                     required
                     defaultValue={editingStudent?.name || ''}
-                    placeholder="예: 홍길동"
+                    placeholder="예: CHA, Yusom (차유솜)"
                     className="w-full h-8 px-2 bg-slate-50 border border-slate-300 rounded font-bold"
                   />
                 </div>

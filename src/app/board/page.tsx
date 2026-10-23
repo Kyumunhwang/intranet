@@ -55,18 +55,18 @@ export default function BoardPage() {
         boardType: 'NOTICE',
         category: '전체공지',
         title: '[필독] 2026학년도 1학기 교직원 복무 규정 및 학교 공인 IP 출퇴근 지침',
-        author: '박교무',
-        dept: '교무부',
+        author: '황규문',
+        dept: '교감실',
         date: '2026.10.23',
         views: 42,
         readCount: 42,
-        totalTeachers: 50,
+        totalTeachers: 32,
         isMustRead: true,
         hasAttachment: true,
         attachmentName: '2026학년도_교직원_복무규정_전문.pdf',
         attachmentSize: '1.8 MB',
         commentsCount: 1,
-        content: `선생님 여러분 안녕하십니까. 교무부입니다.
+        content: `선생님 여러분 안녕하십니까. 교감 황규문입니다.
 2026학년도 1학기 등대글로벌스쿨 복무 관리 지침 및 출퇴근 인정 정책을 안내해 드립니다.
 
 📌 주요 출결 및 복무 준수 사항:
@@ -75,19 +75,19 @@ export default function BoardPage() {
 3. 반별 학생 일일 출결은 매일 08:50 이전까지 담임교사께서 최종 Confirm 확정해 주셔야 합니다. (출석, 지각, 결석, 병결, 조퇴, 무단조퇴, 무단결석 7개 상태 지원)
 4. 연차 및 반차 사용 시 최소 1일 전 전자결재(휴가/연차원) 상신 및 최종 승인을 완료하여 주십시오.
 
-문의 사항은 교무부(내선 201) 또는 행정실(내선 101)로 연락 바랍니다. 감사합니다.`,
+문의 사항은 교무행정실(내선 101)로 연락 바랍니다. 감사합니다.`,
       },
       {
         id: 'notice-2',
         boardType: 'NOTICE',
         category: '행정공지',
         title: '[행정실] 10월 연차 정기 사용 독려 및 전자결재 사전 상신 안내',
-        author: '정총괄',
+        author: '하지현',
         dept: '행정실',
         date: '2026.10.23',
         views: 38,
         readCount: 38,
-        totalTeachers: 50,
+        totalTeachers: 32,
         isMustRead: false,
         hasAttachment: false,
         commentsCount: 0,
@@ -99,12 +99,12 @@ export default function BoardPage() {
         boardType: 'NOTICE',
         category: '총무공지',
         title: '신학기 교직원 단체 피복(유니폼) 신청 및 치수 조사 안내',
-        author: '정총괄',
+        author: '하지현',
         dept: '행정실',
         date: '2026.10.21',
         views: 47,
         readCount: 47,
-        totalTeachers: 50,
+        totalTeachers: 32,
         isMustRead: false,
         hasAttachment: true,
         attachmentName: '교직원_단체유니폼_치수표.xlsx',
@@ -121,12 +121,12 @@ export default function BoardPage() {
         boardType: 'MEETING',
         category: '정기회의',
         title: '10월 3주차 정기 교무회의 회의록 및 안건 의결 사항',
-        author: '박교무',
-        dept: '교무부',
+        author: '황규문',
+        dept: '교감실',
         date: '2026.10.20',
         views: 49,
-        readCount: 49,
-        totalTeachers: 50,
+        readCount: 32,
+        totalTeachers: 32,
         isMustRead: true,
         hasAttachment: true,
         attachmentName: '2026-10-3주차_교무회의록_의결본.pdf',
@@ -135,7 +135,7 @@ export default function BoardPage() {
         content: `[10월 3주차 정기 교무회의 의결 사항]
 일시: 2026년 10월 20일 16:30
 장소: 본관 제1회의실
-주재: 이교장, 박교무 부장
+주재: 김바울 교장, 황규문 교감
 
 1. 신학기 방과후 자율동아리 개설 승인의 건: 원안 가결
 2. 학생 출결 7단계 구분(조퇴, 무단조퇴, 무단결석) 인트라넷 전산 적용의 건: 승인 및 시행
@@ -146,12 +146,12 @@ export default function BoardPage() {
         boardType: 'MEETING',
         category: '교육과정',
         title: '2026학년도 1학기 교육과정 편성·운영 위원회 협의록',
-        author: '박교무',
-        dept: '교무부',
+        author: '황규문',
+        dept: '교감실',
         date: '2026.10.15',
         views: 44,
-        readCount: 44,
-        totalTeachers: 50,
+        readCount: 30,
+        totalTeachers: 32,
         isMustRead: false,
         hasAttachment: true,
         attachmentName: '교육과정_편성운영_협의록.pdf',
@@ -164,12 +164,12 @@ export default function BoardPage() {
         boardType: 'MEETING',
         category: '생활지도',
         title: '학생생활지도 및 학교폭력 예방 교원 자율연수 협의록',
-        author: '김교사',
-        dept: '중고등부',
+        author: '이재원',
+        dept: '중고등학사팀',
         date: '2026.10.10',
-        views: 50,
-        readCount: 50,
-        totalTeachers: 50,
+        views: 32,
+        readCount: 32,
+        totalTeachers: 32,
         isMustRead: false,
         hasAttachment: false,
         commentsCount: 0,
@@ -184,30 +184,30 @@ export default function BoardPage() {
         boardType: 'ARCHIVE',
         category: '수업서식',
         title: '2026학년도 중고등부 교과 진도 계획표 및 평가 기준 표준 서식',
-        author: '박교무',
-        dept: '교무부',
+        author: '황규문',
+        dept: '교감실',
         date: '2026.10.22',
         views: 65,
-        readCount: 46,
-        totalTeachers: 50,
+        readCount: 30,
+        totalTeachers: 32,
         isMustRead: true,
         hasAttachment: true,
         attachmentName: '2026_교과진도계획표_표준서식.hwp',
         attachmentSize: '120 KB',
         commentsCount: 2,
-        content: `각 교과 담당 교사께서는 본 표준 서식을 다운로드하여 1학기 진도 계획 및 수행평가 기준안을 작성하여 교무부로 제출해 주시기 바랍니다.`,
+        content: `각 교과 담당 교사께서는 본 표준 서식을 다운로드하여 1학기 진도 계획 및 수행평가 기준안을 작성하여 교무행정실로 제출해 주시기 바랍니다.`,
       },
       {
         id: 'archive-2',
         boardType: 'ARCHIVE',
         category: '행정서식',
         title: '교직원 관외 출장보고서 양식 및 여비 정산 신청서 (엑셀)',
-        author: '정총괄',
+        author: '하지현',
         dept: '행정실',
         date: '2026.10.18',
         views: 52,
-        readCount: 41,
-        totalTeachers: 50,
+        readCount: 31,
+        totalTeachers: 32,
         isMustRead: false,
         hasAttachment: true,
         attachmentName: '출장보고서_여비정산서식.xlsx',
@@ -220,12 +220,12 @@ export default function BoardPage() {
         boardType: 'ARCHIVE',
         category: '안전매뉴얼',
         title: '과학 실험실 안전 수칙 및 비상 대피 행동 매뉴얼 (2026 개정판)',
-        author: '김교사',
-        dept: '중고등부',
+        author: '이재원',
+        dept: '중고등학사팀',
         date: '2026.10.12',
-        views: 40,
-        readCount: 40,
-        totalTeachers: 50,
+        views: 32,
+        readCount: 32,
+        totalTeachers: 32,
         isMustRead: false,
         hasAttachment: true,
         attachmentName: '과학실험실_안전대피매뉴얼_2026.pdf',
@@ -481,19 +481,19 @@ export default function BoardPage() {
                   <div className="font-bold text-emerald-800 mb-1.5">열람 완료 교직원 (Read)</div>
                   <div className="space-y-1 text-slate-700">
                     <div className="flex justify-between py-0.5 border-b border-slate-100">
-                      <span>정총괄 (행정실)</span>
+                      <span>하지현 (행정실)</span>
                       <span className="font-mono text-[10px] text-slate-400">10.23 08:05</span>
                     </div>
                     <div className="flex justify-between py-0.5 border-b border-slate-100">
-                      <span>김교사 (중고등부)</span>
+                      <span>이재원 (중고등부)</span>
                       <span className="font-mono text-[10px] text-slate-400">10.23 08:16</span>
                     </div>
                     <div className="flex justify-between py-0.5 border-b border-slate-100">
-                      <span>박교무 (교무부)</span>
+                      <span>황규문 (교감실)</span>
                       <span className="font-mono text-[10px] text-slate-400">10.23 08:00</span>
                     </div>
                     <div className="flex justify-between py-0.5">
-                      <span>이교장 (교장실)</span>
+                      <span>김바울 (교장실)</span>
                       <span className="font-mono text-[10px] text-slate-400">10.23 08:22</span>
                     </div>
                   </div>

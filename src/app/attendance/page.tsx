@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, Suspense } from 'react';
+import React, { useState, useEffect, useMemo, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import {
   CalendarCheck,
@@ -10,8 +10,9 @@ import {
   ShieldCheck,
   FileCheck2,
 } from 'lucide-react';
-import { StudentAttendanceStatus } from '@/lib/types';
+import { StudentAttendanceStatus, Student } from '@/lib/types';
 import { useLanguage } from '@/lib/language-context';
+import rawStudentsData from '../../../data/students.json';
 
 const SCHOOL_GRADES = [
   'T1',
@@ -28,6 +29,22 @@ const SCHOOL_GRADES = [
   'H11',
   'H12',
 ] as const;
+
+const GRADE_TEACHER_MAP: Record<string, string> = {
+  T1: '편제 준비중 (Pending)',
+  E1: '에크남 (Eknam)',
+  E2: '에크남 (Eknam) / 임그린 (Green Lim)',
+  E3: '정성수 (Steven Jung)',
+  E4: '정성수 (Steven Jung)',
+  E5: '장민희 (Minhee Jang)',
+  M6: '류미연 (Monica Ryu)',
+  M7: '김지은 (Rachel Kim)',
+  M8: '이재원 (Jay Lee)',
+  H9: '이영은 (Michelle Lee)',
+  H10: '임진경 (Stephanie Lim)',
+  H11: '김형식 (Hyungsik Kim)',
+  H12: '문지선 (Sunny Moon)',
+};
 
 function AttendanceContent() {
   const searchParams = useSearchParams();
@@ -53,24 +70,43 @@ function AttendanceContent() {
     router.replace(`/attendance?tab=${tab === 'student' ? 'students' : 'staff'}`);
   };
 
-  // 7 attendance status options (조퇴, 무단조퇴, 무단결석 포함) - 번호 제거 및 학년 반영
-  const [students, setStudents] = useState<
-    { student_no: string; name: string; status: StudentAttendanceStatus; memo: string }[]
-  >([
-    { student_no: '2026-M801', name: '강서준', status: 'PRESENT', memo: '' },
-    { student_no: '2026-M802', name: '김민재', status: 'LATE', memo: '병원 진료 후 09:10 입실' },
-    { student_no: '2026-M803', name: '김서연', status: 'PRESENT', memo: '' },
-    { student_no: '2026-M804', name: '박지우', status: 'EARLY_LEAVE', memo: '체험학습 조퇴' },
-    { student_no: '2026-M805', name: '이준혁', status: 'PRESENT', memo: '' },
-    { student_no: '2026-M806', name: '정예원', status: 'SICK', memo: '독감 병결' },
-    { student_no: '2026-M807', name: '최도윤', status: 'ABSENT', memo: '가족행사 결석' },
-    { student_no: '2026-M808', name: '한지민', status: 'PRESENT', memo: '' },
-  ]);
+  // 학생 데이터 로드 (실제 144명 DB 연동)
+  const allStudents = useMemo(() => rawStudentsData as unknown as Student[], []);
+  const currentGradeStudents = useMemo(() => {
+    return allStudents.filter((s) => String(s.grade) === selectedGrade);
+  }, [allStudents, selectedGrade]);
 
-  const handleStudentStatusChange = (index: number, newStatus: StudentAttendanceStatus) => {
-    const next = [...students];
-    next[index].status = newStatus;
-    setStudents(next);
+  // 출결 상태 및 메모 맵
+  const [studentStatusMap, setStudentStatusMap] = useState<
+    Record<string, { status: StudentAttendanceStatus; memo: string }>
+  >({});
+
+  const getStudentStatus = (studentNo: string): StudentAttendanceStatus => {
+    return studentStatusMap[studentNo]?.status || 'PRESENT';
+  };
+
+  const getStudentMemo = (studentNo: string): string => {
+    return studentStatusMap[studentNo]?.memo || '';
+  };
+
+  const handleStudentStatusChange = (studentNo: string, newStatus: StudentAttendanceStatus) => {
+    setStudentStatusMap((prev) => ({
+      ...prev,
+      [studentNo]: {
+        status: newStatus,
+        memo: prev[studentNo]?.memo || '',
+      },
+    }));
+  };
+
+  const handleStudentMemoChange = (studentNo: string, memo: string) => {
+    setStudentStatusMap((prev) => ({
+      ...prev,
+      [studentNo]: {
+        status: prev[studentNo]?.status || 'PRESENT',
+        memo,
+      },
+    }));
   };
 
   const handleConfirm = () => {
@@ -238,11 +274,14 @@ function AttendanceContent() {
                 onChange={(e) => setSelectedGrade(e.target.value)}
                 className="h-8 px-2.5 text-xs bg-slate-50 border border-slate-300 rounded-lg text-slate-800 font-bold"
               >
-                {SCHOOL_GRADES.map((g) => (
-                  <option key={g} value={g}>
-                    {g} 학년 {g === 'M8' ? '(담임: 김교사)' : ''}
-                  </option>
-                ))}
+                {SCHOOL_GRADES.map((g) => {
+                  const teacher = GRADE_TEACHER_MAP[g];
+                  return (
+                    <option key={g} value={g}>
+                      {g} 학년 {teacher ? `(담임: ${teacher})` : ''}
+                    </option>
+                  );
+                })}
               </select>
             </div>
 
@@ -264,7 +303,12 @@ function AttendanceContent() {
                 <span className="px-2.5 py-0.5 rounded bg-blue-100 text-blue-800 font-mono font-bold text-xs">
                   {selectedGrade}
                 </span>
-                <span>학생 명렬표 (총원 {students.length}명)</span>
+                <span>학생 명렬표 (총원 {currentGradeStudents.length}명)</span>
+                {GRADE_TEACHER_MAP[selectedGrade] && (
+                  <span className="text-xs text-slate-500 font-normal">
+                    · 담임: {GRADE_TEACHER_MAP[selectedGrade]}
+                  </span>
+                )}
               </h2>
               <span className="text-xs font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
                 {isConfirmed ? t('Confirm 완료 (08:50)', 'Confirmed') : t('미확정', 'Pending')}
@@ -275,7 +319,7 @@ function AttendanceContent() {
                 <thead>
                   <tr className="bg-slate-100/70 border-b border-slate-200 text-slate-600 font-semibold text-[11px]">
                     <th className="py-2.5 px-3 w-32">{t('학번', 'Student ID')}</th>
-                    <th className="py-2.5 px-3 w-28">{t('성명', 'Name')}</th>
+                    <th className="py-2.5 px-3 w-40">{t('성명', 'Name')}</th>
                     <th className="py-2.5 px-3 w-20 text-center">{t('학년', 'Grade')}</th>
                     <th className="py-2.5 px-3 text-center">
                       {t('출결 상태 선택 (7개 항목: 출석, 지각, 결석, 병결, 조퇴, 무단조퇴, 무단결석)', 'Status Options')}
@@ -284,52 +328,60 @@ function AttendanceContent() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100 text-slate-700">
-                  {students.map((s, idx) => (
-                    <tr key={s.student_no} className="hover:bg-slate-50/70">
-                      <td className="py-2.5 px-3 font-mono font-semibold text-slate-600 text-xs">{s.student_no}</td>
-                      <td className="py-2.5 px-3 font-bold text-slate-900 text-xs">{s.name}</td>
-                      <td className="py-2.5 px-3 text-center">
-                        <span className="px-2 py-0.5 rounded bg-blue-50 text-blue-700 border border-blue-200 font-mono font-bold text-xs">
-                          {selectedGrade}
-                        </span>
-                      </td>
-                      <td className="py-2 px-3">
-                        <div className="flex flex-wrap items-center justify-center gap-1">
-                          {statusOptions.map((opt) => {
-                            const isSelected = s.status === opt.value;
-                            const label = lang === 'ko' ? opt.labelKo : opt.labelEn;
-                            return (
-                              <button
-                                key={opt.value}
-                                type="button"
-                                onClick={() => handleStudentStatusChange(idx, opt.value)}
-                                className={`px-2 py-0.5 rounded text-[11px] font-semibold transition-all ${
-                                  isSelected
-                                    ? `${opt.color} shadow-sm scale-105`
-                                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                                }`}
-                              >
-                                {label}
-                              </button>
-                            );
-                          })}
-                        </div>
-                      </td>
-                      <td className="py-2 px-3">
-                        <input
-                          type="text"
-                          value={s.memo}
-                          onChange={(e) => {
-                            const next = [...students];
-                            next[idx].memo = e.target.value;
-                            setStudents(next);
-                          }}
-                          placeholder={t('메모 입력', 'Memo')}
-                          className="w-full h-7 px-2 text-xs bg-slate-50 border border-slate-200 rounded text-slate-800"
-                        />
+                  {currentGradeStudents.length === 0 ? (
+                    <tr>
+                      <td colSpan={5} className="py-8 text-center text-slate-400">
+                        {t('해당 학년에 등록된 학생이 없습니다.', 'No students registered for this grade.')}
                       </td>
                     </tr>
-                  ))}
+                  ) : (
+                    currentGradeStudents.map((s) => {
+                      const currentStatus = getStudentStatus(s.student_no);
+                      const currentMemo = getStudentMemo(s.student_no);
+                      return (
+                        <tr key={s.student_no} className="hover:bg-slate-50/70">
+                          <td className="py-2.5 px-3 font-mono font-semibold text-slate-600 text-xs">{s.student_no}</td>
+                          <td className="py-2.5 px-3 font-bold text-slate-900 text-xs">{s.name}</td>
+                          <td className="py-2.5 px-3 text-center">
+                            <span className="px-2 py-0.5 rounded bg-blue-50 text-blue-700 border border-blue-200 font-mono font-bold text-xs">
+                              {selectedGrade}
+                            </span>
+                          </td>
+                          <td className="py-2 px-3">
+                            <div className="flex flex-wrap items-center justify-center gap-1">
+                              {statusOptions.map((opt) => {
+                                const isSelected = currentStatus === opt.value;
+                                const label = lang === 'ko' ? opt.labelKo : opt.labelEn;
+                                return (
+                                  <button
+                                    key={opt.value}
+                                    type="button"
+                                    onClick={() => handleStudentStatusChange(s.student_no, opt.value)}
+                                    className={`px-2 py-0.5 rounded text-[11px] font-semibold transition-all ${
+                                      isSelected
+                                        ? `${opt.color} shadow-sm scale-105`
+                                        : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                                    }`}
+                                  >
+                                    {label}
+                                  </button>
+                                );
+                              })}
+                            </div>
+                          </td>
+                          <td className="py-2 px-3">
+                            <input
+                              type="text"
+                              value={currentMemo}
+                              onChange={(e) => handleStudentMemoChange(s.student_no, e.target.value)}
+                              placeholder={t('메모 입력', 'Memo')}
+                              className="w-full h-7 px-2 text-xs bg-slate-50 border border-slate-200 rounded text-slate-800"
+                            />
+                          </td>
+                        </tr>
+                      );
+                    })
+                  )}
                 </tbody>
               </table>
             </div>

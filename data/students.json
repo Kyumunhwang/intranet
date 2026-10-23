@@ -1,82 +1,1154 @@
 [
   {
     "id": "s1",
-    "student_no": "2026-30201",
-    "name": "강서준",
-    "grade": 3,
-    "class_no": 2,
-    "number_in_class": 1,
-    "homeroom_teacher_id": "u2",
+    "student_no": "2026-E101",
+    "name": "CHA, Yusom (차유솜)",
+    "grade": "E1",
+    "homeroom_teacher_id": "u15",
     "status": "ENROLLED"
   },
   {
     "id": "s2",
-    "student_no": "2026-30202",
-    "name": "김민재",
-    "grade": 3,
-    "class_no": 2,
-    "number_in_class": 2,
-    "homeroom_teacher_id": "u2",
+    "student_no": "2026-E102",
+    "name": "JEONG, Jiyong (정지용)",
+    "grade": "E1",
+    "homeroom_teacher_id": "u15",
     "status": "ENROLLED"
   },
   {
     "id": "s3",
-    "student_no": "2026-30203",
-    "name": "김서연",
-    "grade": 3,
-    "class_no": 2,
-    "number_in_class": 3,
-    "homeroom_teacher_id": "u2",
+    "student_no": "2026-E103",
+    "name": "KIM, Sio (김시오)",
+    "grade": "E1",
+    "homeroom_teacher_id": "u15",
     "status": "ENROLLED"
   },
   {
     "id": "s4",
-    "student_no": "2026-30204",
-    "name": "박지우",
-    "grade": 3,
-    "class_no": 2,
-    "number_in_class": 4,
-    "homeroom_teacher_id": "u2",
+    "student_no": "2026-E104",
+    "name": "LEE, Eunho (이은호)",
+    "grade": "E1",
+    "homeroom_teacher_id": "u15",
     "status": "ENROLLED"
   },
   {
     "id": "s5",
-    "student_no": "2026-30205",
-    "name": "이준혁",
-    "grade": 3,
-    "class_no": 2,
-    "number_in_class": 5,
-    "homeroom_teacher_id": "u2",
+    "student_no": "2026-E105",
+    "name": "LEE, Jiho (이지호)",
+    "grade": "E1",
+    "homeroom_teacher_id": "u15",
     "status": "ENROLLED"
   },
   {
     "id": "s6",
-    "student_no": "2026-30206",
-    "name": "정예원",
-    "grade": 3,
-    "class_no": 2,
-    "number_in_class": 6,
-    "homeroom_teacher_id": "u2",
+    "student_no": "2026-E106",
+    "name": "LEE, Jisoo (이지수)",
+    "grade": "E1",
+    "homeroom_teacher_id": "u15",
     "status": "ENROLLED"
   },
   {
     "id": "s7",
-    "student_no": "2026-30207",
-    "name": "최도윤",
-    "grade": 3,
-    "class_no": 2,
-    "number_in_class": 7,
-    "homeroom_teacher_id": "u2",
+    "student_no": "2026-E107",
+    "name": "PYUNG, Ahyoon (평아윤)",
+    "grade": "E1",
+    "homeroom_teacher_id": "u15",
     "status": "ENROLLED"
   },
   {
     "id": "s8",
-    "student_no": "2026-30208",
-    "name": "한지민",
-    "grade": 3,
-    "class_no": 2,
-    "number_in_class": 8,
-    "homeroom_teacher_id": "u2",
+    "student_no": "2026-E108",
+    "name": "WOO, Juye (우주예)",
+    "grade": "E1",
+    "homeroom_teacher_id": "u15",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s9",
+    "student_no": "2026-E201",
+    "name": "HEO, Yeju (허예주)",
+    "grade": "E2",
+    "homeroom_teacher_id": "u15",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s10",
+    "student_no": "2026-E202",
+    "name": "JUNG, Ethan (정이든)",
+    "grade": "E2",
+    "homeroom_teacher_id": "u18",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s11",
+    "student_no": "2026-E203",
+    "name": "KIM, Seul-Ah (김슬아)",
+    "grade": "E2",
+    "homeroom_teacher_id": "u18",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s12",
+    "student_no": "2026-E204",
+    "name": "LEE, Doha (이도하)",
+    "grade": "E2",
+    "homeroom_teacher_id": "u18",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s13",
+    "student_no": "2026-E205",
+    "name": "LEE, Hajin (이하진)",
+    "grade": "E2",
+    "homeroom_teacher_id": "u18",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s14",
+    "student_no": "2026-E206",
+    "name": "LEE, Jaejune (이재준)",
+    "grade": "E2",
+    "homeroom_teacher_id": "u18",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s15",
+    "student_no": "2026-E207",
+    "name": "OH, Yeonjoon (오연준)",
+    "grade": "E2",
+    "homeroom_teacher_id": "u18",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s16",
+    "student_no": "2026-E208",
+    "name": "PARK, Dawit (박다윗)",
+    "grade": "E2",
+    "homeroom_teacher_id": "u18",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s17",
+    "student_no": "2026-E209",
+    "name": "WON, Yehan (원예한)",
+    "grade": "E2",
+    "homeroom_teacher_id": "u18",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s18",
+    "student_no": "2026-E301",
+    "name": "CHUNG, Yuchan (정유찬)",
+    "grade": "E3",
+    "homeroom_teacher_id": "u16",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s19",
+    "student_no": "2026-E302",
+    "name": "HEO, Siun (허시언)",
+    "grade": "E3",
+    "homeroom_teacher_id": "u16",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s20",
+    "student_no": "2026-E303",
+    "name": "KIM, Dael (김다엘)",
+    "grade": "E3",
+    "homeroom_teacher_id": "u16",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s21",
+    "student_no": "2026-E304",
+    "name": "KIM, Taegyeong (김태경)",
+    "grade": "E3",
+    "homeroom_teacher_id": "u16",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s22",
+    "student_no": "2026-E305",
+    "name": "LEE, Danbee (이단비)",
+    "grade": "E3",
+    "homeroom_teacher_id": "u16",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s23",
+    "student_no": "2026-E306",
+    "name": "LEE, Junsoo (이준수)",
+    "grade": "E3",
+    "homeroom_teacher_id": "u16",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s24",
+    "student_no": "2026-E307",
+    "name": "PARK, Chanhyuk (박찬혁)",
+    "grade": "E3",
+    "homeroom_teacher_id": "u16",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s25",
+    "student_no": "2026-E308",
+    "name": "RYU, Hamin (유하민)",
+    "grade": "E3",
+    "homeroom_teacher_id": "u16",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s26",
+    "student_no": "2026-E309",
+    "name": "SHIN, Yena (신예나)",
+    "grade": "E3",
+    "homeroom_teacher_id": "u16",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s27",
+    "student_no": "2026-E310",
+    "name": "SUNG, Hyejoo (성혜주)",
+    "grade": "E3",
+    "homeroom_teacher_id": "u16",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s28",
+    "student_no": "2026-E311",
+    "name": "YANG, Congcong (양총총)",
+    "grade": "E3",
+    "homeroom_teacher_id": "u16",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s29",
+    "student_no": "2026-E401",
+    "name": "HAN, Onbyeol (한온별)",
+    "grade": "E4",
+    "homeroom_teacher_id": "u17",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s30",
+    "student_no": "2026-E402",
+    "name": "JEONG, Joowan (정주완)",
+    "grade": "E4",
+    "homeroom_teacher_id": "u17",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s31",
+    "student_no": "2026-E403",
+    "name": "JUNG, Jireh (정이레)",
+    "grade": "E4",
+    "homeroom_teacher_id": "u17",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s32",
+    "student_no": "2026-E404",
+    "name": "KANG, Hanna (강한나)",
+    "grade": "E4",
+    "homeroom_teacher_id": "u17",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s33",
+    "student_no": "2026-E405",
+    "name": "KIM, Jihaeng (김지행)",
+    "grade": "E4",
+    "homeroom_teacher_id": "u17",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s34",
+    "student_no": "2026-E406",
+    "name": "LEE, Suhu (이서우)",
+    "grade": "E4",
+    "homeroom_teacher_id": "u17",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s35",
+    "student_no": "2026-E407",
+    "name": "LEE, Urim (이우림)",
+    "grade": "E4",
+    "homeroom_teacher_id": "u17",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s36",
+    "student_no": "2026-E408",
+    "name": "Park, Daniel Hajoon (박하준)",
+    "grade": "E4",
+    "homeroom_teacher_id": "u17",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s37",
+    "student_no": "2026-E409",
+    "name": "PYUNG, Doyoon (평도윤)",
+    "grade": "E4",
+    "homeroom_teacher_id": "u17",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s38",
+    "student_no": "2026-E410",
+    "name": "SONG, Hyunseok (송현석)",
+    "grade": "E4",
+    "homeroom_teacher_id": "u17",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s39",
+    "student_no": "2026-E411",
+    "name": "XIN, Yooah (신유아)",
+    "grade": "E4",
+    "homeroom_teacher_id": "u17",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s40",
+    "student_no": "2026-E501",
+    "name": "HAN, Yeri (한예리)",
+    "grade": "E5",
+    "homeroom_teacher_id": "u21",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s41",
+    "student_no": "2026-E502",
+    "name": "JUNG, Jimin (정지민)",
+    "grade": "E5",
+    "homeroom_teacher_id": "u21",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s42",
+    "student_no": "2026-E503",
+    "name": "KIM, Ain (김아인)",
+    "grade": "E5",
+    "homeroom_teacher_id": "u21",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s43",
+    "student_no": "2026-E504",
+    "name": "KIM, Loha (김로하)",
+    "grade": "E5",
+    "homeroom_teacher_id": "u21",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s44",
+    "student_no": "2026-E505",
+    "name": "KUG, Isaac (국이삭)",
+    "grade": "E5",
+    "homeroom_teacher_id": "u21",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s45",
+    "student_no": "2026-E506",
+    "name": "LEE, Gippeum (이기쁨)",
+    "grade": "E5",
+    "homeroom_teacher_id": "u21",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s46",
+    "student_no": "2026-E507",
+    "name": "LEE, Sia (이시아)",
+    "grade": "E5",
+    "homeroom_teacher_id": "u21",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s47",
+    "student_no": "2026-E508",
+    "name": "PARK, Sejun (박세준)",
+    "grade": "E5",
+    "homeroom_teacher_id": "u21",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s48",
+    "student_no": "2026-E509",
+    "name": "YOON, Yoolim (윤유림)",
+    "grade": "E5",
+    "homeroom_teacher_id": "u21",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s49",
+    "student_no": "2026-M601",
+    "name": "CHOI, Seungjae (최승재)",
+    "grade": "M6",
+    "homeroom_teacher_id": "u25",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s50",
+    "student_no": "2026-M602",
+    "name": "HAN, Onbit (한온빛)",
+    "grade": "M6",
+    "homeroom_teacher_id": "u25",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s51",
+    "student_no": "2026-M603",
+    "name": "HAN, Yena (한예나)",
+    "grade": "M6",
+    "homeroom_teacher_id": "u25",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s52",
+    "student_no": "2026-M604",
+    "name": "KANG, Sechan (강세찬)",
+    "grade": "M6",
+    "homeroom_teacher_id": "u25",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s53",
+    "student_no": "2026-M605",
+    "name": "LEE, David (이지율)",
+    "grade": "M6",
+    "homeroom_teacher_id": "u25",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s54",
+    "student_no": "2026-M606",
+    "name": "LEE, Eden (이이든)",
+    "grade": "M6",
+    "homeroom_teacher_id": "u25",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s55",
+    "student_no": "2026-M607",
+    "name": "LEE, Juho (이주호)",
+    "grade": "M6",
+    "homeroom_teacher_id": "u25",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s56",
+    "student_no": "2026-M608",
+    "name": "LEE, Siwoo (이시우)",
+    "grade": "M6",
+    "homeroom_teacher_id": "u25",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s57",
+    "student_no": "2026-M609",
+    "name": "LEE, Tay (이태이)",
+    "grade": "M6",
+    "homeroom_teacher_id": "u25",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s58",
+    "student_no": "2026-M610",
+    "name": "LIM, Harang (임하랑)",
+    "grade": "M6",
+    "homeroom_teacher_id": "u25",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s59",
+    "student_no": "2026-M611",
+    "name": "OH, Pyeongan (오평안)",
+    "grade": "M6",
+    "homeroom_teacher_id": "u25",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s60",
+    "student_no": "2026-M701",
+    "name": "KANG, Dongho (강동호)",
+    "grade": "M7",
+    "homeroom_teacher_id": "u22",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s61",
+    "student_no": "2026-M702",
+    "name": "KIM, Dayeon (김다연)",
+    "grade": "M7",
+    "homeroom_teacher_id": "u22",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s62",
+    "student_no": "2026-M703",
+    "name": "KIM, Joy (김조이)",
+    "grade": "M7",
+    "homeroom_teacher_id": "u22",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s63",
+    "student_no": "2026-M704",
+    "name": "KIM, Yigeon (김이건)",
+    "grade": "M7",
+    "homeroom_teacher_id": "u22",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s64",
+    "student_no": "2026-M705",
+    "name": "KOO, Hajun (구하준)",
+    "grade": "M7",
+    "homeroom_teacher_id": "u22",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s65",
+    "student_no": "2026-M706",
+    "name": "LEE, Sangwoo (이상우)",
+    "grade": "M7",
+    "homeroom_teacher_id": "u22",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s66",
+    "student_no": "2026-M707",
+    "name": "PARK, Habin (박하빈)",
+    "grade": "M7",
+    "homeroom_teacher_id": "u22",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s67",
+    "student_no": "2026-M708",
+    "name": "RYU, Hayeon (유하연)",
+    "grade": "M7",
+    "homeroom_teacher_id": "u22",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s68",
+    "student_no": "2026-M709",
+    "name": "SON, Hayul (손하율)",
+    "grade": "M7",
+    "homeroom_teacher_id": "u22",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s69",
+    "student_no": "2026-M710",
+    "name": "YANG, Riah Heesol (양희솔)",
+    "grade": "M7",
+    "homeroom_teacher_id": "u22",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s70",
+    "student_no": "2026-M711",
+    "name": "YANG, Sion (양시온)",
+    "grade": "M7",
+    "homeroom_teacher_id": "u22",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s71",
+    "student_no": "2026-M712",
+    "name": "YOON, Lael (윤라엘)",
+    "grade": "M7",
+    "homeroom_teacher_id": "u22",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s72",
+    "student_no": "2026-M713",
+    "name": "YU, Hwanhwi (유환휘)",
+    "grade": "M7",
+    "homeroom_teacher_id": "u22",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s73",
+    "student_no": "2026-M714",
+    "name": "YUN, Keonwoo (윤건우)",
+    "grade": "M7",
+    "homeroom_teacher_id": "u22",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s74",
+    "student_no": "2026-M801",
+    "name": "HAN, Yeju (한예주)",
+    "grade": "M8",
+    "homeroom_teacher_id": "u8",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s75",
+    "student_no": "2026-M802",
+    "name": "HWANG, Hee (황희)",
+    "grade": "M8",
+    "homeroom_teacher_id": "u8",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s76",
+    "student_no": "2026-M803",
+    "name": "JEONG, Raon (정라온)",
+    "grade": "M8",
+    "homeroom_teacher_id": "u8",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s77",
+    "student_no": "2026-M804",
+    "name": "KIM, Eden (김이든)",
+    "grade": "M8",
+    "homeroom_teacher_id": "u8",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s78",
+    "student_no": "2026-M805",
+    "name": "Kim, Hajin (김하진)",
+    "grade": "M8",
+    "homeroom_teacher_id": "u8",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s79",
+    "student_no": "2026-M806",
+    "name": "LEE, Jeri (이재이)",
+    "grade": "M8",
+    "homeroom_teacher_id": "u8",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s80",
+    "student_no": "2026-M807",
+    "name": "OH, Sion (오시온)",
+    "grade": "M8",
+    "homeroom_teacher_id": "u8",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s81",
+    "student_no": "2026-M808",
+    "name": "PARK, Haon (박하온)",
+    "grade": "M8",
+    "homeroom_teacher_id": "u8",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s82",
+    "student_no": "2026-M809",
+    "name": "SHIN, Hajun (신하준)",
+    "grade": "M8",
+    "homeroom_teacher_id": "u8",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s83",
+    "student_no": "2026-M810",
+    "name": "SONG, La-Im (송라임)",
+    "grade": "M8",
+    "homeroom_teacher_id": "u8",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s84",
+    "student_no": "2026-M811",
+    "name": "SONG, Sangyun (송상윤)",
+    "grade": "M8",
+    "homeroom_teacher_id": "u8",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s85",
+    "student_no": "2026-M812",
+    "name": "YANG, Luis Heerahm (양희람)",
+    "grade": "M8",
+    "homeroom_teacher_id": "u8",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s86",
+    "student_no": "2026-M813",
+    "name": "YOO, Hajoon (유하준)",
+    "grade": "M8",
+    "homeroom_teacher_id": "u8",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s87",
+    "student_no": "2026-M814",
+    "name": "YOON, Seokhyeon (윤석현)",
+    "grade": "M8",
+    "homeroom_teacher_id": "u8",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s88",
+    "student_no": "2026-H901",
+    "name": "CHOI, Yoonkwon (최윤권)",
+    "grade": "H9",
+    "homeroom_teacher_id": "u20",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s89",
+    "student_no": "2026-H902",
+    "name": "HAN, Onyoo (한온유)",
+    "grade": "H9",
+    "homeroom_teacher_id": "u20",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s90",
+    "student_no": "2026-H903",
+    "name": "IM, Joseph H. (임하람)",
+    "grade": "H9",
+    "homeroom_teacher_id": "u20",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s91",
+    "student_no": "2026-H904",
+    "name": "KIM, Hyungseo (김형서)",
+    "grade": "H9",
+    "homeroom_teacher_id": "u20",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s92",
+    "student_no": "2026-H905",
+    "name": "KIM, Kyungchun (김경천)",
+    "grade": "H9",
+    "homeroom_teacher_id": "u20",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s93",
+    "student_no": "2026-H906",
+    "name": "KIM, Minjun (김민준)",
+    "grade": "H9",
+    "homeroom_teacher_id": "u20",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s94",
+    "student_no": "2026-H907",
+    "name": "KIM, Riwon (김리원)",
+    "grade": "H9",
+    "homeroom_teacher_id": "u20",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s95",
+    "student_no": "2026-H908",
+    "name": "KIM, Seolrin (김설린)",
+    "grade": "H9",
+    "homeroom_teacher_id": "u20",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s96",
+    "student_no": "2026-H909",
+    "name": "KIM, Yuna (김윤아)",
+    "grade": "H9",
+    "homeroom_teacher_id": "u20",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s97",
+    "student_no": "2026-H910",
+    "name": "KOO, Haeun (구하은)",
+    "grade": "H9",
+    "homeroom_teacher_id": "u20",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s98",
+    "student_no": "2026-H911",
+    "name": "LEE, Heeel (이희엘)",
+    "grade": "H9",
+    "homeroom_teacher_id": "u20",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s99",
+    "student_no": "2026-H912",
+    "name": "LEE, Jimin (이지민)",
+    "grade": "H9",
+    "homeroom_teacher_id": "u20",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s100",
+    "student_no": "2026-H913",
+    "name": "RYU, Hajun (유하준)",
+    "grade": "H9",
+    "homeroom_teacher_id": "u20",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s101",
+    "student_no": "2026-H914",
+    "name": "SONG, Yuvin (송유빈)",
+    "grade": "H9",
+    "homeroom_teacher_id": "u20",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s102",
+    "student_no": "2026-H915",
+    "name": "TAK, Taewon (탁태원)",
+    "grade": "H9",
+    "homeroom_teacher_id": "u20",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s103",
+    "student_no": "2026-H1001",
+    "name": "CUI, Yuanshuo (최원석)",
+    "grade": "H10",
+    "homeroom_teacher_id": "u19",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s104",
+    "student_no": "2026-H1002",
+    "name": "KANG, Kyungho (강경호)",
+    "grade": "H10",
+    "homeroom_teacher_id": "u19",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s105",
+    "student_no": "2026-H1003",
+    "name": "KIM, Haul (김하울)",
+    "grade": "H10",
+    "homeroom_teacher_id": "u19",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s106",
+    "student_no": "2026-H1004",
+    "name": "KIM, Hyeongju (김형주)",
+    "grade": "H10",
+    "homeroom_teacher_id": "u19",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s107",
+    "student_no": "2026-H1005",
+    "name": "KIM, Hyorin (김효린)",
+    "grade": "H10",
+    "homeroom_teacher_id": "u19",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s108",
+    "student_no": "2026-H1006",
+    "name": "KIM, Layoon (김라윤)",
+    "grade": "H10",
+    "homeroom_teacher_id": "u19",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s109",
+    "student_no": "2026-H1007",
+    "name": "KUG, Jimin (국지민)",
+    "grade": "H10",
+    "homeroom_teacher_id": "u19",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s110",
+    "student_no": "2026-H1008",
+    "name": "KWAK, Hayong (곽하용)",
+    "grade": "H10",
+    "homeroom_teacher_id": "u19",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s111",
+    "student_no": "2026-H1009",
+    "name": "LEE, Jaden Sungil (이성일)",
+    "grade": "H10",
+    "homeroom_teacher_id": "u19",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s112",
+    "student_no": "2026-H1010",
+    "name": "LEE, Somin (이소민)",
+    "grade": "H10",
+    "homeroom_teacher_id": "u19",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s113",
+    "student_no": "2026-H1011",
+    "name": "LEE, Yejun (이예준)",
+    "grade": "H10",
+    "homeroom_teacher_id": "u19",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s114",
+    "student_no": "2026-H1012",
+    "name": "LIM, Hayoon (임하윤)",
+    "grade": "H10",
+    "homeroom_teacher_id": "u19",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s115",
+    "student_no": "2026-H1013",
+    "name": "OH, Yeju (오예주)",
+    "grade": "H10",
+    "homeroom_teacher_id": "u19",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s116",
+    "student_no": "2026-H1014",
+    "name": "OH, Yumin (오유민)",
+    "grade": "H10",
+    "homeroom_teacher_id": "u19",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s117",
+    "student_no": "2026-H1015",
+    "name": "SHIM, Haeol (심하얼)",
+    "grade": "H10",
+    "homeroom_teacher_id": "u19",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s118",
+    "student_no": "2026-H1016",
+    "name": "SHIM, Haram (심하람)",
+    "grade": "H10",
+    "homeroom_teacher_id": "u19",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s119",
+    "student_no": "2026-H1017",
+    "name": "SON, Euna Faith (손유나)",
+    "grade": "H10",
+    "homeroom_teacher_id": "u19",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s120",
+    "student_no": "2026-H1018",
+    "name": "SUNG, Hyein (성혜인)",
+    "grade": "H10",
+    "homeroom_teacher_id": "u19",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s121",
+    "student_no": "2026-H1101",
+    "name": "HWANG, Haeun (황하은)",
+    "grade": "H11",
+    "homeroom_teacher_id": "u13",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s122",
+    "student_no": "2026-H1102",
+    "name": "JEONG, Yian (정이안)",
+    "grade": "H11",
+    "homeroom_teacher_id": "u13",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s123",
+    "student_no": "2026-H1103",
+    "name": "KIM, Eunchan (김은찬)",
+    "grade": "H11",
+    "homeroom_teacher_id": "u13",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s124",
+    "student_no": "2026-H1104",
+    "name": "KIM, Younghoo (김영후)",
+    "grade": "H11",
+    "homeroom_teacher_id": "u13",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s125",
+    "student_no": "2026-H1105",
+    "name": "KO, Sun (고선)",
+    "grade": "H11",
+    "homeroom_teacher_id": "u13",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s126",
+    "student_no": "2026-H1106",
+    "name": "KWAK, Inyong (곽인용)",
+    "grade": "H11",
+    "homeroom_teacher_id": "u13",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s127",
+    "student_no": "2026-H1107",
+    "name": "PHY, Jiyun (피지윤)",
+    "grade": "H11",
+    "homeroom_teacher_id": "u13",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s128",
+    "student_no": "2026-H1201",
+    "name": "CHEON, Kailyn Sumin (천수민)",
+    "grade": "H12",
+    "homeroom_teacher_id": "u4",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s129",
+    "student_no": "2026-H1202",
+    "name": "CHO, Sumin (조수민)",
+    "grade": "H12",
+    "homeroom_teacher_id": "u4",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s130",
+    "student_no": "2026-H1203",
+    "name": "HAN, Yewon (한예원)",
+    "grade": "H12",
+    "homeroom_teacher_id": "u4",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s131",
+    "student_no": "2026-H1204",
+    "name": "KIM, Eunsol (김은솔)",
+    "grade": "H12",
+    "homeroom_teacher_id": "u4",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s132",
+    "student_no": "2026-H1205",
+    "name": "KIM, Hanul (김하늘)",
+    "grade": "H12",
+    "homeroom_teacher_id": "u4",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s133",
+    "student_no": "2026-H1206",
+    "name": "KIM, Hyundo (김현도)",
+    "grade": "H12",
+    "homeroom_teacher_id": "u4",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s134",
+    "student_no": "2026-H1207",
+    "name": "KIM, Hyunseo (김현서)",
+    "grade": "H12",
+    "homeroom_teacher_id": "u4",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s135",
+    "student_no": "2026-H1208",
+    "name": "KIM, Minki (김민기)",
+    "grade": "H12",
+    "homeroom_teacher_id": "u4",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s136",
+    "student_no": "2026-H1209",
+    "name": "KIM, Sehyun (김세현)",
+    "grade": "H12",
+    "homeroom_teacher_id": "u4",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s137",
+    "student_no": "2026-H1210",
+    "name": "KIM, Serin (김세린)",
+    "grade": "H12",
+    "homeroom_teacher_id": "u4",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s138",
+    "student_no": "2026-H1211",
+    "name": "KIM, Sophia Minkyung (김민경)",
+    "grade": "H12",
+    "homeroom_teacher_id": "u4",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s139",
+    "student_no": "2026-H1212",
+    "name": "KIM, Taerim (김태림)",
+    "grade": "H12",
+    "homeroom_teacher_id": "u4",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s140",
+    "student_no": "2026-H1213",
+    "name": "LEE, Dohyun (이도현)",
+    "grade": "H12",
+    "homeroom_teacher_id": "u4",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s141",
+    "student_no": "2026-H1214",
+    "name": "LEE, Rachel (이예윤)",
+    "grade": "H12",
+    "homeroom_teacher_id": "u4",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s142",
+    "student_no": "2026-H1215",
+    "name": "SON, Yena Hope (손예나)",
+    "grade": "H12",
+    "homeroom_teacher_id": "u4",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s143",
+    "student_no": "2026-H1216",
+    "name": "TAK, Seeun (탁세은)",
+    "grade": "H12",
+    "homeroom_teacher_id": "u4",
+    "status": "ENROLLED"
+  },
+  {
+    "id": "s144",
+    "student_no": "2026-H1217",
+    "name": "YOON, Seoyoung (윤서영)",
+    "grade": "H12",
+    "homeroom_teacher_id": "u4",
     "status": "ENROLLED"
   }
 ]

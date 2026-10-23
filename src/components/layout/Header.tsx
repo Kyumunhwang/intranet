@@ -64,10 +64,10 @@ export default function Header({ currentIp = '211.104.88.24', isSchoolIp = true 
   };
 
   const rolesList: { role: UserRole; label: string; desc: string }[] = [
-    { role: 'TEACHER', label: '김교사 (Grace Kim)', desc: '일반교사 / 기안자' },
-    { role: 'DEPT_HEAD', label: '박교무 (Peter Park)', desc: '교무부장 / 1차 결재권자' },
-    { role: 'PRINCIPAL', label: '이교장 (Samuel Lee)', desc: '교장 / 최종 결재권자' },
-    { role: 'ADMIN', label: '정총괄 (David Jung)', desc: '행정실장 / 시스템 관리자' },
+    { role: 'TEACHER', label: '이재원 (Jay Lee)', desc: '정규교사 / M8 담임' },
+    { role: 'DEPT_HEAD', label: '황규문 (Kyumun Hwang)', desc: '교감 / 1차 결재권자' },
+    { role: 'PRINCIPAL', label: '김바울 (Paul Kim)', desc: '교장 / 최종 결재권자' },
+    { role: 'ADMIN', label: '하지현 (Jihyun Ha)', desc: '행정실 / 시스템 관리자' },
   ];
 
   return (

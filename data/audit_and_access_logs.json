@@ -1,102 +1,42 @@
 [
   {
-    "id": "log_1792766623138_izaq",
-    "actor_id": "u2",
-    "actor_email": "kim.teacher@lighthouse.org",
-    "actor_name": "김교사",
+    "id": "log_20261024_001",
+    "actor_id": "u8",
+    "actor_email": "jay.lee@lighthouse.org",
+    "actor_name": "이재원",
     "action_category": "ATTENDANCE_CLICK",
-    "action_detail": "퇴근 체크 완료 (PM 11:43:43)",
+    "action_detail": "[M8 학년] 학생 일일 출결 14명 최종 Confirm 확정 (출석 14, 지각 0, 결석 0, 병결 0)",
     "client_ip": "211.104.88.24",
-    "created_at": "2026-10-23T14:43:43.138Z"
+    "created_at": "2026-10-23T23:50:00.000Z"
   },
   {
-    "id": "log_1792761162582_m0gd",
-    "actor_id": "u2",
-    "actor_email": "kim.teacher@lighthouse.org",
-    "actor_name": "김교사",
+    "id": "log_20261024_002",
+    "actor_id": "u8",
+    "actor_email": "jay.lee@lighthouse.org",
+    "actor_name": "이재원",
     "action_category": "ATTENDANCE_CLICK",
-    "action_detail": "퇴근 체크 완료 (PM 10:12:42)",
+    "action_detail": "정규 출근 체크 완료 (08:15:22)",
     "client_ip": "211.104.88.24",
-    "created_at": "2026-10-23T13:12:42.582Z"
+    "created_at": "2026-10-23T23:15:22.000Z"
   },
   {
-    "id": "log_1792759775478_gbmk",
-    "actor_id": "u2",
-    "actor_email": "kim.teacher@lighthouse.org",
-    "actor_name": "김교사",
-    "action_category": "ATTENDANCE_CLICK",
-    "action_detail": "[중등 3-2] 학생 일일 출결 최종 Confirm 확정 (출석 8, 지각 0, 결석 0, 병결 0)",
+    "id": "log_20261024_003",
+    "actor_id": "u5",
+    "actor_email": "kyumun.hwang@lighthouse.org",
+    "actor_name": "황규문",
+    "action_category": "LOGIN",
+    "action_detail": "교감실 공인 IP 인트라넷 보안 로그인 인증 성공",
     "client_ip": "211.104.88.24",
-    "created_at": "2026-10-23T12:49:35.478Z"
+    "created_at": "2026-10-23T23:05:10.000Z"
   },
   {
-    "id": "log_1792759773077_x7a4",
-    "actor_id": "u2",
-    "actor_email": "kim.teacher@lighthouse.org",
-    "actor_name": "김교사",
-    "action_category": "ATTENDANCE_CLICK",
-    "action_detail": "[중등 3-2] 학생 일일 출결 최종 Confirm 확정 (출석 7, 지각 1, 결석 0, 병결 0)",
+    "id": "log_20261024_004",
+    "actor_id": "u1",
+    "actor_email": "paul.kim@lighthouse.org",
+    "actor_name": "김바울",
+    "action_category": "LOGIN",
+    "action_detail": "교장실 공인 IP 인트라넷 관리자 접속",
     "client_ip": "211.104.88.24",
-    "created_at": "2026-10-23T12:49:33.077Z"
-  },
-  {
-    "id": "log_1792759719526_tzic",
-    "actor_id": "u2",
-    "actor_email": "kim.teacher@lighthouse.org",
-    "actor_name": "김교사",
-    "action_category": "ATTENDANCE_CLICK",
-    "action_detail": "퇴근 체크 완료 (PM 9:48:39)",
-    "client_ip": "211.104.88.24",
-    "created_at": "2026-10-23T12:48:39.526Z"
-  },
-  {
-    "id": "log_1792759630424_9vt7",
-    "actor_id": "u2",
-    "actor_email": "kim.teacher@lighthouse.org",
-    "actor_name": "김교사",
-    "action_category": "PASSWORD_RESET",
-    "action_detail": "관리자에 의한 초기 비밀번호 '1234' 리셋 완료 (대상: 김교사 / kim.teacher@lighthouse.org)",
-    "client_ip": "211.104.88.24",
-    "created_at": "2026-10-23T12:47:10.424Z"
-  },
-  {
-    "id": "log_1792759628684_9qvn",
-    "actor_id": "u2",
-    "actor_email": "kim.teacher@lighthouse.org",
-    "actor_name": "김교사",
-    "action_category": "ATTENDANCE_CLICK",
-    "action_detail": "[중등 3-2] 학생 일일 출결 최종 Confirm 확정 (출석 1, 지각 1, 결석 0, 병결 0)",
-    "client_ip": "211.104.88.24",
-    "created_at": "2026-10-23T12:47:08.684Z"
-  },
-  {
-    "id": "log_1792759627374_zsmx",
-    "actor_id": "u2",
-    "actor_email": "kim.teacher@lighthouse.org",
-    "actor_name": "김교사",
-    "action_category": "ATTENDANCE_CLICK",
-    "action_detail": "출퇴근 체크 실패 - 외부 비인가 IP 접속 차단 (110.15.22.99)",
-    "client_ip": "110.15.22.99",
-    "created_at": "2026-10-23T12:47:07.374Z"
-  },
-  {
-    "id": "log1",
-    "actor_id": "u2",
-    "actor_email": "kim.teacher@lighthouse.org",
-    "actor_name": "김교사",
-    "action_category": "ATTENDANCE_CLICK",
-    "action_detail": "출근 체크 완료 (08:15:22) - 학교 공인 IP 일치",
-    "client_ip": "211.104.88.24",
-    "created_at": "2026-10-23T08:15:22Z"
-  },
-  {
-    "id": "log2",
-    "actor_id": "u2",
-    "actor_email": "kim.teacher@lighthouse.org",
-    "actor_name": "김교사",
-    "action_category": "ATTENDANCE_CLICK",
-    "action_detail": "중등 3-2 학생 출결 확정 (총원 8명, 출석 7, 지각 1)",
-    "client_ip": "211.104.88.24",
-    "created_at": "2026-10-23T08:50:00Z"
+    "created_at": "2026-10-23T23:00:00.000Z"
   }
 ]
