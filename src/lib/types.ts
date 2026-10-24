@@ -52,9 +52,25 @@ export interface Position {
 
 export interface Role {
   id: string;
-  role_code: RoleCode;
+  role_code: RoleCode | string;
   role_name: string;
   is_system_role: boolean;
+  description?: string;
+}
+
+export interface MenuPermissionItem {
+  id: string;
+  menu: string;
+  category: string;
+  superRead: boolean;
+  superWrite: boolean;
+  superPrint: boolean;
+  adminRead: boolean;
+  adminWrite: boolean;
+  adminPrint: boolean;
+  teacherRead: boolean;
+  teacherWrite: boolean;
+  teacherPrint: boolean;
 }
 
 export interface Profile {

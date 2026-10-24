@@ -3,30 +3,35 @@
     "id": "r1",
     "role_code": "SUPER_ADMIN",
     "role_name": "최고관리자 (Super Admin)",
-    "is_system_role": true
+    "is_system_role": true,
+    "description": "학교 전산, 연차 가감 거버넌스 및 최종 인사 총괄 권한"
   },
   {
     "id": "r2",
     "role_code": "ADMIN",
     "role_name": "일반관리자 (System Admin)",
-    "is_system_role": true
+    "is_system_role": true,
+    "description": "행정실 및 학사 시스템 일반 관리 및 운영 권한"
   },
   {
     "id": "r3",
     "role_code": "APPROVER",
     "role_name": "결재권자 (Approver)",
-    "is_system_role": false
+    "is_system_role": false,
+    "description": "교감/부서장 등 전자결재 1차/중간 승인 권한"
   },
   {
     "id": "r4",
     "role_code": "TEACHER",
     "role_name": "일반교직원 (Faculty/Staff)",
-    "is_system_role": false
+    "is_system_role": false,
+    "description": "정규 교원 및 직원 기본 업무 포털 접근 권한"
   },
   {
     "id": "r5",
     "role_code": "VIEWER",
     "role_name": "열람전용 (Viewer)",
-    "is_system_role": false
+    "is_system_role": false,
+    "description": "파트타임 및 외부 강사 제한적 열람 권한"
   }
 ]

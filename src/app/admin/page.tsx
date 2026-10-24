@@ -55,13 +55,15 @@ import {
   FileSpreadsheet,
   ShieldAlert,
 } from 'lucide-react';
-import { Profile, AllowedIP, AuditLog, Department, Position, Role, Student } from '@/lib/types';
+import { Profile, AllowedIP, AuditLog, Department, Position, Role, Student, MenuPermissionItem } from '@/lib/types';
 import { useLanguage } from '@/lib/language-context';
 import { useUser } from '@/lib/user-context';
 import rawProfilesData from '../../../data/profiles.json';
 import rawStudentsData from '../../../data/students.json';
 import rawDepartmentsData from '../../../data/departments.json';
 import rawPositionsData from '../../../data/positions.json';
+import rawRolesData from '../../../data/roles.json';
+import rawMenuPermissionsData from '../../../data/menu_permissions.json';
 
 const SCHOOL_GRADES = [
   'T1',
@@ -259,23 +261,21 @@ function AdminConsoleContent() {
   // =========================================================================
   // [2. 권한관리] 상태
   // =========================================================================
-  const [roles, setRoles] = useState<Role[]>([
-    { id: 'r1', role_code: 'SUPER_ADMIN', role_name: '최고관리자 (Super Admin)', is_system_role: true },
-    { id: 'r2', role_code: 'ADMIN', role_name: '기관행정관리자 (Admin)', is_system_role: true },
-    { id: 'r3', role_code: 'APPROVER', role_name: '결재권자 / 부서장', is_system_role: false },
-    { id: 'r4', role_code: 'TEACHER', role_name: '정규/담임 교직원', is_system_role: false },
-    { id: 'r5', role_code: 'VIEWER', role_name: '파트/외부강사 열람전용', is_system_role: false },
-  ]);
+  const [roles, setRoles] = useState<Role[]>(rawRolesData as Role[]);
 
-  // 메뉴별 권한 매트릭스 (조회, 저장, 인쇄)
-  const [menuPermissions, setMenuPermissions] = useState([
-    { menu: '교직원 근태 / 출퇴근', adminRead: true, adminWrite: true, adminPrint: true, teacherRead: true, teacherWrite: true, teacherPrint: false },
-    { menu: '반별 학생출결 Confirm', adminRead: true, adminWrite: true, adminPrint: true, teacherRead: true, teacherWrite: true, teacherPrint: true },
-    { menu: '전자결재 기안 및 승인', adminRead: true, adminWrite: true, adminPrint: true, teacherRead: true, teacherWrite: true, teacherPrint: true },
-    { menu: '학사일정 캘린더', adminRead: true, adminWrite: true, adminPrint: true, teacherRead: true, teacherWrite: false, teacherPrint: true },
-    { menu: '전자게시판 및 회의록', adminRead: true, adminWrite: true, adminPrint: true, teacherRead: true, teacherWrite: true, teacherPrint: true },
-    { menu: '최고관리자 콘솔', adminRead: true, adminWrite: true, adminPrint: true, teacherRead: false, teacherWrite: false, teacherPrint: false },
-  ]);
+  // 메뉴별 권한 매트릭스 (최고관리자, 관리자, 일반 교직원 - 조회, 저장, 인쇄)
+  const [menuPermissions, setMenuPermissions] = useState<MenuPermissionItem[]>(
+    rawMenuPermissionsData as MenuPermissionItem[]
+  );
+
+  // 권한 코드 등록/수정 모달 상태
+  const [isRoleModalOpen, setIsRoleModalOpen] = useState(false);
+  const [editingRoleId, setEditingRoleId] = useState<string | null>(null);
+  const [roleFormCode, setRoleFormCode] = useState('');
+  const [roleFormName, setRoleFormName] = useState('');
+  const [roleFormDesc, setRoleFormDesc] = useState('');
+  const [roleFormIsSystem, setRoleFormIsSystem] = useState(false);
+  const [isSavingPermissions, setIsSavingPermissions] = useState(false);
 
   // =========================================================================
   // [3. 인트라넷 관리] 상태
@@ -577,6 +577,158 @@ function AdminConsoleContent() {
     setNewIpDesc('');
     setToastMessage(`IP [${newIp.ip_address}]가 등록되었습니다.`);
     setTimeout(() => setToastMessage(null), 3000);
+  };
+
+  // 초기 마운트 시 권한 코드 및 메뉴별 권한 설정 불러오기
+  useEffect(() => {
+    fetch('/api/admin/roles')
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && Array.isArray(data.roles)) {
+          setRoles(data.roles);
+        }
+      })
+      .catch(() => {});
+
+    fetch('/api/admin/permissions')
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && Array.isArray(data.permissions)) {
+          setMenuPermissions(data.permissions);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  const handleOpenAddRole = () => {
+    setEditingRoleId(null);
+    setRoleFormCode('');
+    setRoleFormName('');
+    setRoleFormDesc('');
+    setRoleFormIsSystem(false);
+    setIsRoleModalOpen(true);
+  };
+
+  const handleOpenEditRole = (r: Role) => {
+    setEditingRoleId(r.id);
+    setRoleFormCode(r.role_code);
+    setRoleFormName(r.role_name);
+    setRoleFormDesc(r.description || '');
+    setRoleFormIsSystem(r.is_system_role);
+    setIsRoleModalOpen(true);
+  };
+
+  const handleSaveRole = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!roleFormCode.trim() || !roleFormName.trim()) {
+      alert('권한 코드와 권한명을 모두 입력해주세요.');
+      return;
+    }
+    try {
+      const res = await fetch('/api/admin/roles', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id: editingRoleId,
+          role_code: roleFormCode.trim(),
+          role_name: roleFormName.trim(),
+          description: roleFormDesc.trim(),
+          is_system_role: roleFormIsSystem,
+        }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setToastMessage(data.message || '권한 코드가 저장되었습니다.');
+        setTimeout(() => setToastMessage(null), 3000);
+        setIsRoleModalOpen(false);
+        const rolesRes = await fetch('/api/admin/roles');
+        const rolesData = await rolesRes.json();
+        if (rolesData.success && Array.isArray(rolesData.roles)) {
+          setRoles(rolesData.roles);
+        }
+      } else {
+        alert(data.message || '권한 코드 저장 실패');
+      }
+    } catch (err) {
+      alert('서버 통신 중 오류가 발생했습니다.');
+    }
+  };
+
+  const handleDeleteRole = async (r: Role) => {
+    if (r.is_system_role) {
+      alert('시스템 기본 핵심 권한은 삭제할 수 없습니다.');
+      return;
+    }
+    if (
+      !confirm(
+        `권한 코드 [${r.role_name} (${r.role_code})]를 정말 삭제하시겠습니까?\n해당 권한이 부여된 교직원 설정에 영향이 발생할 수 있습니다.`
+      )
+    ) {
+      return;
+    }
+    try {
+      const res = await fetch(`/api/admin/roles?id=${r.id}`, { method: 'DELETE' });
+      const data = await res.json();
+      if (data.success) {
+        setToastMessage(data.message || '권한 코드가 삭제되었습니다.');
+        setTimeout(() => setToastMessage(null), 3000);
+        setRoles((prev) => prev.filter((item) => item.id !== r.id));
+      } else {
+        alert(data.message || '삭제 실패');
+      }
+    } catch (err) {
+      alert('서버 통신 중 오류가 발생했습니다.');
+    }
+  };
+
+  const handleToggleMenuPermission = (id: string, field: keyof MenuPermissionItem) => {
+    setMenuPermissions((prev) =>
+      prev.map((item) => {
+        if (item.id === id) {
+          return {
+            ...item,
+            [field]: !item[field],
+          };
+        }
+        return item;
+      })
+    );
+  };
+
+  const handleBulkToggleRolePermissions = (rolePrefix: 'super' | 'admin' | 'teacher', checked: boolean) => {
+    const rKey = `${rolePrefix}Read` as keyof MenuPermissionItem;
+    const wKey = `${rolePrefix}Write` as keyof MenuPermissionItem;
+    const pKey = `${rolePrefix}Print` as keyof MenuPermissionItem;
+    setMenuPermissions((prev) =>
+      prev.map((item) => ({
+        ...item,
+        [rKey]: checked,
+        [wKey]: checked,
+        [pKey]: checked,
+      }))
+    );
+  };
+
+  const handleSaveMenuPermissions = async () => {
+    setIsSavingPermissions(true);
+    try {
+      const res = await fetch('/api/admin/permissions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ permissions: menuPermissions }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setToastMessage('메뉴별 권한 설정(최고관리자, 관리자, 일반 교직원)이 안전하게 저장되었습니다.');
+        setTimeout(() => setToastMessage(null), 3000);
+      } else {
+        alert(data.message || '저장 실패');
+      }
+    } catch (err) {
+      alert('서버 통신 중 오류가 발생했습니다.');
+    } finally {
+      setIsSavingPermissions(false);
+    }
   };
 
   return (
@@ -1347,78 +1499,275 @@ function AdminConsoleContent() {
             </div>
           </div>
 
-          {/* Subtab 1: 권한코드 등록 (기본 Default 서브탭) */}
+          {/* Subtab 1: 권한코드 등록 및 관리 */}
           {permSubTab === 'codes' && (
             <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-5 space-y-4">
-              <h3 className="text-xs font-bold text-slate-900 pb-2 border-b border-slate-200">
-                권한 코드 등록 및 관리 (관리자, 교직원)
-              </h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-                {roles.map(r => (
-                  <div key={r.id} className="p-3.5 rounded-lg border border-slate-200 bg-slate-50/70">
-                    <div className="flex items-center justify-between">
-                      <span className="font-mono text-[10px] bg-slate-200 text-slate-800 px-1.5 py-0.2 rounded font-bold">
-                        {r.role_code}
-                      </span>
-                      {r.is_system_role && (
-                        <span className="text-[9px] bg-amber-100 text-amber-800 px-1 rounded font-bold">고정</span>
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-slate-200 gap-2">
+                <div>
+                  <h3 className="text-xs font-bold text-slate-900 flex items-center gap-1.5">
+                    <Shield className="w-4 h-4 text-blue-600" />
+                    <span>권한 코드 등록 및 관리 (최고관리자, 관리자, 일반 교직원 및 커스텀 권한)</span>
+                  </h3>
+                  <p className="text-[11px] text-slate-500 mt-0.5">
+                    인트라넷 시스템에서 사용하는 직무 및 보안 권한 코드를 신규 추가, 변경 또는 삭제 관리합니다.
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={handleOpenAddRole}
+                  className="px-3.5 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold flex items-center gap-1.5 shadow-sm transition-all"
+                >
+                  <Plus className="w-3.5 h-3.5" />
+                  <span>신규 권한 코드 등록</span>
+                </button>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5">
+                {roles.map((r) => (
+                  <div
+                    key={r.id}
+                    className="p-4 rounded-xl border border-slate-200 bg-slate-50/70 hover:bg-white hover:border-blue-300 hover:shadow-sm transition-all flex flex-col justify-between"
+                  >
+                    <div>
+                      <div className="flex items-center justify-between">
+                        <span className="font-mono text-[11px] bg-slate-200 text-slate-800 px-2 py-0.5 rounded font-bold">
+                          {r.role_code}
+                        </span>
+                        {r.is_system_role ? (
+                          <span className="text-[10px] bg-amber-100 text-amber-800 border border-amber-300 px-1.5 py-0.5 rounded font-bold">
+                            시스템 기본
+                          </span>
+                        ) : (
+                          <span className="text-[10px] bg-emerald-100 text-emerald-800 border border-emerald-300 px-1.5 py-0.5 rounded font-bold">
+                            커스텀 권한
+                          </span>
+                        )}
+                      </div>
+                      <div className="text-sm font-bold text-slate-900 mt-2">{r.role_name}</div>
+                      <p className="text-[11px] text-slate-500 mt-1 min-h-[32px] line-clamp-2">
+                        {r.description || '상세 설명이 등록되지 않았습니다.'}
+                      </p>
+                    </div>
+
+                    <div className="flex items-center justify-end gap-1.5 pt-3 mt-3 border-t border-slate-200/80 text-xs">
+                      <button
+                        type="button"
+                        onClick={() => handleOpenEditRole(r)}
+                        className="px-2.5 py-1 rounded-md bg-white border border-slate-300 text-slate-700 hover:bg-slate-100 hover:text-blue-700 font-semibold flex items-center gap-1 transition-colors"
+                      >
+                        <Edit3 className="w-3 h-3 text-slate-500" />
+                        <span>수정</span>
+                      </button>
+                      {!r.is_system_role && (
+                        <button
+                          type="button"
+                          onClick={() => handleDeleteRole(r)}
+                          className="px-2.5 py-1 rounded-md bg-white border border-rose-200 text-rose-600 hover:bg-rose-50 hover:border-rose-300 font-semibold flex items-center gap-1 transition-colors"
+                        >
+                          <Trash2 className="w-3 h-3 text-rose-500" />
+                          <span>삭제</span>
+                        </button>
                       )}
                     </div>
-                    <div className="text-xs font-bold text-slate-900 mt-1.5">{r.role_name}</div>
                   </div>
                 ))}
               </div>
             </div>
           )}
 
-          {/* Subtab 2: 메뉴별 권한설정 (조회, 저장, 인쇄) */}
+          {/* Subtab 2: 메뉴별 권한설정 (최고관리자, 관리자, 일반 교직원) */}
           {permSubTab === 'menu-matrix' && (
             <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-5 space-y-4">
-              <div className="flex items-center justify-between pb-3 border-b border-slate-200">
-                <h3 className="text-xs font-bold text-slate-900 flex items-center gap-2">
-                  <CheckSquare className="w-4 h-4 text-blue-600" />
-                  <span>모든 메뉴에 대한 조회(Read), 저장(Write), 인쇄(Print) 기능 권한 매트릭스</span>
-                </h3>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setToastMessage('메뉴별 조회/저장/인쇄 권한 설정이 전산에 동기화 저장되었습니다.');
-                    setTimeout(() => setToastMessage(null), 3000);
-                  }}
-                  className="px-3.5 py-1.5 rounded-lg bg-blue-600 text-white text-xs font-bold"
-                >
-                  권한 변경사항 저장
-                </button>
+              <div className="flex flex-col md:flex-row md:items-center justify-between pb-3 border-b border-slate-200 gap-3">
+                <div>
+                  <h3 className="text-xs font-bold text-slate-900 flex items-center gap-2">
+                    <CheckSquare className="w-4 h-4 text-blue-600" />
+                    <span>메뉴별 권한설정 매트릭스 (최고관리자, 관리자, 일반 교직원 조회/저장/인쇄)</span>
+                  </h3>
+                  <p className="text-[11px] text-slate-500 mt-0.5">
+                    시스템 메뉴 영역별로 최고관리자(Super Admin), 관리자(Admin), 일반 교직원(Staff/Teacher)의 권한을 세부 설정합니다.
+                  </p>
+                </div>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    disabled={isSavingPermissions}
+                    onClick={handleSaveMenuPermissions}
+                    className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold flex items-center gap-1.5 shadow-sm transition-all disabled:opacity-50"
+                  >
+                    <Save className="w-3.5 h-3.5" />
+                    <span>{isSavingPermissions ? '저장 중...' : '권한 변경사항 저장'}</span>
+                  </button>
+                </div>
               </div>
 
-              <div className="overflow-x-auto">
+              {/* 역할별 일괄 설정 툴바 */}
+              <div className="flex flex-wrap items-center gap-2 p-3 bg-slate-50 border border-slate-200 rounded-lg text-xs">
+                <span className="font-bold text-slate-600 flex items-center gap-1 mr-1">
+                  <Sliders className="w-3.5 h-3.5 text-blue-600" /> 빠른 일괄설정:
+                </span>
+                <div className="flex items-center gap-1 bg-white px-2 py-1 rounded border border-slate-200">
+                  <span className="font-semibold text-slate-700 text-[11px]">최고관리자:</span>
+                  <button
+                    type="button"
+                    onClick={() => handleBulkToggleRolePermissions('super', true)}
+                    className="text-[10px] text-blue-600 hover:underline font-bold px-1"
+                  >
+                    전체 허용
+                  </button>
+                </div>
+                <div className="flex items-center gap-1 bg-white px-2 py-1 rounded border border-slate-200">
+                  <span className="font-semibold text-slate-700 text-[11px]">관리자:</span>
+                  <button
+                    type="button"
+                    onClick={() => handleBulkToggleRolePermissions('admin', true)}
+                    className="text-[10px] text-blue-600 hover:underline font-bold px-1"
+                  >
+                    전체 허용
+                  </button>
+                  <span className="text-slate-300">|</span>
+                  <button
+                    type="button"
+                    onClick={() => handleBulkToggleRolePermissions('admin', false)}
+                    className="text-[10px] text-slate-500 hover:underline font-bold px-1"
+                  >
+                    전체 해제
+                  </button>
+                </div>
+                <div className="flex items-center gap-1 bg-white px-2 py-1 rounded border border-slate-200">
+                  <span className="font-semibold text-slate-700 text-[11px]">일반 교직원:</span>
+                  <button
+                    type="button"
+                    onClick={() => handleBulkToggleRolePermissions('teacher', true)}
+                    className="text-[10px] text-blue-600 hover:underline font-bold px-1"
+                  >
+                    전체 허용
+                  </button>
+                  <span className="text-slate-300">|</span>
+                  <button
+                    type="button"
+                    onClick={() => handleBulkToggleRolePermissions('teacher', false)}
+                    className="text-[10px] text-slate-500 hover:underline font-bold px-1"
+                  >
+                    전체 해제
+                  </button>
+                </div>
+              </div>
+
+              <div className="overflow-x-auto border border-slate-200 rounded-lg">
                 <table className="w-full text-left text-xs border-collapse">
                   <thead>
-                    <tr className="bg-slate-100/70 border-b border-slate-200 text-slate-600 font-semibold">
-                      <th className="py-2.5 px-3">시스템 메뉴 명</th>
-                      <th className="py-2.5 px-3 text-center" colSpan={3}>최고관리자 (Admin)</th>
-                      <th className="py-2.5 px-3 text-center" colSpan={3}>일반 교직원 (Staff/Teacher)</th>
+                    <tr className="bg-slate-100 border-b border-slate-200 text-slate-700 font-semibold">
+                      <th className="py-2.5 px-3 min-w-[200px]" rowSpan={2}>시스템 메뉴 명</th>
+                      <th className="py-2 px-3 text-center bg-blue-50/70 border-x border-slate-200 text-blue-900" colSpan={3}>
+                        최고관리자 (Super Admin)
+                      </th>
+                      <th className="py-2 px-3 text-center bg-indigo-50/70 border-r border-slate-200 text-indigo-900" colSpan={3}>
+                        관리자 (Admin)
+                      </th>
+                      <th className="py-2 px-3 text-center bg-emerald-50/70 text-emerald-900" colSpan={3}>
+                        일반 교직원 (Staff / Teacher)
+                      </th>
                     </tr>
-                    <tr className="bg-slate-50 border-b border-slate-200 text-[11px] text-slate-500 text-center font-mono">
-                      <th></th>
-                      <th className="py-1">조회</th>
-                      <th className="py-1">저장</th>
-                      <th className="py-1">인쇄</th>
-                      <th className="py-1">조회</th>
-                      <th className="py-1">저장</th>
-                      <th className="py-1">인쇄</th>
+                    <tr className="bg-slate-50 border-b border-slate-200 text-[11px] text-slate-600 text-center font-mono">
+                      {/* 최고관리자 */}
+                      <th className="py-1.5 px-2 bg-blue-50/40 border-l border-slate-200">조회</th>
+                      <th className="py-1.5 px-2 bg-blue-50/40">저장</th>
+                      <th className="py-1.5 px-2 bg-blue-50/40 border-r border-slate-200">인쇄</th>
+                      {/* 관리자 */}
+                      <th className="py-1.5 px-2 bg-indigo-50/40">조회</th>
+                      <th className="py-1.5 px-2 bg-indigo-50/40">저장</th>
+                      <th className="py-1.5 px-2 bg-indigo-50/40 border-r border-slate-200">인쇄</th>
+                      {/* 교직원 */}
+                      <th className="py-1.5 px-2 bg-emerald-50/40">조회</th>
+                      <th className="py-1.5 px-2 bg-emerald-50/40">저장</th>
+                      <th className="py-1.5 px-2 bg-emerald-50/40">인쇄</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-100 text-slate-700">
-                    {menuPermissions.map((mp, idx) => (
-                      <tr key={mp.menu} className="hover:bg-slate-50/60">
-                        <td className="py-2.5 px-3 font-bold text-slate-900">{mp.menu}</td>
-                        <td className="text-center"><input type="checkbox" defaultChecked={mp.adminRead} /></td>
-                        <td className="text-center"><input type="checkbox" defaultChecked={mp.adminWrite} /></td>
-                        <td className="text-center"><input type="checkbox" defaultChecked={mp.adminPrint} /></td>
-                        <td className="text-center"><input type="checkbox" defaultChecked={mp.teacherRead} /></td>
-                        <td className="text-center"><input type="checkbox" defaultChecked={mp.teacherWrite} /></td>
-                        <td className="text-center"><input type="checkbox" defaultChecked={mp.teacherPrint} /></td>
+                    {menuPermissions.map((mp) => (
+                      <tr key={mp.id || mp.menu} className="hover:bg-slate-50/80 transition-colors">
+                        <td className="py-2.5 px-3">
+                          <div className="font-bold text-slate-900">{mp.menu}</div>
+                          {mp.category && (
+                            <span className="text-[10px] text-slate-400 font-mono">[{mp.category}]</span>
+                          )}
+                        </td>
+                        {/* 최고관리자 */}
+                        <td className="text-center py-2 bg-blue-50/20 border-l border-slate-200">
+                          <input
+                            type="checkbox"
+                            checked={Boolean(mp.superRead)}
+                            onChange={() => handleToggleMenuPermission(mp.id, 'superRead')}
+                            className="w-4 h-4 rounded text-blue-600 border-slate-300 focus:ring-blue-500 cursor-pointer"
+                          />
+                        </td>
+                        <td className="text-center py-2 bg-blue-50/20">
+                          <input
+                            type="checkbox"
+                            checked={Boolean(mp.superWrite)}
+                            onChange={() => handleToggleMenuPermission(mp.id, 'superWrite')}
+                            className="w-4 h-4 rounded text-blue-600 border-slate-300 focus:ring-blue-500 cursor-pointer"
+                          />
+                        </td>
+                        <td className="text-center py-2 bg-blue-50/20 border-r border-slate-200">
+                          <input
+                            type="checkbox"
+                            checked={Boolean(mp.superPrint)}
+                            onChange={() => handleToggleMenuPermission(mp.id, 'superPrint')}
+                            className="w-4 h-4 rounded text-blue-600 border-slate-300 focus:ring-blue-500 cursor-pointer"
+                          />
+                        </td>
+                        {/* 관리자 */}
+                        <td className="text-center py-2 bg-indigo-50/20">
+                          <input
+                            type="checkbox"
+                            checked={Boolean(mp.adminRead)}
+                            onChange={() => handleToggleMenuPermission(mp.id, 'adminRead')}
+                            className="w-4 h-4 rounded text-indigo-600 border-slate-300 focus:ring-indigo-500 cursor-pointer"
+                          />
+                        </td>
+                        <td className="text-center py-2 bg-indigo-50/20">
+                          <input
+                            type="checkbox"
+                            checked={Boolean(mp.adminWrite)}
+                            onChange={() => handleToggleMenuPermission(mp.id, 'adminWrite')}
+                            className="w-4 h-4 rounded text-indigo-600 border-slate-300 focus:ring-indigo-500 cursor-pointer"
+                          />
+                        </td>
+                        <td className="text-center py-2 bg-indigo-50/20 border-r border-slate-200">
+                          <input
+                            type="checkbox"
+                            checked={Boolean(mp.adminPrint)}
+                            onChange={() => handleToggleMenuPermission(mp.id, 'adminPrint')}
+                            className="w-4 h-4 rounded text-indigo-600 border-slate-300 focus:ring-indigo-500 cursor-pointer"
+                          />
+                        </td>
+                        {/* 일반 교직원 */}
+                        <td className="text-center py-2 bg-emerald-50/20">
+                          <input
+                            type="checkbox"
+                            checked={Boolean(mp.teacherRead)}
+                            onChange={() => handleToggleMenuPermission(mp.id, 'teacherRead')}
+                            className="w-4 h-4 rounded text-emerald-600 border-slate-300 focus:ring-emerald-500 cursor-pointer"
+                          />
+                        </td>
+                        <td className="text-center py-2 bg-emerald-50/20">
+                          <input
+                            type="checkbox"
+                            checked={Boolean(mp.teacherWrite)}
+                            onChange={() => handleToggleMenuPermission(mp.id, 'teacherWrite')}
+                            className="w-4 h-4 rounded text-emerald-600 border-slate-300 focus:ring-emerald-500 cursor-pointer"
+                          />
+                        </td>
+                        <td className="text-center py-2 bg-emerald-50/20">
+                          <input
+                            type="checkbox"
+                            checked={Boolean(mp.teacherPrint)}
+                            onChange={() => handleToggleMenuPermission(mp.id, 'teacherPrint')}
+                            className="w-4 h-4 rounded text-emerald-600 border-slate-300 focus:ring-emerald-500 cursor-pointer"
+                          />
+                        </td>
                       </tr>
                     ))}
                   </tbody>
@@ -1458,11 +1807,11 @@ function AdminConsoleContent() {
                             }}
                             className="w-full h-8 px-2 bg-slate-50 border border-slate-300 rounded font-semibold text-blue-700"
                           >
-                            <option value="r1">최고관리자 (Super Admin)</option>
-                            <option value="r2">기관행정관리자 (Admin)</option>
-                            <option value="r3">결재권자 / 부서장</option>
-                            <option value="r4">일반 교직원 (Teacher)</option>
-                            <option value="r5">열람전용 (Viewer)</option>
+                            {roles.map((r) => (
+                              <option key={r.id} value={r.id}>
+                                {r.role_name} ({r.role_code})
+                              </option>
+                            ))}
                           </select>
                         </td>
                       </tr>
@@ -3462,6 +3811,102 @@ function AdminConsoleContent() {
                 일괄 업로드 실행
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* ===================================================================== */}
+      {/* MODAL 7: 권한 코드 등록 및 수정 모달 */}
+      {/* ===================================================================== */}
+      {isRoleModalOpen && (
+        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 space-y-4 border border-slate-200 animate-fade-in text-xs">
+            <div className="flex items-center justify-between pb-2 border-b border-slate-100">
+              <h3 className="text-sm font-bold text-slate-900 flex items-center gap-1.5">
+                <Shield className="w-4 h-4 text-blue-600" />
+                <span>{editingRoleId ? '권한 코드 정보 수정' : '신규 권한 코드 등록'}</span>
+              </h3>
+              <button
+                type="button"
+                onClick={() => setIsRoleModalOpen(false)}
+                className="text-slate-400 hover:text-slate-600 font-bold text-base leading-none"
+              >
+                ✕
+              </button>
+            </div>
+
+            <form onSubmit={handleSaveRole} className="space-y-3.5">
+              <div>
+                <label className="block font-bold text-slate-700 mb-1">
+                  권한 코드 (영문 대문자 / 식별자) <span className="text-rose-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={roleFormCode}
+                  onChange={(e) => setRoleFormCode(e.target.value.toUpperCase())}
+                  placeholder="예: COUNSELOR, GRADE_HEAD, LIBRARIAN"
+                  className="w-full h-8 px-2.5 bg-slate-50 border border-slate-300 rounded font-mono font-bold text-slate-800 focus:bg-white focus:border-blue-500 focus:outline-none"
+                />
+                <span className="text-[10px] text-slate-400 mt-0.5 block">시스템 내부에서 고유 식별자로 사용됩니다.</span>
+              </div>
+
+              <div>
+                <label className="block font-bold text-slate-700 mb-1">
+                  권한 명칭 (한글/영문 직무명) <span className="text-rose-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={roleFormName}
+                  onChange={(e) => setRoleFormName(e.target.value)}
+                  placeholder="예: 전문상담교사, 학년부장, 사서교사"
+                  className="w-full h-8 px-2.5 bg-slate-50 border border-slate-300 rounded font-bold text-slate-800 focus:bg-white focus:border-blue-500 focus:outline-none"
+                />
+              </div>
+
+              <div>
+                <label className="block font-bold text-slate-700 mb-1">상세 권한 및 역할 설명</label>
+                <textarea
+                  rows={3}
+                  value={roleFormDesc}
+                  onChange={(e) => setRoleFormDesc(e.target.value)}
+                  placeholder="해당 권한 코드의 구체적인 업무 범위 및 시스템 접근 범위를 기재합니다."
+                  className="w-full p-2.5 bg-slate-50 border border-slate-300 rounded text-slate-800 focus:bg-white focus:border-blue-500 focus:outline-none"
+                />
+              </div>
+
+              <div className="pt-1">
+                <label className="flex items-center gap-2 cursor-pointer p-2.5 rounded-lg bg-slate-50 border border-slate-200">
+                  <input
+                    type="checkbox"
+                    checked={roleFormIsSystem}
+                    onChange={(e) => setRoleFormIsSystem(e.target.checked)}
+                    className="w-4 h-4 rounded text-blue-600 border-slate-300 focus:ring-blue-500 cursor-pointer"
+                  />
+                  <div>
+                    <span className="font-bold text-slate-800">시스템 기본 핵심 권한으로 지정</span>
+                    <p className="text-[10px] text-slate-500">체크 시 임의 삭제가 방지되는 보호 플래그가 설정됩니다.</p>
+                  </div>
+                </label>
+              </div>
+
+              <div className="flex justify-end gap-2 pt-3 border-t border-slate-100">
+                <button
+                  type="button"
+                  onClick={() => setIsRoleModalOpen(false)}
+                  className="px-3 py-1.5 rounded border border-slate-300 text-slate-600 hover:bg-slate-50 font-semibold"
+                >
+                  취소
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-1.5 rounded bg-blue-600 hover:bg-blue-700 text-white font-bold transition-colors"
+                >
+                  {editingRoleId ? '수정 완료' : '등록 완료'}
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}

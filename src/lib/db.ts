@@ -24,6 +24,7 @@ import {
   BoardPostRead,
   AuditLog,
   AttendanceStatus,
+  MenuPermissionItem,
 } from './types';
 
 const DATA_DIR = path.join(process.cwd(), 'data');
@@ -122,6 +123,70 @@ export function getPositions(): Position[] {
 
 export function getRoles(): Role[] {
   return readJson<Role[]>('roles.json', []);
+}
+
+export function saveRole(role: Partial<Role>): Role {
+  const roles = getRoles();
+  let updated: Role;
+  if (role.id) {
+    const idx = roles.findIndex((r) => r.id === role.id);
+    if (idx >= 0) {
+      roles[idx] = { ...roles[idx], ...role } as Role;
+      updated = roles[idx];
+    } else {
+      updated = role as Role;
+      roles.push(updated);
+    }
+  } else {
+    updated = {
+      id: `r_${Date.now()}`,
+      role_code: role.role_code || `CUSTOM_${Date.now()}`,
+      role_name: role.role_name || '신규 권한',
+      is_system_role: false,
+      description: role.description || '',
+    };
+    roles.push(updated);
+  }
+  writeJson('roles.json', roles);
+  logAuditAction({
+    action_category: 'ADMIN_CHANGE',
+    action_detail: `권한 코드 등록/수정 [${updated.role_code}: ${updated.role_name}]`,
+    client_ip: '211.104.88.24',
+  });
+  return updated;
+}
+
+export function deleteRole(roleId: string): { success: boolean; message: string } {
+  const roles = getRoles();
+  const target = roles.find((r) => r.id === roleId);
+  if (!target) {
+    return { success: false, message: '해당 권한 코드를 찾을 수 없습니다.' };
+  }
+  if (target.is_system_role) {
+    return { success: false, message: '시스템 기본 핵심 권한은 삭제할 수 없습니다.' };
+  }
+  const filtered = roles.filter((r) => r.id !== roleId);
+  writeJson('roles.json', filtered);
+  logAuditAction({
+    action_category: 'ADMIN_CHANGE',
+    action_detail: `권한 코드 삭제 완료 [${target.role_code}: ${target.role_name}]`,
+    client_ip: '211.104.88.24',
+  });
+  return { success: true, message: `권한 코드 [${target.role_name}]가 삭제되었습니다.` };
+}
+
+export function getMenuPermissions(): MenuPermissionItem[] {
+  return readJson<MenuPermissionItem[]>('menu_permissions.json', []);
+}
+
+export function updateMenuPermissions(permissions: MenuPermissionItem[]): MenuPermissionItem[] {
+  writeJson('menu_permissions.json', permissions);
+  logAuditAction({
+    action_category: 'ADMIN_CHANGE',
+    action_detail: '메뉴별 권한설정(최고관리자, 관리자, 일반교직원 조회/저장/인쇄) 매트릭스 변경 저장',
+    client_ip: '211.104.88.24',
+  });
+  return permissions;
 }
 
 export function getTeacherMultiRoles(teacherId?: string): TeacherMultiRole[] {
