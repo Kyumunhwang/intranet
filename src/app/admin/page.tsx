@@ -55,7 +55,7 @@ import {
   FileSpreadsheet,
   ShieldAlert,
 } from 'lucide-react';
-import { Profile, AllowedIP, AuditLog, Department, Position, Role, Student, MenuPermissionItem } from '@/lib/types';
+import { Profile, AllowedIP, AuditLog, Department, Position, Role, Student, MenuPermissionItem, ApprovalTemplate } from '@/lib/types';
 import { useLanguage } from '@/lib/language-context';
 import { useUser } from '@/lib/user-context';
 import rawProfilesData from '../../../data/profiles.json';
@@ -64,6 +64,7 @@ import rawDepartmentsData from '../../../data/departments.json';
 import rawPositionsData from '../../../data/positions.json';
 import rawRolesData from '../../../data/roles.json';
 import rawMenuPermissionsData from '../../../data/menu_permissions.json';
+import rawApprovalTemplates from '../../../data/approval_templates.json';
 
 const SCHOOL_GRADES = [
   'T1',
@@ -306,12 +307,22 @@ function AdminConsoleContent() {
   ]);
 
   // 3대 양식 관리 (문서양식, 기안양식, 근태신청서양식)
-  const [managedForms, setManagedForms] = useState<ManagedFormTemplate[]>([
-    { id: 'f-1', type: 'ATTENDANCE_LEAVE', form_code: 'HR-LV-01', title: '휴가원 (연차/반차/병가/공가)', steps: 3, deducts_leave: true, description: '연차 자동 차감 연동 근태신청 서식' },
-    { id: 'f-2', type: 'ATTENDANCE_LEAVE', form_code: 'HR-OT-02', title: '초과근무/연장근무 신청서', steps: 2, deducts_leave: false, description: '방과후 수업 및 야간자습 감독 승인 서식' },
-    { id: 'f-3', type: 'DRAFT', form_code: 'DRF-GEN-01', title: '표준 일반기안문', steps: 3, deducts_leave: false, description: '학교 행정 및 학사 주요 정책 표준 기안 서식' },
-    { id: 'f-4', type: 'DOCUMENT', form_code: 'FIN-EX-01', title: '지출결의서 및 물품구입품의서', steps: 4, deducts_leave: false, description: '예산 집행 및 행정실 경유 4단계 재정 서식' },
-  ]);
+  const [approvalTemplates, setApprovalTemplates] = useState<ApprovalTemplate[]>(
+    rawApprovalTemplates as unknown as ApprovalTemplate[]
+  );
+
+  // 양식 생성/수정/미리보기 모달 상태
+  const [isFormModalOpen, setIsFormModalOpen] = useState(false);
+  const [editingFormId, setEditingFormId] = useState<string | null>(null);
+  const [formName, setFormName] = useState('');
+  const [formCategory, setFormCategory] = useState<'DOCUMENT' | 'DRAFT' | 'ATTENDANCE_LEAVE'>('DRAFT');
+  const [formDescription, setFormDescription] = useState('');
+  const [formContentHtml, setFormContentHtml] = useState('');
+  const [formAutoDeduct, setFormAutoDeduct] = useState(false);
+  const [formStepsCount, setFormStepsCount] = useState<number>(3);
+  const [formFileName, setFormFileName] = useState('');
+  const [formFileUrl, setFormFileUrl] = useState('');
+  const [previewTemplate, setPreviewTemplate] = useState<ApprovalTemplate | null>(null);
 
   // =========================================================================
   // [4. 업무지원] 상태 (사원별, 부서별, 일별, 월별, 퇴사자, 월별연장근무)
@@ -598,6 +609,15 @@ function AdminConsoleContent() {
         }
       })
       .catch(() => {});
+
+    fetch('/api/admin/forms')
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && Array.isArray(data.templates)) {
+          setApprovalTemplates(data.templates);
+        }
+      })
+      .catch(() => {});
   }, []);
 
   const handleOpenAddRole = () => {
@@ -728,6 +748,119 @@ function AdminConsoleContent() {
       alert('서버 통신 중 오류가 발생했습니다.');
     } finally {
       setIsSavingPermissions(false);
+    }
+  };
+
+  const handleOpenAddForm = (category?: 'DOCUMENT' | 'DRAFT' | 'ATTENDANCE_LEAVE') => {
+    setEditingFormId(null);
+    setFormName('');
+    const cat = category || (formCategoryFilter === 'ALL' ? 'DRAFT' : formCategoryFilter);
+    setFormCategory(cat);
+    setFormDescription('');
+    setFormAutoDeduct(cat === 'ATTENDANCE_LEAVE');
+    setFormStepsCount(3);
+    setFormFileName('');
+    setFormFileUrl('');
+
+    if (cat === 'ATTENDANCE_LEAVE') {
+      setFormContentHtml(
+        '1. 신청 사유: 개인 사유 및 용무\n2. 휴가 구분: 연차 / 반차 / 기타\n3. 기간: 2026년 OO월 OO일 ~ OO월 OO일 (1일간)\n4. 긴급 연락처: 010-0000-0000\n5. 업무 및 수업 대행자: OOO 선생님 (사전 인계 완료)\n\n위와 같이 신청하오니 허가하여 주시기 바랍니다.'
+      );
+    } else if (cat === 'DOCUMENT') {
+      setFormContentHtml(
+        '수신: 경기도성남교육지원청 교육장\n참조: 학교안전담당\n제목: \n\n1. 귀 기관의 무궁한 발전을 기원합니다.\n2. 본교(등대글로벌스쿨)의 제반 학사 보고 건을 다음과 같이 제출합니다.\n\n붙임: 1. 세부 계획서 1부. 끝.\n\n등 대 글 로 벌 스 쿨 장 [직인생략]'
+      );
+    } else {
+      setFormContentHtml(
+        '1. 추진 목적:\n   - \n\n2. 주요 사업 내용:\n   가. 일시 및 장소:\n   나. 대상:\n   다. 소요 예산: 일금 OOO원\n\n3. 기대 효과 및 사후 관리:\n   - \n\n위와 같이 추진하고자 하오니 재가하여 주시기 바랍니다.'
+      );
+    }
+    setIsFormModalOpen(true);
+  };
+
+  const handleOpenEditForm = (t: ApprovalTemplate) => {
+    setEditingFormId(t.id);
+    setFormName(t.template_name);
+    setFormCategory((t.template_category as any) || 'DRAFT');
+    setFormDescription(t.description || '');
+    setFormContentHtml(t.content_html || '');
+    setFormAutoDeduct(Boolean(t.auto_deduct_leave));
+    setFormStepsCount(t.default_approval_steps?.length || 3);
+    setFormFileName(t.file_name || '');
+    setFormFileUrl(t.file_url || '');
+    setIsFormModalOpen(true);
+  };
+
+  const handleSaveForm = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!formName.trim()) {
+      alert('양식 명칭을 입력해주세요.');
+      return;
+    }
+    try {
+      const res = await fetch('/api/admin/forms', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id: editingFormId,
+          template_name: formName.trim(),
+          template_category: formCategory,
+          description: formDescription.trim(),
+          content_html: formContentHtml.trim(),
+          auto_deduct_leave: formAutoDeduct,
+          steps_count: formStepsCount,
+          file_name: formFileName,
+          file_url: formFileUrl,
+        }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setToastMessage(data.message || '양식 서식이 저장되었습니다.');
+        setTimeout(() => setToastMessage(null), 3000);
+        setIsFormModalOpen(false);
+        const formsRes = await fetch('/api/admin/forms');
+        const formsData = await formsRes.json();
+        if (formsData.success && Array.isArray(formsData.templates)) {
+          setApprovalTemplates(formsData.templates);
+        }
+      } else {
+        alert(data.message || '양식 저장 실패');
+      }
+    } catch (err) {
+      alert('서버 통신 중 오류가 발생했습니다.');
+    }
+  };
+
+  const handleDeleteForm = async (t: ApprovalTemplate) => {
+    if (
+      !confirm(
+        `양식 서식 [${t.template_name}]을 정말 삭제하시겠습니까?\n삭제된 서식은 전자결재 기안 시 사용할 수 없게 됩니다.`
+      )
+    ) {
+      return;
+    }
+    try {
+      const res = await fetch(`/api/admin/forms?id=${t.id}`, { method: 'DELETE' });
+      const data = await res.json();
+      if (data.success) {
+        setToastMessage(data.message || '양식 서식이 삭제되었습니다.');
+        setTimeout(() => setToastMessage(null), 3000);
+        setApprovalTemplates((prev) => prev.filter((item) => item.id !== t.id));
+      } else {
+        alert(data.message || '삭제 실패');
+      }
+    } catch (err) {
+      alert('서버 통신 중 오류가 발생했습니다.');
+    }
+  };
+
+  const handleFileUploadSimulate = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setFormFileName(file.name);
+      setFormFileUrl(`/templates/${encodeURIComponent(file.name)}`);
+      setToastMessage(`양식 서식 파일 [${file.name}]이 업로드 등록되었습니다.`);
+      setTimeout(() => setToastMessage(null), 2500);
     }
   };
 
@@ -2067,19 +2200,28 @@ function AdminConsoleContent() {
           {/* Subtab 4: 문서양식 / 기안양식 / 근태신청서양식 관리 */}
           {intraSubTab === 'forms' && (
             <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-5 space-y-4">
-              <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-slate-200">
-                <div className="flex items-center gap-2">
-                  <h3 className="text-xs font-bold text-slate-900">
-                    문서양식관리 · 기안양식관리 · 근태신청서양식관리 (생성, 변경, 삭제)
+              <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 pb-3 border-b border-slate-200">
+                <div>
+                  <h3 className="text-xs font-bold text-slate-900 flex items-center gap-1.5">
+                    <FileText className="w-4 h-4 text-blue-600" />
+                    <span>문서양식관리 · 기안양식관리 · 근태신청서양식관리 (생성, 변경, 삭제 및 파일 업로드)</span>
                   </h3>
+                  <p className="text-[11px] text-slate-500 mt-0.5">
+                    학교 전자결재에 사용되는 표준 서식을 등록하고 양식 파일(HWP, DOCX, PDF 등)을 업로드하거나 기본 템플릿을 제정합니다.
+                  </p>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-2">
                   <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-lg text-xs">
-                    {(['ALL', 'DOCUMENT', 'DRAFT', 'ATTENDANCE_LEAVE'] as const).map(cat => (
+                    {(['ALL', 'DOCUMENT', 'DRAFT', 'ATTENDANCE_LEAVE'] as const).map((cat) => (
                       <button
                         key={cat}
                         type="button"
                         onClick={() => setFormCategoryFilter(cat)}
-                        className={`px-2.5 py-0.5 rounded font-bold transition-all ${
-                          formCategoryFilter === cat ? 'bg-white text-blue-700 shadow-sm' : 'text-slate-600'
+                        className={`px-2.5 py-1 rounded font-bold transition-all text-xs ${
+                          formCategoryFilter === cat
+                            ? 'bg-white text-blue-700 shadow-sm'
+                            : 'text-slate-600 hover:text-slate-900'
                         }`}
                       >
                         {cat === 'ALL' && '전체 양식'}
@@ -2089,86 +2231,123 @@ function AdminConsoleContent() {
                       </button>
                     ))}
                   </div>
-                </div>
 
-                <button
-                  type="button"
-                  onClick={() => {
-                    const newTitle = prompt('생성할 서식 명칭을 입력하세요:');
-                    if (newTitle) {
-                      setManagedForms([...managedForms, {
-                        id: `f-${Date.now()}`,
-                        type: formCategoryFilter === 'ALL' ? 'DRAFT' : formCategoryFilter,
-                        form_code: 'NEW-01',
-                        title: newTitle,
-                        steps: 3,
-                        deducts_leave: formCategoryFilter === 'ATTENDANCE_LEAVE',
-                        description: '신규 제정 서식',
-                      }]);
-                      setToastMessage(`새 서식 [${newTitle}]이 등록되었습니다.`);
-                      setTimeout(() => setToastMessage(null), 2500);
-                    }
-                  }}
-                  className="px-3 py-1.5 rounded-lg bg-blue-600 text-white text-xs font-bold"
-                >
-                  + 신규 양식 생성
-                </button>
+                  <button
+                    type="button"
+                    onClick={() => handleOpenAddForm()}
+                    className="px-3.5 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold flex items-center gap-1.5 shadow-sm transition-all"
+                  >
+                    <Plus className="w-3.5 h-3.5" />
+                    <span>신규 양식 생성 / 업로드</span>
+                  </button>
+                </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {managedForms
-                  .filter(fmt => formCategoryFilter === 'ALL' || fmt.type === formCategoryFilter)
-                  .map(fmt => (
-                  <div key={fmt.id} className="p-4 rounded-xl border border-slate-200 bg-slate-50/70 flex flex-col justify-between space-y-2">
-                    <div>
-                      <div className="flex items-center justify-between">
-                        <span className="font-mono text-[10px] bg-slate-200 text-slate-800 px-1.5 py-0.2 rounded font-bold">
-                          {fmt.form_code}
-                        </span>
-                        <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
-                          fmt.type === 'ATTENDANCE_LEAVE' ? 'bg-amber-100 text-amber-800' : fmt.type === 'DRAFT' ? 'bg-blue-100 text-blue-800' : 'bg-purple-100 text-purple-800'
-                        }`}>
-                          {fmt.type === 'ATTENDANCE_LEAVE' && '근태신청서 양식'}
-                          {fmt.type === 'DRAFT' && '기안 양식'}
-                          {fmt.type === 'DOCUMENT' && '문서 양식'}
-                        </span>
-                      </div>
-                      <h4 className="text-sm font-bold text-slate-900 mt-2">{fmt.title}</h4>
-                      <p className="text-[11px] text-slate-500 mt-1">{fmt.description}</p>
-                      <div className="text-[11px] text-slate-600 mt-2">
-                        결재 단계: <strong>{fmt.steps}단계</strong> · 연차 차감: <strong>{fmt.deducts_leave ? '자동 차감' : '미차감'}</strong>
-                      </div>
-                    </div>
+              {/* 양식 카드 리스트 */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5">
+                {approvalTemplates
+                  .filter((tpl) => formCategoryFilter === 'ALL' || tpl.template_category === formCategoryFilter)
+                  .map((tpl) => (
+                    <div
+                      key={tpl.id}
+                      className="p-4 rounded-xl border border-slate-200 bg-slate-50/70 hover:bg-white hover:border-blue-300 hover:shadow-sm transition-all flex flex-col justify-between"
+                    >
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-between">
+                          <span className="font-mono text-[10px] bg-slate-200 text-slate-800 px-2 py-0.5 rounded font-bold">
+                            {tpl.id.toUpperCase()}
+                          </span>
+                          <span
+                            className={`px-2 py-0.5 rounded text-[10px] font-bold ${
+                              tpl.template_category === 'ATTENDANCE_LEAVE'
+                                ? 'bg-amber-100 text-amber-800 border border-amber-300'
+                                : tpl.template_category === 'DRAFT'
+                                ? 'bg-blue-100 text-blue-800 border border-blue-300'
+                                : 'bg-purple-100 text-purple-800 border border-purple-300'
+                            }`}
+                          >
+                            {tpl.template_category === 'ATTENDANCE_LEAVE' && '근태신청서양식'}
+                            {tpl.template_category === 'DRAFT' && '기안양식'}
+                            {tpl.template_category === 'DOCUMENT' && '문서양식'}
+                          </span>
+                        </div>
 
-                    <div className="flex items-center justify-end gap-1.5 pt-2 border-t border-slate-200">
-                      <button
-                        type="button"
-                        onClick={() => {
-                          const newName = prompt('서식 제목을 변경하세요:', fmt.title);
-                          if (newName) {
-                            setManagedForms(prev => prev.map(f => f.id === fmt.id ? { ...f, title: newName } : f));
-                            setToastMessage('서식 제목이 변경되었습니다.');
-                            setTimeout(() => setToastMessage(null), 2000);
-                          }
-                        }}
-                        className="px-2.5 py-1 rounded bg-slate-200 text-slate-700 text-xs font-semibold"
-                      >
-                        변경
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setManagedForms(managedForms.filter(f => f.id !== fmt.id));
-                          setToastMessage('서식이 삭제되었습니다.');
-                          setTimeout(() => setToastMessage(null), 2000);
-                        }}
-                        className="px-2.5 py-1 rounded bg-rose-50 text-rose-700 text-xs font-semibold"
-                      >
-                        삭제
-                      </button>
+                        <div>
+                          <h4 className="text-sm font-bold text-slate-900 line-clamp-1">{tpl.template_name}</h4>
+                          <p className="text-[11px] text-slate-500 mt-1 min-h-[30px] line-clamp-2">
+                            {tpl.description || '등록된 상세 설명이 없습니다.'}
+                          </p>
+                        </div>
+
+                        {/* 결재 단계 및 연차 차감 뱃지 */}
+                        <div className="flex flex-wrap items-center gap-2 pt-1 text-[11px] text-slate-600">
+                          <span className="bg-slate-200/80 px-2 py-0.5 rounded font-semibold text-slate-700">
+                            결재: {tpl.default_approval_steps?.length || 3}단계
+                          </span>
+                          {tpl.auto_deduct_leave ? (
+                            <span className="bg-rose-100 text-rose-700 border border-rose-300 px-2 py-0.5 rounded font-bold">
+                              연차 자동차감
+                            </span>
+                          ) : (
+                            <span className="bg-slate-100 text-slate-500 px-2 py-0.5 rounded font-medium">
+                              연차 미차감
+                            </span>
+                          )}
+                        </div>
+
+                        {/* 첨부 서식 파일 (있을 경우) */}
+                        {tpl.file_name && (
+                          <div className="p-2 bg-blue-50/60 rounded-lg border border-blue-200/60 flex items-center justify-between text-[11px]">
+                            <div className="flex items-center gap-1.5 text-blue-800 font-semibold truncate mr-2">
+                              <FileSpreadsheet className="w-3.5 h-3.5 text-blue-600 shrink-0" />
+                              <span className="truncate">{tpl.file_name}</span>
+                            </div>
+                            <span className="text-[10px] text-blue-600 font-mono shrink-0">서식탑재</span>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* 하단 버튼 툴바 */}
+                      <div className="flex flex-wrap items-center justify-between gap-1 pt-3 mt-3 border-t border-slate-200 text-xs">
+                        <div className="flex items-center gap-1">
+                          <button
+                            type="button"
+                            onClick={() => setPreviewTemplate(tpl)}
+                            className="px-2 py-1 rounded bg-white border border-slate-300 hover:bg-slate-100 text-slate-700 text-[11px] font-semibold flex items-center gap-1"
+                          >
+                            <Eye className="w-3 h-3 text-slate-500" />
+                            <span>서식보기</span>
+                          </button>
+                          <Link
+                            href={`/approval?templateId=${tpl.id}`}
+                            className="px-2 py-1 rounded bg-blue-50 border border-blue-200 hover:bg-blue-100 text-blue-700 text-[11px] font-bold flex items-center gap-1 transition-colors"
+                          >
+                            <FileSignature className="w-3 h-3 text-blue-600" />
+                            <span>기안작성</span>
+                          </Link>
+                        </div>
+
+                        <div className="flex items-center gap-1">
+                          <button
+                            type="button"
+                            onClick={() => handleOpenEditForm(tpl)}
+                            className="px-2 py-1 rounded bg-white border border-slate-300 hover:bg-slate-100 text-slate-700 text-[11px] font-semibold flex items-center gap-1"
+                          >
+                            <Edit3 className="w-3 h-3 text-slate-500" />
+                            <span>수정</span>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleDeleteForm(tpl)}
+                            className="px-2 py-1 rounded bg-white border border-rose-200 hover:bg-rose-50 text-rose-600 text-[11px] font-semibold flex items-center gap-1"
+                          >
+                            <Trash2 className="w-3 h-3 text-rose-500" />
+                            <span>삭제</span>
+                          </button>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
               </div>
             </div>
           )}
@@ -3907,6 +4086,294 @@ function AdminConsoleContent() {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* ===================================================================== */}
+      {/* MODAL 8: 양식 서식 생성 및 수정 모달 (문서·기안·근태 서식 및 파일업로드) */}
+      {/* ===================================================================== */}
+      {isFormModalOpen && (
+        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-xl w-full p-6 space-y-4 border border-slate-200 animate-fade-in text-xs max-h-[92vh] overflow-y-auto">
+            <div className="flex items-center justify-between pb-2 border-b border-slate-100">
+              <h3 className="text-sm font-bold text-slate-900 flex items-center gap-1.5">
+                <FileSignature className="w-4 h-4 text-blue-600" />
+                <span>{editingFormId ? '양식 서식 정보 및 템플릿 수정' : '신규 양식 서식 제정 및 파일 등록'}</span>
+              </h3>
+              <button
+                type="button"
+                onClick={() => setIsFormModalOpen(false)}
+                className="text-slate-400 hover:text-slate-600 font-bold text-base leading-none"
+              >
+                ✕
+              </button>
+            </div>
+
+            <form onSubmit={handleSaveForm} className="space-y-3.5">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="block font-bold text-slate-700 mb-1">
+                    서식 구분 (카테고리) <span className="text-rose-500">*</span>
+                  </label>
+                  <select
+                    value={formCategory}
+                    onChange={(e) => {
+                      const newCat = e.target.value as any;
+                      setFormCategory(newCat);
+                      setFormAutoDeduct(newCat === 'ATTENDANCE_LEAVE');
+                    }}
+                    className="w-full h-8 px-2.5 bg-slate-50 border border-slate-300 rounded font-semibold text-slate-800 focus:bg-white focus:border-blue-500 focus:outline-none"
+                  >
+                    <option value="DOCUMENT">문서양식 (공문서, 대외문서, 통신문)</option>
+                    <option value="DRAFT">기안양식 (내부기안, 품의서, 지출결의)</option>
+                    <option value="ATTENDANCE_LEAVE">근태신청서양식 (연차, 출장, 조퇴, 결근)</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block font-bold text-slate-700 mb-1">
+                    결재 단계 수 (승인선) <span className="text-rose-500">*</span>
+                  </label>
+                  <select
+                    value={formStepsCount}
+                    onChange={(e) => setFormStepsCount(Number(e.target.value))}
+                    className="w-full h-8 px-2.5 bg-slate-50 border border-slate-300 rounded font-semibold text-slate-800 focus:bg-white focus:border-blue-500 focus:outline-none"
+                  >
+                    <option value={2}>2단계 (기안자 → 부서장)</option>
+                    <option value={3}>3단계 (기안자 → 부서장 → 교장)</option>
+                    <option value={4}>4단계 (기안자 → 부서장 → 행정실장 → 교장)</option>
+                    <option value={5}>5단계 (기안자 → 교감 → 부서장 → 행정실장 → 교장)</option>
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label className="block font-bold text-slate-700 mb-1">
+                  서식 명칭 (양식 제목) <span className="text-rose-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={formName}
+                  onChange={(e) => setFormName(e.target.value)}
+                  placeholder="예: 휴가 / 연차원, 물품 구매 품의서, 대외 공문서"
+                  className="w-full h-8 px-2.5 bg-slate-50 border border-slate-300 rounded font-bold text-slate-800 focus:bg-white focus:border-blue-500 focus:outline-none"
+                />
+              </div>
+
+              <div>
+                <label className="block font-bold text-slate-700 mb-1">서식 개요 및 작성 지침</label>
+                <input
+                  type="text"
+                  value={formDescription}
+                  onChange={(e) => setFormDescription(e.target.value)}
+                  placeholder="예: 교직원 연차 신청 시 사용하는 표준 서식으로 교무부 사전 인계 필수"
+                  className="w-full h-8 px-2.5 bg-slate-50 border border-slate-300 rounded text-slate-800 focus:bg-white focus:border-blue-500 focus:outline-none"
+                />
+              </div>
+
+              <div>
+                <div className="flex items-center justify-between mb-1">
+                  <label className="block font-bold text-slate-700">
+                    기본 템플릿 본문 서식 (전자결재 기안 시 자동 로드)
+                  </label>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (formCategory === 'ATTENDANCE_LEAVE') {
+                        setFormContentHtml(
+                          '1. 신청 사유: 개인 사유 및 용무\n2. 휴가 구분: 연차 (1.0일)\n3. 기간: 2026년 10월 28일 (1일간)\n4. 비상 연락처: 010-0000-0000\n5. 업무 및 수업 대행: OOO 선생님 (사전 인계 완료)\n\n위와 같이 신청하오니 허가하여 주시기 바랍니다.'
+                        );
+                      } else if (formCategory === 'DOCUMENT') {
+                        setFormContentHtml(
+                          '수신: 경기도성남교육지원청 교육장\n참조: 학교안전담당\n제목: \n\n1. 귀 기관의 무궁한 발전을 기원합니다.\n2. 본교(등대글로벌스쿨)의 제반 학사 보고 건을 다음과 같이 제출합니다.\n\n붙임: 1. 세부 계획서 1부. 끝.\n\n등 대 글 로 벌 스 쿨 장 [직인생략]'
+                        );
+                      } else {
+                        setFormContentHtml(
+                          '1. 추진 목적:\n   - 2026학년도 부서 주요 사업 추진 및 예산 승인 건\n\n2. 주요 사업 내용:\n   가. 일시 및 장소:\n   나. 대상:\n   다. 소요 예산: 일금 OOO원 (VAT 포함)\n\n3. 기대 효과:\n   - 학사 운영 고도화 및 학생 만족도 제고\n\n위와 같이 추진하고자 하오니 재가하여 주시기 바랍니다.'
+                        );
+                      }
+                    }}
+                    className="text-[10px] text-blue-600 hover:underline font-bold"
+                  >
+                    + 표준 서식 템플릿 채우기
+                  </button>
+                </div>
+                <textarea
+                  rows={6}
+                  value={formContentHtml}
+                  onChange={(e) => setFormContentHtml(e.target.value)}
+                  placeholder="전자결재 작성 시 기안자가 기본으로 작성할 수 있도록 항목, 항목 번호, 문구 등의 템플릿을 입력하세요."
+                  className="w-full p-2.5 bg-slate-50 border border-slate-300 rounded font-mono text-[11px] text-slate-800 leading-relaxed focus:bg-white focus:border-blue-500 focus:outline-none"
+                />
+              </div>
+
+              {/* 양식 파일 업로드 섹션 */}
+              <div className="p-3 bg-slate-50 rounded-xl border border-dashed border-slate-300 space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="font-bold text-slate-700 flex items-center gap-1.5">
+                    <Upload className="w-3.5 h-3.5 text-blue-600" />
+                    <span>양식 서식 파일 업로드 (HWP, DOCX, PDF, XLSX)</span>
+                  </span>
+                  {formFileName && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setFormFileName('');
+                        setFormFileUrl('');
+                      }}
+                      className="text-[10px] text-rose-500 hover:underline"
+                    >
+                      파일 제거
+                    </button>
+                  )}
+                </div>
+                <p className="text-[11px] text-slate-500">
+                  교직원이 다운로드하여 작성할 수 있는 공식 오프라인 원본 양식 파일(한글, 워드, 엑셀 등)을 등록합니다.
+                </p>
+                <div className="flex items-center gap-2">
+                  <input
+                    type="file"
+                    id="form-file-upload-input"
+                    onChange={handleFileUploadSimulate}
+                    accept=".hwp,.hwpx,.doc,.docx,.pdf,.xlsx,.xls"
+                    className="block w-full text-xs text-slate-500 file:mr-3 file:py-1 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer"
+                  />
+                </div>
+                {formFileName && (
+                  <div className="flex items-center gap-1.5 text-xs text-emerald-700 font-bold bg-emerald-50 px-2.5 py-1 rounded border border-emerald-200">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                    <span>등록된 양식 파일: {formFileName}</span>
+                  </div>
+                )}
+              </div>
+
+              <div className="pt-1">
+                <label className="flex items-center gap-2 cursor-pointer p-2.5 rounded-lg bg-slate-50 border border-slate-200">
+                  <input
+                    type="checkbox"
+                    checked={formAutoDeduct}
+                    onChange={(e) => setFormAutoDeduct(e.target.checked)}
+                    className="w-4 h-4 rounded text-blue-600 border-slate-300 focus:ring-blue-500 cursor-pointer"
+                  />
+                  <div>
+                    <span className="font-bold text-slate-800">최종 승인 시 잔여 연차 자동 차감</span>
+                    <p className="text-[10px] text-slate-500">체크 시 교장 결재 완료 시 기안자의 연차 일수가 전산에서 자동 차감 정산됩니다.</p>
+                  </div>
+                </label>
+              </div>
+
+              <div className="flex justify-end gap-2 pt-3 border-t border-slate-100">
+                <button
+                  type="button"
+                  onClick={() => setIsFormModalOpen(false)}
+                  className="px-3.5 py-1.5 rounded border border-slate-300 text-slate-600 hover:bg-slate-50 font-semibold"
+                >
+                  취소
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-1.5 rounded bg-blue-600 hover:bg-blue-700 text-white font-bold transition-colors"
+                >
+                  {editingFormId ? '수정 완료' : '양식 등록 완료'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* ===================================================================== */}
+      {/* MODAL 9: 양식 서식 미리보기 모달 */}
+      {/* ===================================================================== */}
+      {previewTemplate && (
+        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-6 space-y-4 border border-slate-200 animate-fade-in text-xs max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between pb-2 border-b border-slate-100">
+              <div className="flex items-center gap-2">
+                <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-100 text-blue-800 font-mono">
+                  {previewTemplate.id.toUpperCase()}
+                </span>
+                <h3 className="text-sm font-bold text-slate-900">{previewTemplate.template_name}</h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => setPreviewTemplate(null)}
+                className="text-slate-400 hover:text-slate-600 font-bold text-base leading-none"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="space-y-3">
+              <p className="text-slate-600 leading-relaxed bg-slate-50 p-2.5 rounded-lg border border-slate-200">
+                {previewTemplate.description || '등록된 상세 설명이 없습니다.'}
+              </p>
+
+              <div className="grid grid-cols-2 gap-2 text-[11px]">
+                <div className="p-2 bg-slate-50 rounded border border-slate-200">
+                  <span className="text-slate-500 block">결재 단계:</span>
+                  <span className="font-bold text-slate-800">
+                    {previewTemplate.default_approval_steps?.length || 3}단계 (
+                    {previewTemplate.default_approval_steps?.map((s) => s.role_desc).join(' → ')})
+                  </span>
+                </div>
+                <div className="p-2 bg-slate-50 rounded border border-slate-200">
+                  <span className="text-slate-500 block">연차 차감 여부:</span>
+                  <span className="font-bold text-slate-800">
+                    {previewTemplate.auto_deduct_leave ? '최종 승인 시 자동 차감' : '미차감 서식'}
+                  </span>
+                </div>
+              </div>
+
+              {previewTemplate.file_name && (
+                <div className="p-3 bg-blue-50/70 border border-blue-200 rounded-lg flex items-center justify-between">
+                  <div className="flex items-center gap-2 text-blue-900 font-bold text-xs truncate mr-2">
+                    <FileSpreadsheet className="w-4 h-4 text-blue-600 shrink-0" />
+                    <span className="truncate">{previewTemplate.file_name}</span>
+                  </div>
+                  <a
+                    href={previewTemplate.file_url || '#'}
+                    download={previewTemplate.file_name}
+                    onClick={(e) => {
+                      if (!previewTemplate.file_url || previewTemplate.file_url.startsWith('/templates')) {
+                        e.preventDefault();
+                        alert(`서식 파일 [${previewTemplate.file_name}] 다운로드가 시뮬레이션되었습니다.`);
+                      }
+                    }}
+                    className="px-2.5 py-1 rounded bg-blue-600 hover:bg-blue-700 text-white text-[11px] font-bold shrink-0 flex items-center gap-1 shadow-sm"
+                  >
+                    <Download className="w-3 h-3" />
+                    <span>서식 다운로드</span>
+                  </a>
+                </div>
+              )}
+
+              <div>
+                <span className="font-bold text-slate-700 block mb-1">기본 템플릿 본문 서식 미리보기:</span>
+                <div className="p-3.5 bg-slate-50 rounded-lg border border-slate-200 whitespace-pre-line font-mono text-[11px] text-slate-800 leading-relaxed shadow-inner max-h-48 overflow-y-auto">
+                  {previewTemplate.content_html || '등록된 본문 서식이 없습니다.'}
+                </div>
+              </div>
+            </div>
+
+            <div className="flex justify-between items-center gap-2 pt-3 border-t border-slate-100">
+              <Link
+                href={`/approval?templateId=${previewTemplate.id}`}
+                className="px-3.5 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold flex items-center gap-1.5 shadow-sm transition-all"
+              >
+                <FileSignature className="w-3.5 h-3.5" />
+                <span>이 양식으로 즉시 기안 상신하기</span>
+              </Link>
+              <button
+                type="button"
+                onClick={() => setPreviewTemplate(null)}
+                className="px-3 py-1.5 rounded border border-slate-300 text-slate-600 hover:bg-slate-50 font-semibold"
+              >
+                닫기
+              </button>
+            </div>
           </div>
         </div>
       )}

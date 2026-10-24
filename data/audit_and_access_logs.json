@@ -1,5 +1,25 @@
 [
   {
+    "id": "log_1792815481962_ouyy",
+    "actor_id": "u8",
+    "actor_email": "jay.lee@lighthouse.org",
+    "actor_name": "이재원",
+    "action_category": "ADMIN_CHANGE",
+    "action_detail": "양식 서식 삭제 [테스트 특별활동 기안서]",
+    "client_ip": "211.104.88.24",
+    "created_at": "2026-10-24T04:18:01.962Z"
+  },
+  {
+    "id": "log_1792815476442_0kpa",
+    "actor_id": "u8",
+    "actor_email": "jay.lee@lighthouse.org",
+    "actor_name": "이재원",
+    "action_category": "ADMIN_CHANGE",
+    "action_detail": "양식 서식 등록/수정 [테스트 특별활동 기안서 (DRAFT)]",
+    "client_ip": "211.104.88.24",
+    "created_at": "2026-10-24T04:17:56.442Z"
+  },
+  {
     "id": "log_1792814338608_bzuc",
     "actor_id": "u8",
     "actor_email": "jay.lee@lighthouse.org",

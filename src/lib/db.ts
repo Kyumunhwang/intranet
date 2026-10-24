@@ -462,6 +462,72 @@ export function getApprovalTemplates(): ApprovalTemplate[] {
   return readJson<ApprovalTemplate[]>('approval_templates.json', []);
 }
 
+export function saveApprovalTemplate(tpl: Partial<ApprovalTemplate>): ApprovalTemplate {
+  const templates = getApprovalTemplates();
+  let updated: ApprovalTemplate;
+  const nowStr = new Date().toISOString().slice(0, 10);
+  if (tpl.id) {
+    const idx = templates.findIndex((t) => t.id === tpl.id);
+    if (idx >= 0) {
+      templates[idx] = {
+        ...templates[idx],
+        ...tpl,
+        updated_at: nowStr,
+      } as ApprovalTemplate;
+      updated = templates[idx];
+    } else {
+      updated = {
+        ...tpl,
+        id: tpl.id,
+        updated_at: nowStr,
+      } as ApprovalTemplate;
+      templates.push(updated);
+    }
+  } else {
+    updated = {
+      id: `t_${Date.now()}`,
+      template_category: tpl.template_category || 'DRAFT',
+      template_name: tpl.template_name || '신규 양식 서식',
+      auto_deduct_leave: Boolean(tpl.auto_deduct_leave),
+      description: tpl.description || '',
+      content_html: tpl.content_html || '',
+      file_name: tpl.file_name || '',
+      file_url: tpl.file_url || '',
+      default_approval_steps: tpl.default_approval_steps || [
+        { order: 1, role_desc: '기안자', type: 'DRAFTER' },
+        { order: 2, role_desc: '부서장', type: 'APPROVAL' },
+        { order: 3, role_desc: '교장', type: 'APPROVAL' },
+      ],
+      created_at: nowStr,
+      updated_at: nowStr,
+    };
+    templates.push(updated);
+  }
+  writeJson('approval_templates.json', templates);
+  logAuditAction({
+    action_category: 'ADMIN_CHANGE',
+    action_detail: `양식 서식 등록/수정 [${updated.template_name} (${updated.template_category})]`,
+    client_ip: '211.104.88.24',
+  });
+  return updated;
+}
+
+export function deleteApprovalTemplate(templateId: string): { success: boolean; message: string } {
+  const templates = getApprovalTemplates();
+  const target = templates.find((t) => t.id === templateId);
+  if (!target) {
+    return { success: false, message: '해당 양식 서식을 찾을 수 없습니다.' };
+  }
+  const filtered = templates.filter((t) => t.id !== templateId);
+  writeJson('approval_templates.json', filtered);
+  logAuditAction({
+    action_category: 'ADMIN_CHANGE',
+    action_detail: `양식 서식 삭제 [${target.template_name}]`,
+    client_ip: '211.104.88.24',
+  });
+  return { success: true, message: `서식 [${target.template_name}]이 성공적으로 삭제되었습니다.` };
+}
+
 export function getApprovalDocuments(): ApprovalDocument[] {
   return readJson<ApprovalDocument[]>('approval_documents.json', []);
 }

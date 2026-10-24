@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
 import {
   FileCheck2,
   Printer,
@@ -16,67 +17,236 @@ import {
   Inbox,
   FileText,
   AlertCircle,
+  Download,
+  FileSpreadsheet,
+  Upload,
+  FileSignature,
+  Layers,
+  ChevronRight,
 } from 'lucide-react';
 import { useLanguage } from '@/lib/language-context';
 import { useUser } from '@/lib/user-context';
+import { ApprovalTemplate } from '@/lib/types';
+import rawApprovalTemplates from '../../../data/approval_templates.json';
 
-export default function ApprovalPage() {
+interface SubmittedApprovalDoc {
+  id: string;
+  doc_no: string;
+  template_id: string;
+  template_name: string;
+  category: string;
+  title: string;
+  drafter_name: string;
+  drafter_dept: string;
+  created_at: string;
+  content: string;
+  special_notes: string;
+  leave_days?: number;
+  leave_type?: string;
+  date_range?: string;
+  attached_file_name?: string;
+  status: 'PENDING' | 'APPROVED' | 'REJECTED';
+  step2_status: 'WAITING' | 'APPROVED' | 'REJECTED';
+  step3_status: 'WAITING' | 'APPROVED' | 'REJECTED';
+  step2_time?: string | null;
+  step3_time?: string | null;
+  is_delegated?: boolean;
+}
+
+function ApprovalContent() {
   const { lang, t } = useLanguage();
   const { currentUser } = useUser();
+  const searchParams = useSearchParams();
+  const initialTemplateId = searchParams.get('templateId') || 't1';
 
-  // Active Category for Drafter
-  const [activeCategory, setActiveCategory] = useState<'LEAVE' | 'EXPENSE' | 'TRIP' | 'PURCHASE'>('LEAVE');
+  // Available Form Templates
+  const [templates, setTemplates] = useState<ApprovalTemplate[]>(
+    rawApprovalTemplates as unknown as ApprovalTemplate[]
+  );
+
+  // Selected template & category
+  const [selectedCategory, setSelectedCategory] = useState<'ALL' | 'ATTENDANCE_LEAVE' | 'DRAFT' | 'DOCUMENT'>('ALL');
+  const [selectedTemplateId, setSelectedTemplateId] = useState<string>(initialTemplateId);
+
+  // Draft inputs
   const [docTitle, setDocTitle] = useState('2026학년도 하반기 연차 휴가 신청서 (1일)');
+  const [leaveType, setLeaveType] = useState('연차 (1.0일 차감)');
   const [leaveDays, setLeaveDays] = useState(1.0);
   const [startDate, setStartDate] = useState('2026-10-28');
   const [endDate, setEndDate] = useState('2026-10-28');
   const [content, setContent] = useState(
-    '개인 사유로 인하여 아래와 같이 연차 휴가를 신청하오니 결재 바랍니다.\n- 일시: 2026년 10월 28일 (1일간)\n- 사유: 가족 행사 및 개인 건강검진\n- 수업 대강: 정성수 선생님 배정 완료'
+    '1. 신청 사유: 개인 사유 및 가족 행사 참석\n2. 휴가 종류: 연차 (1.0일)\n3. 휴가 기간: 2026년 10월 28일 (1일간)\n4. 비상 연락처: 010-3344-5566\n5. 업무 및 수업 대행: 정성수 선생님 배정 및 교무부 사전 인계 완료\n\n위와 같이 휴가를 신청하오니 허가하여 주시기 바랍니다.'
   );
   const [specialNotes, setSpecialNotes] = useState('수업 보강 계획서 교무부 사전 제출 완료');
+  const [userAttachedFile, setUserAttachedFile] = useState<string | null>(null);
 
-  // Approval step statuses (Server state simulation)
-  const [step2Status, setStep2Status] = useState<'WAITING' | 'APPROVED' | 'REJECTED'>('WAITING');
-  const [step3Status, setStep3Status] = useState<'WAITING' | 'APPROVED' | 'REJECTED'>('WAITING');
-  const [step2Time, setStep2Time] = useState<string | null>(null);
-  const [step3Time, setStep3Time] = useState<string | null>(null);
-  const [isDelegated, setIsDelegated] = useState(false);
-  const [toastMessage, setToastMessage] = useState<string | null>(null);
+  // Submitted documents list
+  const [submittedDocs, setSubmittedDocs] = useState<SubmittedApprovalDoc[]>([
+    {
+      id: 'doc-init',
+      doc_no: 'LIS-2026-교무-0042',
+      template_id: 't1',
+      template_name: '휴가 / 연차원 (Leave Request)',
+      category: 'ATTENDANCE_LEAVE',
+      title: '2026학년도 하반기 연차 휴가 신청서 (1일)',
+      drafter_name: '이재원 (Jay Lee)',
+      drafter_dept: '중고등학사팀',
+      created_at: '2026.10.23 08:35',
+      content:
+        '1. 신청 사유: 개인 사유 및 가족 행사 참석\n2. 휴가 종류: 연차 (1.0일)\n3. 휴가 기간: 2026년 10월 28일 (1일간)\n4. 비상 연락처: 010-3344-5566\n5. 업무 및 수업 대행: 정성수 선생님 배정 및 교무부 사전 인계 완료\n\n위와 같이 휴가를 신청하오니 허가하여 주시기 바랍니다.',
+      special_notes: '수업 보강 계획서 교무부 사전 제출 완료',
+      leave_days: 1.0,
+      leave_type: '연차 (1.0일)',
+      date_range: '2026.10.28 ~ 2026.10.28',
+      status: 'PENDING',
+      step2_status: 'WAITING',
+      step3_status: 'WAITING',
+    },
+  ]);
 
   // For Approver view: selected document to review
   const [selectedDocId, setSelectedDocId] = useState<string>('LIS-2026-교무-0042');
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  // Sync templates from backend API
+  useEffect(() => {
+    fetch('/api/approval/templates')
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && Array.isArray(data.templates) && data.templates.length > 0) {
+          setTemplates(data.templates);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  // When initialTemplateId changes or loads
+  useEffect(() => {
+    const target = templates.find((t) => t.id === initialTemplateId);
+    if (target) {
+      applyTemplate(target);
+    }
+  }, [initialTemplateId, templates]);
+
+  const applyTemplate = (tpl: ApprovalTemplate) => {
+    setSelectedTemplateId(tpl.id);
+    setDocTitle(`[기안] ${tpl.template_name}`);
+    if (tpl.content_html) {
+      setContent(tpl.content_html);
+    }
+    if (tpl.auto_deduct_leave) {
+      setLeaveDays(1.0);
+      setLeaveType('연차 (1.0일 차감)');
+    }
+  };
+
+  const currentTemplate = templates.find((t) => t.id === selectedTemplateId) || templates[0];
+  const activeReviewDoc = submittedDocs.find((d) => d.doc_no === selectedDocId) || submittedDocs[0];
+
+  const handleUserFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setUserAttachedFile(file.name);
+      setToastMessage(`기안 첨부파일 [${file.name}]이 등록되었습니다.`);
+      setTimeout(() => setToastMessage(null), 3000);
+    }
+  };
 
   const handleSubmitDraft = () => {
-    setToastMessage(t('전자결재 기안이 성공적으로 상신되었습니다. (문서번호: LIS-2026-교무-0042)', 'Draft submitted successfully.'));
-    setTimeout(() => setToastMessage(null), 4000);
+    const randomSeq = String(Math.floor(Math.random() * 900) + 100);
+    const newDocNo = `LIS-2026-교무-${randomSeq}`;
+    const newDoc: SubmittedApprovalDoc = {
+      id: `doc-${Date.now()}`,
+      doc_no: newDocNo,
+      template_id: currentTemplate.id,
+      template_name: currentTemplate.template_name,
+      category: currentTemplate.template_category,
+      title: docTitle,
+      drafter_name: currentUser.name || '이재원 (Jay Lee)',
+      drafter_dept: '중고등학사팀',
+      created_at: new Date().toISOString().slice(0, 16).replace('T', ' '),
+      content,
+      special_notes: specialNotes,
+      leave_days: currentTemplate.auto_deduct_leave ? leaveDays : undefined,
+      leave_type: currentTemplate.auto_deduct_leave ? leaveType : undefined,
+      date_range: currentTemplate.auto_deduct_leave ? `${startDate} ~ ${endDate}` : undefined,
+      attached_file_name: userAttachedFile || currentTemplate.file_name,
+      status: 'PENDING',
+      step2_status: 'WAITING',
+      step3_status: 'WAITING',
+    };
+
+    setSubmittedDocs((prev) => [newDoc, ...prev]);
+    setSelectedDocId(newDocNo);
+    setToastMessage(
+      t(
+        `선택하신 [${currentTemplate.template_name}] 양식에 맞춰 전자결재 기안이 상신되었습니다. (문서번호: ${newDocNo})`,
+        `Draft submitted successfully based on template [${currentTemplate.template_name}].`
+      )
+    );
+    setTimeout(() => setToastMessage(null), 4500);
   };
 
   const handleDeptHeadApprove = (action: 'APPROVE' | 'DELEGATE' | 'REJECT') => {
+    setSubmittedDocs((prev) =>
+      prev.map((doc) => {
+        if (doc.doc_no === selectedDocId) {
+          if (action === 'REJECT') {
+            return { ...doc, status: 'REJECTED', step2_status: 'REJECTED' };
+          }
+          if (action === 'DELEGATE') {
+            return {
+              ...doc,
+              status: 'APPROVED',
+              step2_status: 'APPROVED',
+              step3_status: 'APPROVED',
+              step2_time: new Date().toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' }),
+              step3_time: new Date().toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' }),
+              is_delegated: true,
+            };
+          }
+          return {
+            ...doc,
+            step2_status: 'APPROVED',
+            step2_time: new Date().toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' }),
+          };
+        }
+        return doc;
+      })
+    );
+
     if (action === 'REJECT') {
-      setStep2Status('REJECTED');
       setToastMessage(t('교무부장이 문서를 반려하였습니다.', 'Rejected by Dept Head.'));
     } else if (action === 'DELEGATE') {
-      setStep2Status('APPROVED');
-      setStep3Status('APPROVED');
-      setIsDelegated(true);
-      setStep2Time('10.23 09:15');
-      setToastMessage(t('교무부장 [전결(대리결재)] 처리 완료! 최종 승인되어 연차가 자동 차감되었습니다.', 'Delegated & fully approved.'));
+      setToastMessage(t('교무부장 [전결(대리결재)] 승인 완료! 최종 승인되어 연차가 자동 차감되었습니다.', 'Delegated & fully approved.'));
     } else {
-      setStep2Status('APPROVED');
-      setStep2Time('10.23 09:10');
-      setToastMessage(t('교무부장 [승인] 완료! 도장이 날인되었으며 교장 결재 대기로 전환되었습니다.', 'Approved by Dept Head.'));
+      setToastMessage(t('교무부장 [승인] 완료! 도장이 날인되었으며 교장 최종 결재 대기로 전환되었습니다.', 'Approved by Dept Head.'));
     }
     setTimeout(() => setToastMessage(null), 4000);
   };
 
   const handlePrincipalApprove = (action: 'APPROVE' | 'REJECT') => {
+    setSubmittedDocs((prev) =>
+      prev.map((doc) => {
+        if (doc.doc_no === selectedDocId) {
+          if (action === 'REJECT') {
+            return { ...doc, status: 'REJECTED', step3_status: 'REJECTED' };
+          }
+          return {
+            ...doc,
+            status: 'APPROVED',
+            step3_status: 'APPROVED',
+            step3_time: new Date().toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' }),
+          };
+        }
+        return doc;
+      })
+    );
+
     if (action === 'REJECT') {
-      setStep3Status('REJECTED');
       setToastMessage(t('교장이 문서를 반려하였습니다.', 'Rejected by Principal.'));
     } else {
-      setStep3Status('APPROVED');
-      setStep3Time('10.23 09:30');
-      setToastMessage(t('교장 최종 [승인] 완료! 도장이 날인되고 잔여 연차 1.0일이 자동 차감되었습니다.', 'Fully approved by Principal.'));
+      setToastMessage(t('교장 최종 [승인] 완료! 도장이 날인되고 잔여 연차가 자동 차감 처리되었습니다.', 'Fully approved by Principal.'));
     }
     setTimeout(() => setToastMessage(null), 4000);
   };
@@ -84,6 +254,10 @@ export default function ApprovalPage() {
   const isDrafter = currentUser.role === 'TEACHER';
   const isDeptHead = currentUser.role === 'DEPT_HEAD';
   const isPrincipal = currentUser.role === 'PRINCIPAL';
+
+  const filteredTemplates = templates.filter(
+    (t) => selectedCategory === 'ALL' || t.template_category === selectedCategory
+  );
 
   return (
     <div className="space-y-5">
@@ -97,7 +271,7 @@ export default function ApprovalPage() {
             </span>
           </h1>
           <p className="text-xs text-slate-500 mt-1">
-            {isDrafter && t('기안 작성 및 본인의 상신 문서 진행 상태를 확인합니다.', 'Draft and track your approval documents.')}
+            {isDrafter && t('관리자가 제정한 표준 양식 서식을 선택하여 기안을 작성하고 상신합니다.', 'Select registered form template and submit your draft.')}
             {isDeptHead && t('교무부 결재 대기 문서를 열람하고 승인/전결/반려 처리합니다.', 'Review and approve department drafts.')}
             {isPrincipal && t('최종 결재 대기 문서를 열람하고 최종 승인 처리합니다.', 'Review and give final approval.')}
           </p>
@@ -108,6 +282,10 @@ export default function ApprovalPage() {
           <div className="flex items-center gap-2">
             <button
               type="button"
+              onClick={() => {
+                setToastMessage('작성 중인 기안이 임시저장되었습니다.');
+                setTimeout(() => setToastMessage(null), 2500);
+              }}
               className="h-8 px-3 rounded-lg bg-white border border-slate-300 text-slate-700 text-xs font-semibold hover:bg-slate-50 flex items-center gap-1.5 shadow-sm"
             >
               <Save className="w-3.5 h-3.5" />
@@ -140,57 +318,95 @@ export default function ApprovalPage() {
         </div>
       )}
 
-      {/* CASE 1: 기안자(이재원) 화면 - 결재권자 탭이나 결재 버튼은 절대 보이지 않음! */}
+      {/* CASE 1: 기안자(교직원) 화면 */}
       {isDrafter && (
         <div className="space-y-5">
-          {/* Category Switcher */}
-          <div className="bg-white p-3 rounded-xl border border-slate-200 shadow-sm flex items-center gap-1.5 text-xs">
-            <span className="font-bold text-slate-500 mr-2">{t('양식 선택:', 'Form:')}</span>
-            <button
-              onClick={() => setActiveCategory('LEAVE')}
-              className={`px-3 py-1.5 rounded-lg font-bold transition-all ${
-                activeCategory === 'LEAVE'
-                  ? 'bg-primary-container text-white shadow-sm'
-                  : 'text-slate-600 hover:text-slate-900 bg-slate-50'
-              }`}
-            >
-              {t('휴가/연차계', 'Leave Request')}
-            </button>
-            <button
-              onClick={() => setActiveCategory('EXPENSE')}
-              className={`px-3 py-1.5 rounded-lg font-bold transition-all ${
-                activeCategory === 'EXPENSE'
-                  ? 'bg-primary-container text-white shadow-sm'
-                  : 'text-slate-600 hover:text-slate-900 bg-slate-50'
-              }`}
-            >
-              {t('지출결의서', 'Expense')}
-            </button>
-            <button
-              onClick={() => setActiveCategory('TRIP')}
-              className={`px-3 py-1.5 rounded-lg font-bold transition-all ${
-                activeCategory === 'TRIP'
-                  ? 'bg-primary-container text-white shadow-sm'
-                  : 'text-slate-600 hover:text-slate-900 bg-slate-50'
-              }`}
-            >
-              {t('출장신청서', 'Business Trip')}
-            </button>
-            <button
-              onClick={() => setActiveCategory('PURCHASE')}
-              className={`px-3 py-1.5 rounded-lg font-bold transition-all ${
-                activeCategory === 'PURCHASE'
-                  ? 'bg-primary-container text-white shadow-sm'
-                  : 'text-slate-600 hover:text-slate-900 bg-slate-50'
-              }`}
-            >
-              {t('구매기안문', 'Purchase')}
-            </button>
+          {/* 1. 표준 양식 선택 툴바 (카테고리 & 템플릿 목록) */}
+          <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm space-y-3">
+            <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-2.5">
+              <div className="flex items-center gap-2">
+                <FileSignature className="w-4 h-4 text-blue-600" />
+                <span className="font-bold text-slate-900 text-xs">
+                  {t('기본 Template 양식 선택 (문서양식 · 기안양식 · 근태신청서양식)', 'Select Document Template')}
+                </span>
+              </div>
+              {/* Category Filter Pills */}
+              <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-lg text-xs">
+                {(['ALL', 'ATTENDANCE_LEAVE', 'DRAFT', 'DOCUMENT'] as const).map((cat) => (
+                  <button
+                    key={cat}
+                    type="button"
+                    onClick={() => setSelectedCategory(cat)}
+                    className={`px-2.5 py-1 rounded font-bold transition-all text-xs ${
+                      selectedCategory === cat ? 'bg-white text-blue-700 shadow-sm' : 'text-slate-600 hover:text-slate-900'
+                    }`}
+                  >
+                    {cat === 'ALL' && '전체 양식'}
+                    {cat === 'ATTENDANCE_LEAVE' && '근태신청서양식'}
+                    {cat === 'DRAFT' && '기안양식'}
+                    {cat === 'DOCUMENT' && '문서양식'}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Template Buttons Carousel/Grid */}
+            <div className="flex flex-wrap items-center gap-2">
+              {filteredTemplates.map((tpl) => (
+                <button
+                  key={tpl.id}
+                  type="button"
+                  onClick={() => applyTemplate(tpl)}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all border flex items-center gap-1.5 ${
+                    selectedTemplateId === tpl.id
+                      ? 'bg-blue-600 text-white border-blue-600 shadow-sm'
+                      : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
+                  }`}
+                >
+                  <FileText className={`w-3.5 h-3.5 ${selectedTemplateId === tpl.id ? 'text-white' : 'text-slate-400'}`} />
+                  <span>{tpl.template_name}</span>
+                </button>
+              ))}
+            </div>
+
+            {/* Selected Template Guide Banner & File Download */}
+            {currentTemplate && (
+              <div className="p-3 bg-blue-50/60 rounded-lg border border-blue-200 flex flex-wrap items-center justify-between gap-3 text-xs">
+                <div className="space-y-0.5">
+                  <div className="font-bold text-blue-950 flex items-center gap-1.5">
+                    <span className="bg-blue-600 text-white px-1.5 py-0.2 rounded text-[10px]">적용된 서식</span>
+                    <span>{currentTemplate.template_name}</span>
+                    <span className="text-slate-400 font-normal">| {currentTemplate.default_approval_steps?.length || 3}단계 결재선</span>
+                    {currentTemplate.auto_deduct_leave && (
+                      <span className="text-rose-600 font-semibold text-[11px]">(최종승인 시 연차 자동 차감)</span>
+                    )}
+                  </div>
+                  <p className="text-[11px] text-slate-600">{currentTemplate.description}</p>
+                </div>
+
+                {currentTemplate.file_name && (
+                  <a
+                    href={currentTemplate.file_url || '#'}
+                    download={currentTemplate.file_name}
+                    onClick={(e) => {
+                      if (!currentTemplate.file_url || currentTemplate.file_url.startsWith('/templates')) {
+                        e.preventDefault();
+                        alert(`학교 공식 표준 양식 원본 서식 파일 [${currentTemplate.file_name}] 다운로드가 시뮬레이션되었습니다.`);
+                      }
+                    }}
+                    className="px-3 py-1.5 rounded-lg bg-white border border-blue-300 text-blue-700 hover:bg-blue-50 font-bold text-xs flex items-center gap-1.5 shadow-sm"
+                  >
+                    <Download className="w-3.5 h-3.5 text-blue-600" />
+                    <span>공식 표준 양식 다운로드 ({currentTemplate.file_name})</span>
+                  </a>
+                )}
+              </div>
+            )}
           </div>
 
-          {/* Drafter Document Creation Form (Paper Style) */}
+          {/* 2. 기안서 본체 (Paper Style Form) */}
           <div className="bg-white rounded-xl border border-slate-200 shadow-md p-8 max-w-[1050px] mx-auto space-y-6">
-            {/* Header & Stamp Box Preview */}
+            {/* Header & 결재선 도장 박스 */}
             <div className="border-b-2 border-slate-900 pb-5">
               <div className="flex flex-wrap items-start justify-between gap-6">
                 <div className="space-y-2 text-xs">
@@ -202,46 +418,51 @@ export default function ApprovalPage() {
                     </span>
                   </div>
                   <div className="grid grid-cols-2 gap-x-6 gap-y-1 text-slate-600 font-medium">
-                    <div>{t('문서번호:', 'Doc No:')} <span className="font-mono text-slate-900 font-bold">LIS-2026-교무-0042 (자동생성)</span></div>
-                    <div>{t('기안일자:', 'Date:')} <span className="font-mono text-slate-900">2026.10.23</span></div>
-                    <div>{t('기안부서:', 'Dept:')} <span className="text-slate-900">중고등학사팀</span></div>
-                    <div>{t('기안자:', 'Drafter:')} <span className="font-bold text-slate-900">이재원 (Jay Lee)</span></div>
+                    <div>
+                      {t('문서번호:', 'Doc No:')}{' '}
+                      <span className="font-mono text-slate-900 font-bold">LIS-2026-교무-자동발번</span>
+                    </div>
+                    <div>
+                      {t('기안일자:', 'Date:')}{' '}
+                      <span className="font-mono text-slate-900">{new Date().toISOString().slice(0, 10)}</span>
+                    </div>
+                    <div>
+                      {t('기안부서:', 'Dept:')} <span className="text-slate-900">중고등학사팀</span>
+                    </div>
+                    <div>
+                      {t('기안자:', 'Drafter:')}{' '}
+                      <span className="font-bold text-slate-900">{currentUser.name || '이재원 (Jay Lee)'}</span>
+                    </div>
                   </div>
                 </div>
 
-                {/* Expected Approval Steps Table */}
+                {/* Dynamic Approval Steps Table */}
                 <div className="border border-slate-300 rounded overflow-hidden text-center text-xs">
                   <div className="bg-slate-100 px-3 py-1 font-bold text-slate-700 border-b border-slate-300 text-[11px]">
-                    {t('지정 결재선 (3단계)', 'Approval Line')}
+                    {t(`지정 결재선 (${currentTemplate.default_approval_steps?.length || 3}단계)`, 'Approval Line')}
                   </div>
-                  <div className="grid grid-cols-3 divide-x divide-slate-300">
-                    <div className="w-24">
-                      <div className="bg-slate-50 py-1 text-[11px] font-semibold text-slate-600 border-b border-slate-300">
-                        {t('기안자', 'Drafter')}
+                  <div className="flex divide-x divide-slate-300">
+                    {currentTemplate.default_approval_steps?.map((step, idx) => (
+                      <div key={idx} className="w-24">
+                        <div className="bg-slate-50 py-1 text-[11px] font-semibold text-slate-600 border-b border-slate-300">
+                          {step.role_desc}
+                        </div>
+                        <div className="h-14 flex flex-col items-center justify-center p-1 text-[11px]">
+                          {step.type === 'DRAFTER' ? (
+                            <>
+                              <span className="text-[11px] font-bold text-rose-700 border border-rose-600 rounded-full px-2 py-0.2">
+                                {currentUser.name?.slice(0, 3) || '이재원'} [印]
+                              </span>
+                              <span className="text-[9px] text-slate-400 mt-1">상신 예정</span>
+                            </>
+                          ) : (
+                            <span className="text-slate-400">
+                              {step.order === 2 ? '황규문' : step.order === 3 ? '김바울' : '행정실'}
+                            </span>
+                          )}
+                        </div>
                       </div>
-                      <div className="h-14 flex flex-col items-center justify-center p-1">
-                        <span className="text-[11px] font-bold text-rose-700 border border-rose-600 rounded-full px-2 py-0.2">
-                          이재원 [印]
-                        </span>
-                        <span className="text-[9px] text-slate-400 mt-1">상신 예정</span>
-                      </div>
-                    </div>
-                    <div className="w-24">
-                      <div className="bg-slate-50 py-1 text-[11px] font-semibold text-slate-600 border-b border-slate-300">
-                        {t('교감', 'Vice Principal')}
-                      </div>
-                      <div className="h-14 flex flex-col items-center justify-center p-1 text-[11px] text-slate-400">
-                        황규문
-                      </div>
-                    </div>
-                    <div className="w-24">
-                      <div className="bg-slate-50 py-1 text-[11px] font-semibold text-slate-600 border-b border-slate-300">
-                        {t('교장', 'Principal')}
-                      </div>
-                      <div className="h-14 flex flex-col items-center justify-center p-1 text-[11px] text-slate-400">
-                        김바울
-                      </div>
-                    </div>
+                    ))}
                   </div>
                 </div>
               </div>
@@ -261,43 +482,112 @@ export default function ApprovalPage() {
                 />
               </div>
 
-              {activeCategory === 'LEAVE' && (
+              {/* 근태신청서 양식인 경우 세부 일자/연차 입력란 활성화 */}
+              {currentTemplate.template_category === 'ATTENDANCE_LEAVE' && (
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 bg-slate-50/70 rounded-lg border border-slate-200 text-xs">
                   <div>
-                    <label className="block font-semibold text-slate-600 mb-1">{t('휴가 종류', 'Leave Type')}</label>
-                    <select aria-label="휴가 종류" className="w-full h-7 px-2 text-xs bg-white border border-slate-300 rounded">
-                      <option>연차 (1.0일 차감)</option>
-                      <option>오전 반차 (0.5일 차감)</option>
-                      <option>오후 반차 (0.5일 차감)</option>
-                      <option>병가</option>
-                      <option>공가</option>
+                    <label className="block font-semibold text-slate-600 mb-1">{t('신청 구분', 'Leave Type')}</label>
+                    <select
+                      value={leaveType}
+                      onChange={(e) => setLeaveType(e.target.value)}
+                      className="w-full h-7 px-2 text-xs bg-white border border-slate-300 rounded font-semibold text-slate-800"
+                    >
+                      <option value="연차 (1.0일 차감)">연차 (1.0일 차감)</option>
+                      <option value="오전 반차 (0.5일 차감)">오전 반차 (0.5일 차감)</option>
+                      <option value="오후 반차 (0.5일 차감)">오후 반차 (0.5일 차감)</option>
+                      <option value="공무 출장">공무 출장 (차감 없음)</option>
+                      <option value="병가 / 결근">병가 / 결근 (진단서 첨부)</option>
+                      <option value="조퇴 / 외출">조퇴 / 외출 (근무시간 외출)</option>
                     </select>
                   </div>
                   <div>
                     <label className="block font-semibold text-slate-600 mb-1">{t('기간 선택', 'Date Range')}</label>
                     <div className="flex items-center gap-1">
-                      <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} className="h-7 px-1.5 text-xs bg-white border border-slate-300 rounded w-full font-mono" />
+                      <input
+                        type="date"
+                        value={startDate}
+                        onChange={(e) => setStartDate(e.target.value)}
+                        className="h-7 px-1.5 text-xs bg-white border border-slate-300 rounded w-full font-mono"
+                      />
                       <span>~</span>
-                      <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} className="h-7 px-1.5 text-xs bg-white border border-slate-300 rounded w-full font-mono" />
+                      <input
+                        type="date"
+                        value={endDate}
+                        onChange={(e) => setEndDate(e.target.value)}
+                        className="h-7 px-1.5 text-xs bg-white border border-slate-300 rounded w-full font-mono"
+                      />
                     </div>
                   </div>
                   <div>
                     <label className="block font-semibold text-slate-600 mb-1">{t('차감 일수', 'Deduction')}</label>
-                    <input type="number" step="0.5" value={leaveDays} onChange={(e) => setLeaveDays(Number(e.target.value))} className="w-full h-7 px-2 text-xs bg-white border border-slate-300 rounded font-bold text-blue-700" />
+                    <input
+                      type="number"
+                      step="0.5"
+                      value={leaveDays}
+                      onChange={(e) => setLeaveDays(Number(e.target.value))}
+                      className="w-full h-7 px-2 text-xs bg-white border border-slate-300 rounded font-bold text-blue-700"
+                    />
                   </div>
                 </div>
               )}
 
+              {/* 기안 본문 내용 에디터 (선택한 템플릿의 양식 구조 자동 로드) */}
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">
-                  {t('기안 본문 내용', 'Content')}
-                </label>
+                <div className="flex items-center justify-between mb-1">
+                  <label className="block text-xs font-bold text-slate-700">
+                    {t('기안 본문 내용 (Template Body)', 'Content')}
+                  </label>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (currentTemplate.content_html) {
+                        setContent(currentTemplate.content_html);
+                        setToastMessage('서식 본문이 템플릿 기본값으로 재설정되었습니다.');
+                        setTimeout(() => setToastMessage(null), 2000);
+                      }
+                    }}
+                    className="text-[10px] text-blue-600 hover:underline font-bold"
+                  >
+                    양식 기본 서식으로 초기화
+                  </button>
+                </div>
                 <textarea
-                  rows={5}
+                  rows={8}
                   value={content}
                   onChange={(e) => setContent(e.target.value)}
-                  className="w-full p-3 text-xs bg-slate-50 border border-slate-300 rounded-lg text-slate-900 leading-relaxed font-sans focus:bg-white"
+                  className="w-full p-3.5 text-xs bg-slate-50 border border-slate-300 rounded-lg text-slate-900 leading-relaxed font-mono focus:bg-white focus:border-blue-500 focus:outline-none"
                 />
+              </div>
+
+              {/* 기안자 첨부파일 업로드란 */}
+              <div className="p-3 bg-slate-50 rounded-lg border border-slate-200 space-y-2">
+                <div className="flex items-center justify-between">
+                  <label className="text-xs font-bold text-slate-700 flex items-center gap-1.5">
+                    <Paperclip className="w-3.5 h-3.5 text-blue-600" />
+                    <span>기안 첨부 서류 / 작성 완료 양식 파일 업로드</span>
+                  </label>
+                  {userAttachedFile && (
+                    <button
+                      type="button"
+                      onClick={() => setUserAttachedFile(null)}
+                      className="text-[10px] text-rose-500 hover:underline"
+                    >
+                      첨부 취소
+                    </button>
+                  )}
+                </div>
+                <input
+                  type="file"
+                  onChange={handleUserFileUpload}
+                  accept=".hwp,.hwpx,.doc,.docx,.pdf,.xlsx,.xls,.png,.jpg"
+                  className="block w-full text-xs text-slate-500 file:mr-3 file:py-1 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer"
+                />
+                {userAttachedFile && (
+                  <div className="flex items-center gap-1.5 text-xs text-blue-800 font-bold bg-white p-2 rounded border border-blue-200">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-blue-600" />
+                    <span>첨부된 파일: {userAttachedFile}</span>
+                  </div>
+                )}
               </div>
 
               <div>
@@ -316,7 +606,7 @@ export default function ApprovalPage() {
         </div>
       )}
 
-      {/* CASE 2: 결재자(교무부장 또는 교장) 화면 - 기안자가 올린 글을 먼저 보고, 본인 권한 액션 바 노출 */}
+      {/* CASE 2: 결재자(교무부장 또는 교장) 화면 */}
       {!isDrafter && (
         <div className="space-y-5">
           {/* 결재 대기 문서 리스트 위젯 */}
@@ -324,30 +614,47 @@ export default function ApprovalPage() {
             <div className="flex items-center gap-2 mb-3">
               <Inbox className="w-4 h-4 text-blue-600" />
               <h2 className="text-sm font-bold text-slate-900">
-                {isDeptHead && t('교무부장 결재 대기 문서함 (1건)', 'Dept Head Approval Inbox (1)')}
-                {isPrincipal && t('교장 최종 결재 대기 문서함 (1건)', 'Principal Approval Inbox (1)')}
+                {isDeptHead && t(`교무부장 결재 대기 문서함 (${submittedDocs.length}건)`, `Dept Head Approval Inbox (${submittedDocs.length})`)}
+                {isPrincipal && t(`교장 최종 결재 대기 문서함 (${submittedDocs.length}건)`, `Principal Approval Inbox (${submittedDocs.length})`)}
               </h2>
             </div>
-            <div
-              onClick={() => setSelectedDocId('LIS-2026-교무-0042')}
-              className="p-3.5 rounded-lg border border-blue-200 bg-blue-50/40 hover:bg-blue-50 cursor-pointer transition-colors flex flex-wrap items-center justify-between gap-3 text-xs"
-            >
-              <div className="flex items-center gap-3">
-                <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500 text-white">
-                  결재 대기
-                </span>
-                <div>
-                  <div className="font-bold text-slate-900 text-[13px]">
-                    [LIS-2026-교무-0042] 2026학년도 하반기 연차 휴가 신청서 (1일)
+            <div className="space-y-2">
+              {submittedDocs.map((doc) => (
+                <div
+                  key={doc.id}
+                  onClick={() => setSelectedDocId(doc.doc_no)}
+                  className={`p-3.5 rounded-lg border cursor-pointer transition-colors flex flex-wrap items-center justify-between gap-3 text-xs ${
+                    selectedDocId === doc.doc_no
+                      ? 'border-blue-300 bg-blue-50/60 shadow-sm'
+                      : 'border-slate-200 bg-white hover:bg-slate-50'
+                  }`}
+                >
+                  <div className="flex items-center gap-3">
+                    <span
+                      className={`px-2 py-0.5 rounded text-[10px] font-bold ${
+                        doc.status === 'APPROVED'
+                          ? 'bg-emerald-600 text-white'
+                          : doc.status === 'REJECTED'
+                          ? 'bg-rose-600 text-white'
+                          : 'bg-amber-500 text-white'
+                      }`}
+                    >
+                      {doc.status === 'APPROVED' ? '승인 완료' : doc.status === 'REJECTED' ? '반려됨' : '결재 대기'}
+                    </span>
+                    <div>
+                      <div className="font-bold text-slate-900 text-[13px]">
+                        [{doc.doc_no}] {doc.title}
+                      </div>
+                      <div className="text-[11px] text-slate-500 mt-0.5">
+                        서식: <span className="font-semibold text-slate-700">{doc.template_name}</span> · 기안자: {doc.drafter_name} ({doc.drafter_dept}) · {doc.created_at}
+                      </div>
+                    </div>
                   </div>
-                  <div className="text-[11px] text-slate-500 mt-0.5">
-                    기안자: 이재원 (중고등부) · 기안일시: 2026.10.23 08:35
-                  </div>
+                  <span className="text-xs font-semibold text-blue-700 bg-white px-2.5 py-1 rounded border border-blue-200">
+                    {selectedDocId === doc.doc_no ? '기안서 상세 열람 중' : '클릭하여 열람'}
+                  </span>
                 </div>
-              </div>
-              <span className="text-xs font-semibold text-blue-700 bg-white px-2.5 py-1 rounded border border-blue-200">
-                기안서 상세 열람 중
-              </span>
+              ))}
             </div>
           </div>
 
@@ -358,10 +665,10 @@ export default function ApprovalPage() {
                 <Stamp className="w-4 h-4 text-blue-700" />
                 <div>
                   <span className="font-bold text-blue-900 block text-xs">
-                    [1차 결재권자: 교감 황규문] 결재 처리
+                    [1차 결재권자: 교감 황규문] 결재 처리 (문서번호: {activeReviewDoc.doc_no})
                   </span>
                   <span className="text-[11px] text-blue-700">
-                    아래 기안자 작성 원문을 검토하신 후 승인 또는 전결을 처리해 주십시오.
+                    기안자가 작성한 템플릿 원문을 검토하신 후 승인 또는 전결을 처리해 주십시오.
                   </span>
                 </div>
               </div>
@@ -397,7 +704,7 @@ export default function ApprovalPage() {
                 <Stamp className="w-4 h-4 text-emerald-700" />
                 <div>
                   <span className="font-bold text-emerald-900 block text-xs">
-                    [최종 결재권자: 교장 김바울] 최종 결재 처리
+                    [최종 결재권자: 교장 김바울] 최종 결재 처리 (문서번호: {activeReviewDoc.doc_no})
                   </span>
                   <span className="text-[11px] text-emerald-700">
                     교감 검토 승인 완료 문서를 확인 후 최종 승인 시 결재 도장이 날인되고 교사 연차가 자동 차감됩니다.
@@ -423,7 +730,7 @@ export default function ApprovalPage() {
             </div>
           )}
 
-          {/* 기안자가 올린 글 상세 열람 뷰 (결재자들은 이 내용을 먼저 읽음) */}
+          {/* 기안자가 올린 글 상세 열람 뷰 */}
           <div className="bg-white rounded-xl border border-slate-200 shadow-md p-8 max-w-[1050px] mx-auto space-y-6">
             <div className="border-b-2 border-slate-900 pb-5">
               <div className="flex flex-wrap items-start justify-between gap-6">
@@ -436,10 +743,10 @@ export default function ApprovalPage() {
                     </span>
                   </div>
                   <div className="grid grid-cols-2 gap-x-6 gap-y-1 text-slate-600 font-medium">
-                    <div>문서번호: <span className="font-mono text-slate-900 font-bold">LIS-2026-교무-0042</span></div>
-                    <div>기안일자: <span className="font-mono text-slate-900">2026.10.23</span></div>
-                    <div>기안부서: <span className="text-slate-900">중고등학사팀</span></div>
-                    <div>기안자: <span className="font-bold text-slate-900">이재원 (Jay Lee)</span></div>
+                    <div>문서번호: <span className="font-mono text-slate-900 font-bold">{activeReviewDoc.doc_no}</span></div>
+                    <div>기안서식: <span className="font-bold text-blue-700">{activeReviewDoc.template_name}</span></div>
+                    <div>기안일자: <span className="font-mono text-slate-900">{activeReviewDoc.created_at}</span></div>
+                    <div>기안자: <span className="font-bold text-slate-900">{activeReviewDoc.drafter_name}</span></div>
                   </div>
                 </div>
 
@@ -457,25 +764,25 @@ export default function ApprovalPage() {
                         <span className="text-[11px] font-bold text-rose-700 border border-rose-600 rounded-full px-2 py-0.2">
                           이재원 [印]
                         </span>
-                        <span className="text-[9px] text-slate-400 mt-1 font-mono">10.23 08:35</span>
+                        <span className="text-[9px] text-slate-400 mt-1">상신완료</span>
                       </div>
                     </div>
                     <div className="w-24">
                       <div className="bg-slate-50 py-1 text-[11px] font-semibold text-slate-600 border-b border-slate-300">
                         교감
                       </div>
-                      <div className="h-16 flex flex-col items-center justify-center p-1">
-                        {step2Status === 'APPROVED' ? (
-                          <>
+                      <div className="h-16 flex flex-col items-center justify-center p-1 text-[11px]">
+                        {activeReviewDoc.step2_status === 'APPROVED' ? (
+                          <div className="flex flex-col items-center">
                             <span className="text-[11px] font-bold text-rose-700 border border-rose-600 rounded-full px-2 py-0.2">
-                              {isDelegated ? '황규문 [전결]' : '황규문 [印]'}
+                              {activeReviewDoc.is_delegated ? '황규문 [전결]' : '황규문 [印]'}
                             </span>
-                            <span className="text-[9px] text-slate-400 mt-1 font-mono">{step2Time || '10.23 09:10'}</span>
-                          </>
-                        ) : step2Status === 'REJECTED' ? (
-                          <span className="text-[10px] text-rose-600 font-bold bg-rose-50 px-1.5 py-0.5 rounded">반려</span>
+                            <span className="text-[9px] text-slate-400 mt-1">{activeReviewDoc.step2_time || '승인'}</span>
+                          </div>
+                        ) : activeReviewDoc.step2_status === 'REJECTED' ? (
+                          <span className="text-xs font-bold text-rose-600">반려됨</span>
                         ) : (
-                          <span className="text-[10px] text-amber-600 font-semibold bg-amber-50 px-1.5 py-0.5 rounded">결재 대기</span>
+                          <span className="text-slate-400">결재 대기</span>
                         )}
                       </div>
                     </div>
@@ -483,18 +790,18 @@ export default function ApprovalPage() {
                       <div className="bg-slate-50 py-1 text-[11px] font-semibold text-slate-600 border-b border-slate-300">
                         교장
                       </div>
-                      <div className="h-16 flex flex-col items-center justify-center p-1">
-                        {step3Status === 'APPROVED' ? (
-                          <>
+                      <div className="h-16 flex flex-col items-center justify-center p-1 text-[11px]">
+                        {activeReviewDoc.step3_status === 'APPROVED' ? (
+                          <div className="flex flex-col items-center">
                             <span className="text-[11px] font-bold text-rose-700 border border-rose-600 rounded-full px-2 py-0.2">
                               김바울 [印]
                             </span>
-                            <span className="text-[9px] text-slate-400 mt-1 font-mono">{step3Time || '10.23 09:30'}</span>
-                          </>
-                        ) : step3Status === 'REJECTED' ? (
-                          <span className="text-[10px] text-rose-600 font-bold bg-rose-50 px-1.5 py-0.5 rounded">반려</span>
+                            <span className="text-[9px] text-slate-400 mt-1">{activeReviewDoc.step3_time || '최종승인'}</span>
+                          </div>
+                        ) : activeReviewDoc.step3_status === 'REJECTED' ? (
+                          <span className="text-xs font-bold text-rose-600">반려됨</span>
                         ) : (
-                          <span className="text-[10px] text-slate-400">대기</span>
+                          <span className="text-slate-400">결재 대기</span>
                         )}
                       </div>
                     </div>
@@ -508,36 +815,53 @@ export default function ApprovalPage() {
               <div>
                 <span className="font-bold text-slate-500 block mb-1">문서 제목:</span>
                 <div className="p-3 bg-slate-50 rounded-lg border border-slate-200 font-bold text-slate-900 text-sm">
-                  {docTitle}
+                  {activeReviewDoc.title}
                 </div>
               </div>
 
-              <div className="grid grid-cols-3 gap-4 p-4 bg-slate-50/70 rounded-lg border border-slate-200">
-                <div>
-                  <span className="text-slate-500 block">휴가 구분:</span>
-                  <span className="font-bold text-slate-900">연차 (1.0일)</span>
+              {activeReviewDoc.leave_days !== undefined && (
+                <div className="grid grid-cols-3 gap-4 p-4 bg-slate-50/70 rounded-lg border border-slate-200">
+                  <div>
+                    <span className="text-slate-500 block">휴가 구분:</span>
+                    <span className="font-bold text-slate-900">{activeReviewDoc.leave_type || '연차'}</span>
+                  </div>
+                  <div>
+                    <span className="text-slate-500 block">기간:</span>
+                    <span className="font-mono font-bold text-slate-900">{activeReviewDoc.date_range}</span>
+                  </div>
+                  <div>
+                    <span className="text-slate-500 block">신청 차감 일수:</span>
+                    <span className="font-bold text-blue-700">{activeReviewDoc.leave_days}일</span>
+                  </div>
                 </div>
-                <div>
-                  <span className="text-slate-500 block">기간:</span>
-                  <span className="font-mono font-bold text-slate-900">2026.10.28 ~ 2026.10.28</span>
-                </div>
-                <div>
-                  <span className="text-slate-500 block">차감 후 잔여:</span>
-                  <span className="font-bold text-blue-700">10.5일 예정</span>
-                </div>
-              </div>
+              )}
 
               <div>
-                <span className="font-bold text-slate-500 block mb-1">기안 상세 내용:</span>
-                <div className="p-4 bg-white border border-slate-200 rounded-lg whitespace-pre-line text-slate-800 leading-relaxed shadow-inner">
-                  {content}
+                <span className="font-bold text-slate-500 block mb-1">기안 상세 내용 (서식 본문):</span>
+                <div className="p-4 bg-white border border-slate-200 rounded-lg whitespace-pre-line font-mono text-slate-800 leading-relaxed shadow-inner">
+                  {activeReviewDoc.content}
                 </div>
               </div>
+
+              {activeReviewDoc.attached_file_name && (
+                <div>
+                  <span className="font-bold text-slate-500 block mb-1">첨부 서류 및 서식 파일:</span>
+                  <div className="p-3 bg-blue-50/60 border border-blue-200 rounded-lg flex items-center justify-between">
+                    <div className="flex items-center gap-2 text-blue-900 font-bold">
+                      <FileSpreadsheet className="w-4 h-4 text-blue-600" />
+                      <span>{activeReviewDoc.attached_file_name}</span>
+                    </div>
+                    <span className="text-[10px] bg-white text-blue-700 px-2 py-0.5 rounded border border-blue-200 font-bold">
+                      첨부 완료
+                    </span>
+                  </div>
+                </div>
+              )}
 
               <div>
                 <span className="font-bold text-slate-500 block mb-1">특이 사항:</span>
                 <div className="p-2.5 bg-amber-50/50 border border-amber-200 rounded text-slate-800">
-                  {specialNotes}
+                  {activeReviewDoc.special_notes || '특이사항 없음'}
                 </div>
               </div>
             </div>
@@ -545,5 +869,13 @@ export default function ApprovalPage() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function ApprovalPage() {
+  return (
+    <Suspense fallback={<div className="p-8 text-center text-xs text-slate-500">Loading Electronic Approval...</div>}>
+      <ApprovalContent />
+    </Suspense>
   );
 }

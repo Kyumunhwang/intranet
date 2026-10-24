@@ -1,9 +1,13 @@
 [
   {
     "id": "t1",
-    "template_category": "ATTENDANCE_REQ",
+    "template_category": "ATTENDANCE_LEAVE",
     "template_name": "휴가 / 연차원 (Leave Request)",
     "auto_deduct_leave": true,
+    "description": "교직원 연차, 반차, 포상휴가 등 정규 휴가 신청 시 사용하는 표준 서식",
+    "file_name": "LIS_휴가_연차원_표준서식.docx",
+    "file_url": "/templates/LIS_휴가_연차원_표준서식.docx",
+    "content_html": "1. 신청 사유: 개인 사유 및 가족 행사 참석\n2. 휴가 종류: 연차 (1.0일)\n3. 휴가 기간: 2026년 10월 28일 (1일간)\n4. 비상 연락처: 010-3344-5566\n5. 업무 및 수업 대행: 정성수 선생님 배정 및 교무부 사전 인계 완료\n\n위와 같이 휴가를 신청하오니 허가하여 주시기 바랍니다.",
     "default_approval_steps": [
       {
         "order": 1,
@@ -22,13 +26,174 @@
         "approver_id": "u3",
         "type": "APPROVAL"
       }
-    ]
+    ],
+    "updated_at": "2026-10-24"
+  },
+  {
+    "id": "t3",
+    "template_category": "ATTENDANCE_LEAVE",
+    "template_name": "출장 및 대외활동 신청서 (Business Trip)",
+    "auto_deduct_leave": false,
+    "description": "교외 공무 출장, 학술 세미나 참석, 입학 설명회 지원 등 교외 활동 신청",
+    "file_name": "LIS_출장신청서_양식.hwp",
+    "file_url": "/templates/LIS_출장신청서_양식.hwp",
+    "content_html": "1. 출장 목적: 2026 국제학교 연합 학술 컨퍼런스 참가 및 세미나 발표\n2. 출장지: 서울 코엑스 아셈볼룸\n3. 출장 기간: 2026년 11월 05일 ~ 2026년 11월 06일 (2일간)\n4. 소요 예산: 금 150,000원 (교통비 및 참가 등록비 포함)\n5. 수업 보강 계획: 담당 교과 보강 계획서 첨부 완료\n\n위와 같이 공무 출장을 명하여 주실 것을 요청합니다.",
+    "default_approval_steps": [
+      {
+        "order": 1,
+        "role_desc": "기안자",
+        "type": "DRAFTER"
+      },
+      {
+        "order": 2,
+        "role_desc": "부서장",
+        "approver_id": "u4",
+        "type": "APPROVAL"
+      },
+      {
+        "order": 3,
+        "role_desc": "교장",
+        "approver_id": "u3",
+        "type": "APPROVAL"
+      }
+    ],
+    "updated_at": "2026-10-24"
+  },
+  {
+    "id": "t5",
+    "template_category": "ATTENDANCE_LEAVE",
+    "template_name": "조퇴 / 외출 신청서 (Early Leave Request)",
+    "auto_deduct_leave": false,
+    "description": "근무 시간 중 외출 또는 조기 퇴근 시 사용하는 근태 증빙 서식",
+    "file_name": "LIS_조퇴_외출신청서.docx",
+    "file_url": "/templates/LIS_조퇴_외출신청서.docx",
+    "content_html": "1. 신청 구분: 조퇴 / 외출\n2. 일시: 2026년 10월 27일 15:00 ~ 17:00 (2시간)\n3. 사유: 병원 정기 진료 및 치료\n4. 수업 조치: 해당 시간 수업 없음 (자습 감독 인계 완료)\n\n위와 같이 조퇴/외출을 신청하오니 재가하여 주시기 바랍니다.",
+    "default_approval_steps": [
+      {
+        "order": 1,
+        "role_desc": "기안자",
+        "type": "DRAFTER"
+      },
+      {
+        "order": 2,
+        "role_desc": "부서장 (교무부장)",
+        "approver_id": "u4",
+        "type": "APPROVAL"
+      }
+    ],
+    "updated_at": "2026-10-24"
+  },
+  {
+    "id": "t6",
+    "template_category": "ATTENDANCE_LEAVE",
+    "template_name": "결근계 및 병가 신청서 (Sick Leave)",
+    "auto_deduct_leave": false,
+    "description": "질병 또는 부상으로 인한 결근 및 병가 신청 (진단서 첨부 필수)",
+    "file_name": "LIS_병가_결근계_양식.pdf",
+    "file_url": "/templates/LIS_병가_결근계_양식.pdf",
+    "content_html": "1. 병가 사유: 급성 인후염 및 고열에 따른 가료\n2. 기간: 2026년 11월 02일 (1일간)\n3. 의료기관: 분당서울대병원 (의사 진단서 첨부)\n4. 수업 보강: 동일 학년 교과 담당교사 보강 수업 진행\n\n위 사유로 인하여 결근계를 제출하오니 승인하여 주시기 바랍니다.",
+    "default_approval_steps": [
+      {
+        "order": 1,
+        "role_desc": "기안자",
+        "type": "DRAFTER"
+      },
+      {
+        "order": 2,
+        "role_desc": "부서장",
+        "approver_id": "u4",
+        "type": "APPROVAL"
+      },
+      {
+        "order": 3,
+        "role_desc": "교장",
+        "approver_id": "u3",
+        "type": "APPROVAL"
+      }
+    ],
+    "updated_at": "2026-10-24"
+  },
+  {
+    "id": "t7",
+    "template_category": "DRAFT",
+    "template_name": "일반 업무 기안문 (General Internal Draft)",
+    "auto_deduct_leave": false,
+    "description": "교내 제반 부서의 일상 업무 협조 및 내부 방침 결정을 위한 표준 기안서",
+    "file_name": "LIS_일반기안서_표준양식.hwp",
+    "file_url": "/templates/LIS_일반기안서_표준양식.hwp",
+    "content_html": "1. 추진 목적:\n   - 2026학년도 학생 자치회 주관 가을 축제 운영 및 예산 집행 승인 건\n\n2. 주요 내용:\n   가. 일시 및 장소: 2026.11.12(목) 13:00 ~ 17:00 / 본관 대강당\n   나. 대상: 전교생 및 교직원, 학부모 참관단\n   다. 세부 프로그램: 동아리 공연, 학술 전시회, 바자회 부스 운영\n\n3. 기대 효과:\n   - 학생 자치 역량 강화 및 건전한 학교 공동체 문화 조성\n\n위와 같이 추진하고자 하오니 재가하여 주시기 바랍니다.",
+    "default_approval_steps": [
+      {
+        "order": 1,
+        "role_desc": "기안자",
+        "type": "DRAFTER"
+      },
+      {
+        "order": 2,
+        "role_desc": "부서장",
+        "approver_id": "u4",
+        "type": "APPROVAL"
+      },
+      {
+        "order": 3,
+        "role_desc": "행정실장",
+        "approver_id": "u1",
+        "type": "APPROVAL"
+      },
+      {
+        "order": 4,
+        "role_desc": "교장",
+        "approver_id": "u3",
+        "type": "APPROVAL"
+      }
+    ],
+    "updated_at": "2026-10-24"
+  },
+  {
+    "id": "t4",
+    "template_category": "DRAFT",
+    "template_name": "물품 구매 / 비품 품의서 (Purchase Draft)",
+    "auto_deduct_leave": false,
+    "description": "교과 교육 기자재, 교무실 소모품 및 행정 비품 구매 품의",
+    "file_name": "LIS_물품구매_품의서.xlsx",
+    "file_url": "/templates/LIS_물품구매_품의서.xlsx",
+    "content_html": "1. 구매 품명: 과학실험실 소모성 시약 및 디지털 현미경 5대\n2. 구매 사유: 2학기 AP 생물/화학 실험 실습 기자재 확충\n3. 소요 예산: 일금 1,850,000원 (VAT 포함)\n4. 예산 과목: 과학과 교육운영비 (2026-SCI-014)\n5. 견적서 비교: 2개 업체 비교 견적서 첨부 완료\n\n위 물품을 구매하고자 하오니 재가하여 주시기 바랍니다.",
+    "default_approval_steps": [
+      {
+        "order": 1,
+        "role_desc": "기안자",
+        "type": "DRAFTER"
+      },
+      {
+        "order": 2,
+        "role_desc": "부서장",
+        "approver_id": "u4",
+        "type": "APPROVAL"
+      },
+      {
+        "order": 3,
+        "role_desc": "재정실장",
+        "approver_id": "u1",
+        "type": "APPROVAL"
+      },
+      {
+        "order": 4,
+        "role_desc": "교장",
+        "approver_id": "u3",
+        "type": "APPROVAL"
+      }
+    ],
+    "updated_at": "2026-10-24"
   },
   {
     "id": "t2",
-    "template_category": "EXPENSE",
-    "template_name": "지출결의서 (Expense Resolution)",
+    "template_category": "DRAFT",
+    "template_name": "지출 결의서 (Expense Resolution)",
     "auto_deduct_leave": false,
+    "description": "기결재된 사업 예산의 실제 집행 및 회계 정산을 위한 지출결의 서식",
+    "file_name": "LIS_지출결의서_양식.xlsx",
+    "file_url": "/templates/LIS_지출결의서_양식.xlsx",
+    "content_html": "1. 지출 건명: 2026학년도 교직원 역량강화 워크숍 다과비 및 인쇄비 지출\n2. 지출 금액: 금 420,000원 (영수증 첨부)\n3. 지급처: (주)등대케이터링 / 신한은행 110-***-******\n4. 계정과목: 복리후생비 - 워크숍 지원비\n\n위 지출을 승인 및 회계 집행하여 주시기 바랍니다.",
     "default_approval_steps": [
       {
         "order": 1,
@@ -53,13 +218,18 @@
         "approver_id": "u3",
         "type": "APPROVAL"
       }
-    ]
+    ],
+    "updated_at": "2026-10-24"
   },
   {
-    "id": "t3",
-    "template_category": "GENERAL_DRAFT",
-    "template_name": "출장신청서 (Business Trip Request)",
+    "id": "t8",
+    "template_category": "DRAFT",
+    "template_name": "행사 및 프로그램 추진계획서 (School Event Proposal)",
     "auto_deduct_leave": false,
+    "description": "학교 대내외 행사, 특별 캠프, 입학 설명회 기획 추진을 위한 기안 서식",
+    "file_name": "LIS_행사추진계획서.hwp",
+    "file_url": "/templates/LIS_행사추진계획서.hwp",
+    "content_html": "1. 행사명: 2026 가을 등대 열린 캠퍼스 입학설명회\n2. 일시: 2026.11.21(토) 10:00 ~ 13:00\n3. 대상: 예비 신입생 학부모 및 학생 (사전 예약자 150명)\n4. 준비 조직: 대외협력팀, 입학홍보부, 교무부 협업\n5. 세부 일정표 및 리플렛 시안 첨부\n\n위 계획에 따라 행사를 추진하고자 합니다.",
     "default_approval_steps": [
       {
         "order": 1,
@@ -78,13 +248,18 @@
         "approver_id": "u3",
         "type": "APPROVAL"
       }
-    ]
+    ],
+    "updated_at": "2026-10-24"
   },
   {
-    "id": "t4",
-    "template_category": "PURCHASE",
-    "template_name": "구매기안문 (Purchase Draft)",
+    "id": "t9",
+    "template_category": "DOCUMENT",
+    "template_name": "학교 대외 공문서 (Official External Document)",
     "auto_deduct_leave": false,
+    "description": "교육청, 지자체, 유관 기관으로 발신하는 표준 대외 공문 서식",
+    "file_name": "LIS_대외공문_표준서식.hwp",
+    "file_url": "/templates/LIS_대외공문_표준서식.hwp",
+    "content_html": "수신: 경기도성남교육지원청 교육장 (학교안전팀장)\n참조: 학교보건담당\n제목: 2026학년도 2학기 학교 방역 및 보건관리 결과 보고의 건\n\n1. 귀 교육지원청의 무궁한 발전을 기원합니다.\n2. 본교(등대글로벌스쿨)의 2026학년도 2학기 학교 안전·방역 점검 결과를 붙임과 같이 보고합니다.\n\n붙임: 1. 학교 방역 자체점검표 1부.\n      2. 환경위생 점검결과표 1부. 끝.\n\n등 대 글 로 벌 스 쿨 장 [직인생략]",
     "default_approval_steps": [
       {
         "order": 1,
@@ -99,7 +274,67 @@
       },
       {
         "order": 3,
-        "role_desc": "재정실",
+        "role_desc": "교장 (최종)",
+        "approver_id": "u3",
+        "type": "APPROVAL"
+      }
+    ],
+    "updated_at": "2026-10-24"
+  },
+  {
+    "id": "t10",
+    "template_category": "DOCUMENT",
+    "template_name": "가정통신문 기안서 (Parent Newsletter Draft)",
+    "auto_deduct_leave": false,
+    "description": "학부모 대상 정기/수시 안내 가정통신문 발행 승인 기안문",
+    "file_name": "LIS_가정통신문_표준안.docx",
+    "file_url": "/templates/LIS_가정통신문_표준안.docx",
+    "content_html": "발행번호: 등대-통신-2026-035\n발행일자: 2026년 10월 28일\n수신: 전교생 학부모 귀하\n제목: 2026학년도 가을방학 및 2학기 중간 학사 일정 안내\n\n학부모님의 가정에 하나님의 은혜와 평강이 넘쳐나시기를 기원합니다.\n본교의 2026학년도 가을방학 일정 및 11월 주요 학사 일정을 다음과 같이 안내해 드리오니 가정에서의 학생 지도에 참고하여 주시기 바랍니다.\n\n- 방학 기간: 2026.10.30(금) ~ 11.03(화)\n- 정상 등교일: 2026.11.04(수) 08:30 정상 등교\n- 문의: 교무부 (내선 101)\n\n2026년 10월 28일\n등 대 글 로 벌 스 쿨 장",
+    "default_approval_steps": [
+      {
+        "order": 1,
+        "role_desc": "기안자",
+        "type": "DRAFTER"
+      },
+      {
+        "order": 2,
+        "role_desc": "교무부장",
+        "approver_id": "u4",
+        "type": "APPROVAL"
+      },
+      {
+        "order": 3,
+        "role_desc": "교장",
+        "approver_id": "u3",
+        "type": "APPROVAL"
+      }
+    ],
+    "updated_at": "2026-10-24"
+  },
+  {
+    "id": "t11",
+    "template_category": "DOCUMENT",
+    "template_name": "교직원 위촉 및 임명 품의서 (Appointment Request)",
+    "auto_deduct_leave": false,
+    "description": "방과후 강사, 특별활동 지도교사, 보조교사 위촉 및 임명 품의",
+    "file_name": "LIS_교원임명_품의서.hwp",
+    "file_url": "/templates/LIS_교원임명_품의서.hwp",
+    "content_html": "1. 위촉 대상자:\n   - 성명: David Miller (외국인 초빙강사)\n   - 전공 및 자격: TESOL / 미국 중등교원자격증 소지\n2. 위촉 직무: 2026-2학기 고등부 Debate 클럽 지도강사\n3. 위촉 기간: 2026.11.01 ~ 2027.02.28 (4개월간)\n4. 강사료: 시간당 60,000원 (월 8시간 기준)\n5. 첨부 서류: 이력서, 범죄경력조회서, 학위증명서 사본 각 1부.\n\n위와 같이 위촉하고자 하오니 재가하여 주시기 바랍니다.",
+    "default_approval_steps": [
+      {
+        "order": 1,
+        "role_desc": "기안자",
+        "type": "DRAFTER"
+      },
+      {
+        "order": 2,
+        "role_desc": "부서장",
+        "approver_id": "u4",
+        "type": "APPROVAL"
+      },
+      {
+        "order": 3,
+        "role_desc": "행정실장",
         "approver_id": "u1",
         "type": "APPROVAL"
       },
@@ -109,6 +344,7 @@
         "approver_id": "u3",
         "type": "APPROVAL"
       }
-    ]
+    ],
+    "updated_at": "2026-10-24"
   }
 ]

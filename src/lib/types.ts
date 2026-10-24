@@ -185,7 +185,7 @@ export interface StudentDailyAttendance {
 
 export interface ApprovalTemplate {
   id: string;
-  template_category: 'GENERAL_DRAFT' | 'ATTENDANCE_REQ' | 'EXPENSE' | 'PURCHASE' | 'OFFICIAL_DOC';
+  template_category: 'GENERAL_DRAFT' | 'ATTENDANCE_REQ' | 'EXPENSE' | 'PURCHASE' | 'OFFICIAL_DOC' | 'DOCUMENT' | 'DRAFT' | 'ATTENDANCE_LEAVE' | string;
   template_name: string;
   auto_deduct_leave: boolean;
   default_approval_steps: {
@@ -194,6 +194,12 @@ export interface ApprovalTemplate {
     approver_id?: string;
     type: string;
   }[];
+  description?: string;
+  content_html?: string;
+  file_url?: string;
+  file_name?: string;
+  created_at?: string;
+  updated_at?: string;
 }
 
 export interface ApprovalDocument {
