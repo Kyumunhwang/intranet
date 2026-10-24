@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import {
   FileCheck2,
@@ -14,6 +14,7 @@ import {
   ChevronRight,
   Pin,
   Eye,
+  GraduationCap,
 } from 'lucide-react';
 import {
   Student,
@@ -21,67 +22,139 @@ import {
   StudentAttendanceStatus,
 } from '@/lib/types';
 import { useLanguage } from '@/lib/language-context';
+import { useUser } from '@/lib/user-context';
+import FrontpageLogin from '@/components/auth/FrontpageLogin';
+import rawStudentsData from '../../data/students.json';
 
-export default function DashboardPage() {
+const SCHOOL_GRADES = [
+  'T1',
+  'E1',
+  'E2',
+  'E3',
+  'E4',
+  'E5',
+  'M6',
+  'M7',
+  'M8',
+  'H9',
+  'H10',
+  'H11',
+  'H12',
+] as const;
+
+const GRADE_TEACHER_MAP: Record<string, { teacherName: string; teacherId: string }> = {
+  T1: { teacherName: '편제 준비중', teacherId: '' },
+  E1: { teacherName: '임그린 (Green Lim)', teacherId: 'u15' },
+  E2: { teacherName: '에크남 (Eknam)', teacherId: 'u18' },
+  E3: { teacherName: '유윤정 (Yoonjung Yu)', teacherId: 'u16' },
+  E4: { teacherName: '박예진 (Yejin Park)', teacherId: 'u17' },
+  E5: { teacherName: '김다니엘 (Daniel Kim)', teacherId: 'u21' },
+  M6: { teacherName: '류미연 (Monica Ryu)', teacherId: 'u25' },
+  M7: { teacherName: '강소라 (Sora Kang)', teacherId: 'u22' },
+  M8: { teacherName: '이재원 (Jay Lee)', teacherId: 'u8' },
+  H9: { teacherName: '이영은 (Michelle Lee)', teacherId: 'u20' },
+  H10: { teacherName: '박진희 (Jinhee Park)', teacherId: 'u19' },
+  H11: { teacherName: '나경식 (Kyungsik Nah)', teacherId: 'u13' },
+  H12: { teacherName: '유찬호 (Chanho Yu)', teacherId: 'u4' },
+};
+
+export default function HomePage() {
+  const { isLoggedIn, isLoading } = useUser();
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-slate-950 flex items-center justify-center text-white text-xs">
+        <div className="flex flex-col items-center gap-2">
+          <div className="w-6 h-6 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+          <span>등대글로벌스쿨 인트라넷 연결 중...</span>
+        </div>
+      </div>
+    );
+  }
+
+  // 로그인하지 않은 경우 첫화면 Frontpage 로그인 화면 노출
+  if (!isLoggedIn) {
+    return <FrontpageLogin />;
+  }
+
+  return <DashboardContent />;
+}
+
+function DashboardContent() {
   const { lang, t } = useLanguage();
-  const [students, setStudents] = useState<Student[]>([]);
-  const [confirmData, setConfirmData] = useState<ClassAttendanceConfirm | null>(null);
+  const { currentUser } = useUser();
+
+  // 144명 실제 학생 데이터
+  const allStudents = useMemo(() => rawStudentsData as unknown as Student[], []);
+
+  // 로그인한 교사의 담임 학년 계산 (기본값 설정)
+  const defaultGrade = useMemo(() => {
+    if (currentUser.homeroom_grade) {
+      return currentUser.homeroom_grade;
+    }
+    // 담임교사 ID 매핑 검색
+    const matchedGrade = Object.entries(GRADE_TEACHER_MAP).find(
+      ([, info]) => info.teacherId === currentUser.id
+    )?.[0];
+    if (matchedGrade) return matchedGrade;
+
+    // 만약 학생 DB에서 직접 담임교사 ID로 검색
+    const student = allStudents.find((s) => s.homeroom_teacher_id === currentUser.id);
+    if (student) return String(student.grade);
+
+    // 관리자/교장 등 담임이 아닌 경우 기본값 M8
+    return 'M8';
+  }, [currentUser, allStudents]);
+
+  // 선택된 학년 상태 (기본값: 로그인한 교사의 담임 학년)
+  const [selectedGrade, setSelectedGrade] = useState<string>(defaultGrade);
+
+  useEffect(() => {
+    setSelectedGrade(defaultGrade);
+  }, [defaultGrade]);
+
+  // 선택된 학년의 학생 명단 필터링
+  const currentGradeStudents = useMemo(() => {
+    return allStudents.filter((s) => String(s.grade) === selectedGrade);
+  }, [allStudents, selectedGrade]);
+
+  // 학생별 출결 상태 및 메모 맵
   const [attendanceMap, setAttendanceMap] = useState<
     Record<string, { status: StudentAttendanceStatus; comment: string }>
   >({});
+
+  const [confirmData, setConfirmData] = useState<ClassAttendanceConfirm | null>({
+    id: 'cac1',
+    attendance_date: new Date().toISOString().split('T')[0],
+    grade: selectedGrade as any,
+    class_no: 1,
+    is_confirmed: true,
+    confirmed_by: currentUser.name,
+    confirmed_at: '08:50',
+    total_students: currentGradeStudents.length,
+    present_count: currentGradeStudents.length,
+    late_count: 0,
+    absent_count: 0,
+    sick_count: 0,
+  });
+
   const [isConfirming, setIsConfirming] = useState(false);
   const [confirmSuccessMsg, setConfirmSuccessMsg] = useState<string | null>(null);
 
-  useEffect(() => {
-    const initialStudents: Student[] = [
-      { id: 's74', student_no: '2026-M801', name: 'HAN, Yeju (한예주)', grade: 'M8', homeroom_teacher_id: 'u8', status: 'ENROLLED' },
-      { id: 's75', student_no: '2026-M802', name: 'HWANG, Hee (황희)', grade: 'M8', homeroom_teacher_id: 'u8', status: 'ENROLLED' },
-      { id: 's76', student_no: '2026-M803', name: 'JEONG, Raon (정라온)', grade: 'M8', homeroom_teacher_id: 'u8', status: 'ENROLLED' },
-      { id: 's77', student_no: '2026-M804', name: 'KIM, Eden (김이든)', grade: 'M8', homeroom_teacher_id: 'u8', status: 'ENROLLED' },
-      { id: 's78', student_no: '2026-M805', name: 'Kim, Hajin (김하진)', grade: 'M8', homeroom_teacher_id: 'u8', status: 'ENROLLED' },
-      { id: 's79', student_no: '2026-M806', name: 'LEE, Jeri (이재이)', grade: 'M8', homeroom_teacher_id: 'u8', status: 'ENROLLED' },
-      { id: 's80', student_no: '2026-M807', name: 'OH, Sion (오시온)', grade: 'M8', homeroom_teacher_id: 'u8', status: 'ENROLLED' },
-      { id: 's81', student_no: '2026-M808', name: 'PARK, Haon (박하온)', grade: 'M8', homeroom_teacher_id: 'u8', status: 'ENROLLED' },
-      { id: 's82', student_no: '2026-M809', name: 'SHIN, Hajun (신하준)', grade: 'M8', homeroom_teacher_id: 'u8', status: 'ENROLLED' },
-      { id: 's83', student_no: '2026-M810', name: 'SONG, La-Im (송라임)', grade: 'M8', homeroom_teacher_id: 'u8', status: 'ENROLLED' },
-      { id: 's84', student_no: '2026-M811', name: 'SONG, Sangyun (송상윤)', grade: 'M8', homeroom_teacher_id: 'u8', status: 'ENROLLED' },
-      { id: 's85', student_no: '2026-M812', name: 'YANG, Luis Heerahm (양희람)', grade: 'M8', homeroom_teacher_id: 'u8', status: 'ENROLLED' },
-      { id: 's86', student_no: '2026-M813', name: 'YOO, Hajoon (유하준)', grade: 'M8', homeroom_teacher_id: 'u8', status: 'ENROLLED' },
-      { id: 's87', student_no: '2026-M814', name: 'YOON, Seokhyeon (윤석현)', grade: 'M8', homeroom_teacher_id: 'u8', status: 'ENROLLED' },
-    ];
-    setStudents(initialStudents);
+  const getStudentStatus = (studentId: string): StudentAttendanceStatus => {
+    return attendanceMap[studentId]?.status || 'PRESENT';
+  };
 
-    const map: Record<string, { status: StudentAttendanceStatus; comment: string }> = {};
-    initialStudents.forEach((s) => {
-      map[s.id] = {
-        status: s.id === 's75' ? 'LATE' : s.id === 's77' ? 'EARLY_LEAVE' : 'PRESENT',
-        comment: s.id === 's75' ? '병원 진료' : s.id === 's77' ? '체험학습 조퇴' : '',
-      };
-    });
-    setAttendanceMap(map);
-
-    setConfirmData({
-      id: 'cac1',
-      attendance_date: new Date().toISOString().split('T')[0],
-      grade: 3,
-      class_no: 2,
-      is_confirmed: true,
-      confirmed_by: '이재원',
-      confirmed_at: '08:50',
-      total_students: 8,
-      present_count: 6,
-      late_count: 1,
-      absent_count: 0,
-      sick_count: 1,
-    });
-  }, []);
+  const getStudentComment = (studentId: string): string => {
+    return attendanceMap[studentId]?.comment || '';
+  };
 
   const handleStatusChange = (studentId: string, status: StudentAttendanceStatus) => {
     setAttendanceMap((prev) => ({
       ...prev,
       [studentId]: {
-        ...prev[studentId],
         status,
+        comment: prev[studentId]?.comment || '',
       },
     }));
   };
@@ -90,7 +163,7 @@ export default function DashboardPage() {
     setAttendanceMap((prev) => ({
       ...prev,
       [studentId]: {
-        ...prev[studentId],
+        status: prev[studentId]?.status || 'PRESENT',
         comment,
       },
     }));
@@ -99,28 +172,45 @@ export default function DashboardPage() {
   const handleConfirmAttendance = async () => {
     setIsConfirming(true);
     try {
-      const records = Object.entries(attendanceMap).map(([student_id, val]) => ({
-        student_id,
-        status: val.status,
-        comment: val.comment,
+      const records = currentGradeStudents.map((s) => ({
+        student_id: s.id,
+        status: getStudentStatus(s.id),
+        comment: getStudentComment(s.id),
       }));
 
       const res = await fetch('/api/attendance/student-confirm', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          grade: 3,
-          class_no: 2,
-          confirmed_by: 'u2',
+          grade: selectedGrade,
+          class_no: 1,
+          confirmed_by: currentUser.id,
           records,
         }),
       });
       const data = await res.json();
-      if (data.success) {
-        setConfirmData(data.data);
-        setConfirmSuccessMsg(t('출결이 최종 확정(Confirm)되었습니다.', 'Attendance confirmed.'));
-        setTimeout(() => setConfirmSuccessMsg(null), 3500);
-      }
+      const nowTime = new Date().toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' });
+      setConfirmData({
+        id: `cac_${Date.now()}`,
+        attendance_date: new Date().toISOString().split('T')[0],
+        grade: selectedGrade as any,
+        class_no: 1,
+        is_confirmed: true,
+        confirmed_by: currentUser.name,
+        confirmed_at: nowTime,
+        total_students: currentGradeStudents.length,
+        present_count: stats.present,
+        late_count: stats.late,
+        absent_count: stats.absent,
+        sick_count: stats.sick,
+      });
+      setConfirmSuccessMsg(
+        t(
+          `[${selectedGrade} 학년] 학생 ${currentGradeStudents.length}명의 출결이 최종 확정(Confirm)되었습니다.`,
+          `[${selectedGrade}] Attendance for ${currentGradeStudents.length} students confirmed.`
+        )
+      );
+      setTimeout(() => setConfirmSuccessMsg(null), 3500);
     } catch {
       setConfirmSuccessMsg(t('출결 확정 완료', 'Attendance confirmed'));
       setTimeout(() => setConfirmSuccessMsg(null), 3500);
@@ -128,6 +218,24 @@ export default function DashboardPage() {
       setIsConfirming(false);
     }
   };
+
+  // 통계 계산
+  const stats = useMemo(() => {
+    let present = 0;
+    let late = 0;
+    let absent = 0;
+    let sick = 0;
+    let early = 0;
+    currentGradeStudents.forEach((s) => {
+      const st = getStudentStatus(s.id);
+      if (st === 'PRESENT') present++;
+      else if (st === 'LATE') late++;
+      else if (st === 'ABSENT' || st === 'UNAUTH_ABSENT') absent++;
+      else if (st === 'SICK') sick++;
+      else if (st === 'EARLY_LEAVE' || st === 'UNAUTH_EARLY') early++;
+    });
+    return { present, late, absent, sick, early, total: currentGradeStudents.length };
+  }, [currentGradeStudents, attendanceMap]);
 
   const statusOptions: { value: StudentAttendanceStatus; labelKo: string; labelEn: string; color: string }[] = [
     { value: 'PRESENT', labelKo: '출석', labelEn: 'Present', color: 'bg-emerald-600 text-white' },
@@ -139,35 +247,19 @@ export default function DashboardPage() {
     { value: 'UNAUTH_ABSENT', labelKo: '무단결석', labelEn: 'Truancy', color: 'bg-red-700 text-white' },
   ];
 
+  const currentTeacherInfo = GRADE_TEACHER_MAP[selectedGrade];
+
   return (
     <div className="space-y-6">
-      {/* Page Title & Breadcrumb */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
-            <span>{t('교직원 인트라넷 대시보드', 'Faculty Intranet Dashboard')}</span>
-          </h1>
-          <p className="text-xs text-slate-500 mt-1">
-            {t(
-              '등대글로벌스쿨 일일 업무 현황 및 실시간 학사 대시보드입니다.',
-              'Lighthouse Global School daily core tasks and academic dashboard.'
-            )}
-          </p>
-        </div>
-        <div className="text-xs text-slate-500 bg-white px-3 py-1.5 rounded-lg border border-slate-200 shadow-sm flex items-center gap-2 font-mono">
-          <span>2026.10.23 (금)</span>
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-          <span>Semester 1</span>
-        </div>
-      </div>
-
-      {/* 1. Top Summary KPI Cards (3 Cards) */}
+      {/* 1. Top Row: 3 Core Metric Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-        {/* Card A: Pending Approvals */}
+        {/* Card A: Pending Electronic Approvals */}
         <div className="bg-surface-white rounded-xl p-5 border border-slate-200/90 shadow-sm flex flex-col justify-between hover:border-slate-300 transition-all">
           <div className="flex items-center justify-between mb-3">
             <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
-              {t('내가 결재할 문서', 'Pending Approvals')}
+              {currentUser.role === 'TEACHER'
+                ? t('내 기안 결재 진행', 'My Drafts')
+                : t('결재 대기 문서', 'Pending Approvals')}
             </span>
             <span className="p-2 rounded-lg bg-blue-50 text-blue-600">
               <FileCheck2 className="w-4 h-4" />
@@ -175,26 +267,25 @@ export default function DashboardPage() {
           </div>
           <div className="flex items-baseline gap-2 mb-2">
             <span className="text-3xl font-extrabold text-slate-900 font-sans tracking-tight">
-              4<span className="text-lg font-semibold text-slate-500 ml-1">{t('건', '')}</span>
+              1<span className="text-lg font-semibold text-slate-500 ml-0.5">{t('건', 'item')}</span>
             </span>
-            <span className="px-2 py-0.5 rounded-full text-[11px] font-bold bg-rose-50 text-rose-700 border border-rose-200">
-              {t('긴급 1건', '1 Urgent')}
+            <span className="text-xs font-semibold text-blue-700 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-200">
+              {currentUser.role === 'TEACHER' ? t('1차 승인 대기', 'In Progress') : t('검토 필요', 'Needs Review')}
             </span>
-            <span className="text-xs text-slate-400">{t('일반 3건', '3 Normal')}</span>
           </div>
           <div className="pt-3 border-t border-slate-100 flex items-center justify-between">
-            <span className="text-xs text-slate-500">{t('결재 대기 문서', 'Waiting approvals')}</span>
+            <span className="text-xs text-slate-500">{t('결재 처리 평균 2.4시간', 'Avg. 2.4 hrs')}</span>
             <Link
               href="/approval"
-              className="text-xs font-semibold text-primary-container hover:text-blue-700 flex items-center gap-1 group"
+              className="text-xs font-semibold text-primary-container hover:underline flex items-center gap-0.5"
             >
-              <span>{t('결재함 이동', 'Review Docs')}</span>
-              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+              <span>{t('전자결재 바로가기', 'Approvals')}</span>
+              <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </div>
         </div>
 
-        {/* Card B: Available Annual Leave */}
+        {/* Card B: Remaining Leave Days */}
         <div className="bg-surface-white rounded-xl p-5 border border-slate-200/90 shadow-sm flex flex-col justify-between hover:border-slate-300 transition-all">
           <div className="flex items-center justify-between mb-3">
             <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
@@ -247,11 +338,11 @@ export default function DashboardPage() {
             </span>
           </div>
           <div className="text-xs text-slate-500 flex items-center justify-between">
-            <span>{t('당월 초과근무:', 'Overtime:')}</span>
-            <span className="font-semibold text-slate-700">{t('0시간', '0 hrs')}</span>
+            <span>{t('접속 계정:', 'User:')}</span>
+            <span className="font-semibold text-slate-700">{currentUser.name} ({currentUser.title})</span>
           </div>
           <div className="pt-3 border-t border-slate-100 flex items-center justify-between">
-            <span className="text-xs text-slate-400">211.104.88.24</span>
+            <span className="text-xs text-slate-400 font-mono">211.104.88.24</span>
             <Link
               href="/attendance"
               className="text-xs font-semibold text-slate-600 hover:text-slate-900 flex items-center gap-1"
@@ -288,10 +379,10 @@ export default function DashboardPage() {
                   )}
                 </h2>
                 <p className="text-[11px] text-slate-500 mt-0.5">
-                  {t(
-                    '출석, 지각, 결석, 병결, 조퇴, 무단조퇴, 무단결석 중 선택 후 Confirm 버튼을 누르면 확정됩니다.',
-                    'Select attendance status and click Confirm to submit.'
-                  )}
+                  {currentTeacherInfo?.teacherName ? (
+                    <span>담임: <strong>{currentTeacherInfo.teacherName}</strong> · </span>
+                  ) : null}
+                  <span>출석, 지각, 결석, 병결, 조퇴, 무단조퇴, 무단결석 중 선택 후 Confirm 버튼을 누르면 확정됩니다.</span>
                 </p>
               </div>
             </div>
@@ -300,20 +391,25 @@ export default function DashboardPage() {
             <div className="flex items-center gap-2">
               <select
                 aria-label="학년 선택"
-                className="h-8 px-2.5 text-xs bg-white border border-slate-300 rounded-lg text-slate-800 font-bold focus:ring-1 focus:ring-primary-container"
-                defaultValue="M8"
+                value={selectedGrade}
+                onChange={(e) => setSelectedGrade(e.target.value)}
+                className="h-8 px-2.5 text-xs bg-white border border-slate-300 rounded-lg text-slate-800 font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none"
               >
-                {['T1', 'E1', 'E2', 'E3', 'E4', 'E5', 'M6', 'M7', 'M8', 'H9', 'H10', 'H11', 'H12'].map((g) => (
-                  <option key={g} value={g}>
-                    {g} 학년 {g === 'M8' ? '(담임: 이재원)' : ''}
-                  </option>
-                ))}
+                {SCHOOL_GRADES.map((g) => {
+                  const teacher = GRADE_TEACHER_MAP[g]?.teacherName;
+                  return (
+                    <option key={g} value={g}>
+                      {g} 학년 {teacher ? `(${teacher})` : ''}
+                    </option>
+                  );
+                })}
               </select>
 
               <button
+                type="button"
                 onClick={handleConfirmAttendance}
-                disabled={isConfirming}
-                className="h-8 px-3.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold flex items-center gap-1.5 shadow-sm transition-all"
+                disabled={isConfirming || currentGradeStudents.length === 0}
+                className="h-8 px-3.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white text-xs font-bold flex items-center gap-1.5 shadow-sm transition-all"
               >
                 <CheckCircle2 className="w-3.5 h-3.5" />
                 <span>{isConfirming ? t('확정중...', 'Saving...') : t('오늘 출결 최종 Confirm', 'Confirm Attendance')}</span>
@@ -334,76 +430,87 @@ export default function DashboardPage() {
               <thead>
                 <tr className="bg-slate-100/70 border-b border-slate-200 text-slate-600 font-semibold text-[11px]">
                   <th className="py-2.5 px-3 w-28">{t('학번', 'ID')}</th>
-                  <th className="py-2.5 px-3 w-24">{t('성명', 'Name')}</th>
+                  <th className="py-2.5 px-3 w-40">{t('성명', 'Name')}</th>
                   <th className="py-2.5 px-3 w-16 text-center">{t('학년', 'Grade')}</th>
                   <th className="py-2.5 px-3 text-center">
-                    {t('출결 상태 선택 (7개 항목)', 'Status Options')}
+                    {t('출결 상태 선택 (7개 항목: 출석, 지각, 결석, 병결, 조퇴, 무단조퇴, 무단결석)', 'Status Options')}
                   </th>
                   <th className="py-2.5 px-3 w-48">{t('메모', 'Memo')}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 text-slate-700">
-                {students.map((student) => {
-                  const current = attendanceMap[student.id] || { status: 'PRESENT', comment: '' };
+                {currentGradeStudents.length === 0 ? (
+                  <tr>
+                    <td colSpan={5} className="py-8 text-center text-slate-400">
+                      {t(`[${selectedGrade} 학년] 등록된 학생이 없습니다.`, `No students in ${selectedGrade}.`)}
+                    </td>
+                  </tr>
+                ) : (
+                  currentGradeStudents.map((student) => {
+                    const status = getStudentStatus(student.id);
+                    const comment = getStudentComment(student.id);
 
-                  return (
-                    <tr key={student.id} className="hover:bg-slate-50/70 transition-colors">
-                      <td className="py-2 px-3 font-mono font-semibold text-slate-600 text-xs">
-                        {student.student_no}
-                      </td>
-                      <td className="py-2 px-3">
-                        <div className="font-bold text-slate-900 text-xs">{student.name}</div>
-                      </td>
-                      <td className="py-2 px-3 text-center">
-                        <span className="px-2 py-0.5 rounded bg-blue-50 text-blue-700 border border-blue-200 font-mono font-bold text-xs">
-                          {student.grade}
-                        </span>
-                      </td>
-                      <td className="py-2 px-3">
-                        {/* 7 status buttons */}
-                        <div className="flex flex-wrap items-center justify-center gap-1">
-                          {statusOptions.map((opt) => {
-                            const isSelected = current.status === opt.value;
-                            const label = lang === 'ko' ? opt.labelKo : opt.labelEn;
-                            return (
-                              <button
-                                key={opt.value}
-                                type="button"
-                                onClick={() => handleStatusChange(student.id, opt.value)}
-                                className={`px-2 py-0.5 rounded text-[11px] font-semibold transition-all ${
-                                  isSelected
-                                    ? `${opt.color} shadow-sm scale-105`
-                                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                                }`}
-                              >
-                                {label}
-                              </button>
-                            );
-                          })}
-                        </div>
-                      </td>
-                      <td className="py-2 px-3">
-                        <input
-                          type="text"
-                          value={current.comment}
-                          onChange={(e) => handleCommentChange(student.id, e.target.value)}
-                          placeholder={t('메모 입력', 'Memo')}
-                          className="w-full h-7 px-2 text-xs bg-slate-50 border border-slate-200 rounded text-slate-800"
-                        />
-                      </td>
-                    </tr>
-                  );
-                })}
+                    return (
+                      <tr key={student.id} className="hover:bg-slate-50/70 transition-colors">
+                        <td className="py-2 px-3 font-mono font-semibold text-slate-600 text-xs">
+                          {student.student_no}
+                        </td>
+                        <td className="py-2 px-3">
+                          <div className="font-bold text-slate-900 text-xs">{student.name}</div>
+                        </td>
+                        <td className="py-2 px-3 text-center">
+                          <span className="px-2 py-0.5 rounded bg-blue-50 text-blue-700 border border-blue-200 font-mono font-bold text-xs">
+                            {student.grade}
+                          </span>
+                        </td>
+                        <td className="py-1.5 px-3">
+                          <div className="flex flex-wrap items-center justify-center gap-1">
+                            {statusOptions.map((opt) => {
+                              const isSelected = status === opt.value;
+                              const label = lang === 'ko' ? opt.labelKo : opt.labelEn;
+
+                              return (
+                                <button
+                                  key={opt.value}
+                                  type="button"
+                                  onClick={() => handleStatusChange(student.id, opt.value)}
+                                  className={`px-2 py-0.5 rounded text-[11px] font-semibold transition-all ${
+                                    isSelected
+                                      ? `${opt.color} shadow-xs font-bold scale-105`
+                                      : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                                  }`}
+                                >
+                                  {label}
+                                </button>
+                              );
+                            })}
+                          </div>
+                        </td>
+                        <td className="py-1.5 px-3">
+                          <input
+                            type="text"
+                            value={comment}
+                            onChange={(e) => handleCommentChange(student.id, e.target.value)}
+                            placeholder={t('사유 및 메모 입력', 'Enter note')}
+                            className="w-full h-7 px-2 text-xs bg-slate-50 border border-slate-200 rounded text-slate-800 placeholder-slate-400 focus:bg-white focus:border-primary-container focus:outline-none"
+                          />
+                        </td>
+                      </tr>
+                    );
+                  })
+                )}
               </tbody>
             </table>
           </div>
 
-          <div className="p-3 border-t border-slate-200 bg-slate-50/70 rounded-b-xl flex items-center justify-between text-xs text-slate-600 font-medium">
+          <div className="p-3 border-t border-slate-200 bg-slate-50/70 rounded-b-xl flex flex-wrap items-center justify-between text-xs text-slate-600 font-medium gap-2">
             <div className="flex items-center gap-3">
-              <span>{t('총원: 8명', 'Total: 8')}</span>
-              <span className="text-emerald-700 font-semibold">{t('출석 6', 'Present 6')}</span>
-              <span className="text-amber-700 font-semibold">{t('지각 1', 'Late 1')}</span>
-              <span className="text-sky-700 font-semibold">{t('조퇴 1', 'Early 1')}</span>
+              <span>{t(`[${selectedGrade} 학년 총원: ${stats.total}명]`, `Total: ${stats.total}`)}</span>
+              <span className="text-emerald-700 font-semibold">{t(`출석 ${stats.present}`, `Present ${stats.present}`)}</span>
+              {stats.late > 0 && <span className="text-amber-700 font-semibold">{t(`지각 ${stats.late}`, `Late ${stats.late}`)}</span>}
+              {stats.sick > 0 && <span className="text-indigo-700 font-semibold">{t(`병결 ${stats.sick}`, `Sick ${stats.sick}`)}</span>}
+              {stats.early > 0 && <span className="text-sky-700 font-semibold">{t(`조퇴 ${stats.early}`, `Early ${stats.early}`)}</span>}
+              {stats.absent > 0 && <span className="text-rose-700 font-semibold">{t(`결석 ${stats.absent}`, `Absent ${stats.absent}`)}</span>}
             </div>
             <span className="text-[11px] text-slate-400 font-mono">08:50 (Live)</span>
           </div>

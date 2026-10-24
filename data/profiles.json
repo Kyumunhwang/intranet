@@ -13,7 +13,7 @@
     "primary_role_id": "r2",
     "subject": "교장",
     "employment_status": "ACTIVE",
-    "remaining_leave_days": 15.0,
+    "remaining_leave_days": 15,
     "must_change_password": false,
     "signature_text": "김바울 [전자서명]"
   },
@@ -31,7 +31,7 @@
     "primary_role_id": "r2",
     "subject": "재정실장",
     "employment_status": "ACTIVE",
-    "remaining_leave_days": 15.0,
+    "remaining_leave_days": 15,
     "must_change_password": false,
     "signature_text": "박영희 [전자서명]"
   },
@@ -49,7 +49,7 @@
     "primary_role_id": "r1",
     "subject": "부교장",
     "employment_status": "ACTIVE",
-    "remaining_leave_days": 15.0,
+    "remaining_leave_days": 15,
     "must_change_password": false,
     "signature_text": "김지이 [전자서명]"
   },
@@ -67,9 +67,10 @@
     "primary_role_id": "r1",
     "subject": "교목",
     "employment_status": "ACTIVE",
-    "remaining_leave_days": 15.0,
+    "remaining_leave_days": 15,
     "must_change_password": false,
-    "signature_text": "유찬호 [전자서명]"
+    "signature_text": "유찬호 [전자서명]",
+    "homeroom_grade": "H12"
   },
   {
     "id": "u5",
@@ -85,7 +86,7 @@
     "primary_role_id": "r1",
     "subject": "교감",
     "employment_status": "ACTIVE",
-    "remaining_leave_days": 15.0,
+    "remaining_leave_days": 15,
     "must_change_password": false,
     "signature_text": "황규문 [전자서명]"
   },
@@ -103,7 +104,7 @@
     "primary_role_id": "r2",
     "subject": "재정팀장",
     "employment_status": "ACTIVE",
-    "remaining_leave_days": 15.0,
+    "remaining_leave_days": 15,
     "must_change_password": false,
     "signature_text": "이환희 [전자서명]"
   },
@@ -121,7 +122,7 @@
     "primary_role_id": "r1",
     "subject": "교감",
     "employment_status": "ACTIVE",
-    "remaining_leave_days": 15.0,
+    "remaining_leave_days": 15,
     "must_change_password": false,
     "signature_text": "하지현 [전자서명]"
   },
@@ -139,9 +140,10 @@
     "primary_role_id": "r2",
     "subject": "교사",
     "employment_status": "ACTIVE",
-    "remaining_leave_days": 15.0,
-    "must_change_password": false,
-    "signature_text": "이재원 [전자서명]"
+    "remaining_leave_days": 15,
+    "must_change_password": true,
+    "signature_text": "이재원 [전자서명]",
+    "homeroom_grade": "M8"
   },
   {
     "id": "u9",
@@ -157,7 +159,7 @@
     "primary_role_id": "r4",
     "subject": "교사",
     "employment_status": "ACTIVE",
-    "remaining_leave_days": 15.0,
+    "remaining_leave_days": 15,
     "must_change_password": false,
     "signature_text": "김혜정 [전자서명]"
   },
@@ -175,7 +177,7 @@
     "primary_role_id": "r4",
     "subject": "교사",
     "employment_status": "ACTIVE",
-    "remaining_leave_days": 15.0,
+    "remaining_leave_days": 15,
     "must_change_password": false,
     "signature_text": "평상규 [전자서명]"
   },
@@ -193,7 +195,7 @@
     "primary_role_id": "r4",
     "subject": "행정팀장",
     "employment_status": "ACTIVE",
-    "remaining_leave_days": 15.0,
+    "remaining_leave_days": 15,
     "must_change_password": false,
     "signature_text": "김선경 [전자서명]"
   },
@@ -211,7 +213,7 @@
     "primary_role_id": "r4",
     "subject": "행정",
     "employment_status": "ACTIVE",
-    "remaining_leave_days": 15.0,
+    "remaining_leave_days": 15,
     "must_change_password": false,
     "signature_text": "이주형 [전자서명]"
   },
@@ -229,9 +231,10 @@
     "primary_role_id": "r4",
     "subject": "교사",
     "employment_status": "ACTIVE",
-    "remaining_leave_days": 15.0,
+    "remaining_leave_days": 15,
     "must_change_password": false,
-    "signature_text": "나경식 [전자서명]"
+    "signature_text": "나경식 [전자서명]",
+    "homeroom_grade": "H11"
   },
   {
     "id": "u14",
@@ -247,7 +250,7 @@
     "primary_role_id": "r4",
     "subject": "교사",
     "employment_status": "ACTIVE",
-    "remaining_leave_days": 15.0,
+    "remaining_leave_days": 15,
     "must_change_password": false,
     "signature_text": "진해리 [전자서명]"
   },
@@ -265,9 +268,10 @@
     "primary_role_id": "r4",
     "subject": "교사",
     "employment_status": "ACTIVE",
-    "remaining_leave_days": 15.0,
+    "remaining_leave_days": 15,
     "must_change_password": false,
-    "signature_text": "임그린 [전자서명]"
+    "signature_text": "임그린 [전자서명]",
+    "homeroom_grade": "E2"
   },
   {
     "id": "u16",
@@ -283,9 +287,10 @@
     "primary_role_id": "r4",
     "subject": "교사",
     "employment_status": "ACTIVE",
-    "remaining_leave_days": 15.0,
+    "remaining_leave_days": 15,
     "must_change_password": false,
-    "signature_text": "유윤정 [전자서명]"
+    "signature_text": "유윤정 [전자서명]",
+    "homeroom_grade": "E3"
   },
   {
     "id": "u17",
@@ -301,9 +306,10 @@
     "primary_role_id": "r4",
     "subject": "교사",
     "employment_status": "ACTIVE",
-    "remaining_leave_days": 15.0,
+    "remaining_leave_days": 15,
     "must_change_password": false,
-    "signature_text": "박예진 [전자서명]"
+    "signature_text": "박예진 [전자서명]",
+    "homeroom_grade": "E4"
   },
   {
     "id": "u18",
@@ -319,9 +325,10 @@
     "primary_role_id": "r4",
     "subject": "교사",
     "employment_status": "ACTIVE",
-    "remaining_leave_days": 15.0,
+    "remaining_leave_days": 15,
     "must_change_password": false,
-    "signature_text": "에크남 [전자서명]"
+    "signature_text": "에크남 [전자서명]",
+    "homeroom_grade": "E2"
   },
   {
     "id": "u19",
@@ -337,9 +344,10 @@
     "primary_role_id": "r4",
     "subject": "교사",
     "employment_status": "ACTIVE",
-    "remaining_leave_days": 15.0,
+    "remaining_leave_days": 15,
     "must_change_password": false,
-    "signature_text": "박진희 [전자서명]"
+    "signature_text": "박진희 [전자서명]",
+    "homeroom_grade": "H10"
   },
   {
     "id": "u20",
@@ -355,9 +363,10 @@
     "primary_role_id": "r4",
     "subject": "교사",
     "employment_status": "ACTIVE",
-    "remaining_leave_days": 15.0,
+    "remaining_leave_days": 15,
     "must_change_password": false,
-    "signature_text": "이영은 [전자서명]"
+    "signature_text": "이영은 [전자서명]",
+    "homeroom_grade": "H9"
   },
   {
     "id": "u21",
@@ -373,9 +382,10 @@
     "primary_role_id": "r4",
     "subject": "교사",
     "employment_status": "ACTIVE",
-    "remaining_leave_days": 15.0,
+    "remaining_leave_days": 15,
     "must_change_password": false,
-    "signature_text": "김다니엘 [전자서명]"
+    "signature_text": "김다니엘 [전자서명]",
+    "homeroom_grade": "E5"
   },
   {
     "id": "u22",
@@ -391,9 +401,10 @@
     "primary_role_id": "r4",
     "subject": "교사",
     "employment_status": "ACTIVE",
-    "remaining_leave_days": 15.0,
+    "remaining_leave_days": 15,
     "must_change_password": false,
-    "signature_text": "강소라 [전자서명]"
+    "signature_text": "강소라 [전자서명]",
+    "homeroom_grade": "M7"
   },
   {
     "id": "u23",
@@ -409,7 +420,7 @@
     "primary_role_id": "r4",
     "subject": "행정",
     "employment_status": "ACTIVE",
-    "remaining_leave_days": 15.0,
+    "remaining_leave_days": 15,
     "must_change_password": false,
     "signature_text": "정봉자 [전자서명]"
   },
@@ -427,7 +438,7 @@
     "primary_role_id": "r4",
     "subject": "행정",
     "employment_status": "ACTIVE",
-    "remaining_leave_days": 15.0,
+    "remaining_leave_days": 15,
     "must_change_password": false,
     "signature_text": "김용오 [전자서명]"
   },
@@ -445,9 +456,10 @@
     "primary_role_id": "r4",
     "subject": "교사",
     "employment_status": "ACTIVE",
-    "remaining_leave_days": 15.0,
+    "remaining_leave_days": 15,
     "must_change_password": false,
-    "signature_text": "류미연 [전자서명]"
+    "signature_text": "류미연 [전자서명]",
+    "homeroom_grade": "M6"
   },
   {
     "id": "u26",
@@ -463,7 +475,7 @@
     "primary_role_id": "r4",
     "subject": "파트",
     "employment_status": "ACTIVE",
-    "remaining_leave_days": 0.0,
+    "remaining_leave_days": 0,
     "must_change_password": false,
     "signature_text": "문성환 [전자서명]"
   },
@@ -481,7 +493,7 @@
     "primary_role_id": "r4",
     "subject": "파트",
     "employment_status": "ACTIVE",
-    "remaining_leave_days": 0.0,
+    "remaining_leave_days": 0,
     "must_change_password": false,
     "signature_text": "곽혜미 [전자서명]"
   },
@@ -499,7 +511,7 @@
     "primary_role_id": "r4",
     "subject": "파트",
     "employment_status": "ACTIVE",
-    "remaining_leave_days": 0.0,
+    "remaining_leave_days": 0,
     "must_change_password": false,
     "signature_text": "김성희 [전자서명]"
   },
@@ -517,7 +529,7 @@
     "primary_role_id": "r4",
     "subject": "파트",
     "employment_status": "ACTIVE",
-    "remaining_leave_days": 0.0,
+    "remaining_leave_days": 0,
     "must_change_password": false,
     "signature_text": "김보미 [전자서명]"
   },
@@ -535,7 +547,7 @@
     "primary_role_id": "r4",
     "subject": "파트",
     "employment_status": "ACTIVE",
-    "remaining_leave_days": 0.0,
+    "remaining_leave_days": 0,
     "must_change_password": false,
     "signature_text": "황지선 [전자서명]"
   },
@@ -553,7 +565,7 @@
     "primary_role_id": "r4",
     "subject": "파트",
     "employment_status": "ACTIVE",
-    "remaining_leave_days": 0.0,
+    "remaining_leave_days": 0,
     "must_change_password": false,
     "signature_text": "이은주 [전자서명]"
   },
@@ -571,7 +583,7 @@
     "primary_role_id": "r4",
     "subject": "파트",
     "employment_status": "ACTIVE",
-    "remaining_leave_days": 0.0,
+    "remaining_leave_days": 0,
     "must_change_password": false,
     "signature_text": "김남균 [전자서명]"
   }

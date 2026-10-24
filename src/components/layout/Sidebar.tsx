@@ -33,6 +33,7 @@ import {
   Plus,
 } from 'lucide-react';
 import { useLanguage } from '@/lib/language-context';
+import { useUser } from '@/lib/user-context';
 
 interface AdminSubItem {
   id: string;
@@ -52,11 +53,16 @@ interface AdminNavGroup {
 }
 
 function SidebarNav() {
+  const { isLoggedIn, isLoading } = useUser();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const currentTab = searchParams.get('tab') || 'school-info';
   const currentSub = searchParams.get('sub');
   const { lang, t } = useLanguage();
+
+  if (!isLoggedIn && !isLoading) {
+    return null;
+  }
 
   const isAdminMode = pathname.startsWith('/admin');
 

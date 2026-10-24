@@ -1,5 +1,45 @@
 [
   {
+    "id": "log_1792801365946_rx2f",
+    "actor_id": "u8",
+    "actor_email": "jay.lee@lighthouse.org",
+    "actor_name": "이재원",
+    "action_category": "PASSWORD_RESET",
+    "action_detail": "관리자에 의한 초기 비밀번호 '1234' 리셋 완료 (대상: 이재원 / lis.jaelee@gmail.com)",
+    "client_ip": "211.104.88.24",
+    "created_at": "2026-10-24T00:22:45.947Z"
+  },
+  {
+    "id": "log_1792801360102_qgzm",
+    "actor_id": "u8",
+    "actor_email": "lis.jaelee@gmail.com",
+    "actor_name": "이재원",
+    "action_category": "PASSWORD_RESET",
+    "action_detail": "교직원 본인 비밀번호 변경 완료 (이재원 / lis.jaelee@gmail.com)",
+    "client_ip": "211.104.88.24",
+    "created_at": "2026-10-24T00:22:40.102Z"
+  },
+  {
+    "id": "log_1792801353929_uleu",
+    "actor_id": "u8",
+    "actor_email": "jay.lee@lighthouse.org",
+    "actor_name": "이재원",
+    "action_category": "PASSWORD_RESET",
+    "action_detail": "관리자에 의한 초기 비밀번호 '1234' 리셋 완료 (대상: 이재원 / lis.jaelee@gmail.com)",
+    "client_ip": "211.104.88.24",
+    "created_at": "2026-10-24T00:22:33.929Z"
+  },
+  {
+    "id": "log_1792801338687_6ers",
+    "actor_id": "u8",
+    "actor_email": "lis.jaelee@gmail.com",
+    "actor_name": "이재원",
+    "action_category": "AUTH_LOGIN",
+    "action_detail": "교직원 인트라넷 로그인 성공 (이재원 / 교사)",
+    "client_ip": "211.104.88.24",
+    "created_at": "2026-10-24T00:22:18.687Z"
+  },
+  {
     "id": "log_20261024_001",
     "actor_id": "u8",
     "actor_email": "jay.lee@lighthouse.org",

@@ -14,6 +14,7 @@ import {
   Languages,
   User,
   ChevronDown,
+  KeyRound,
 } from 'lucide-react';
 import { useLanguage } from '@/lib/language-context';
 import { useUser, UserRole, USERS } from '@/lib/user-context';
@@ -37,7 +38,7 @@ export default function Header({ currentIp = '211.104.88.24', isSchoolIp = true 
   const [showUserDropdown, setShowUserDropdown] = useState(false);
 
   const { lang, toggleLang, t } = useLanguage();
-  const { currentUser, setCurrentUserRole } = useUser();
+  const { currentUser, setCurrentUserRole, logout, setIsPasswordModalOpen } = useUser();
 
   const handleAttendanceClick = async (action: 'CHECK_IN' | 'CHECK_OUT') => {
     try {
@@ -199,31 +200,65 @@ export default function Header({ currentIp = '211.104.88.24', isSchoolIp = true 
 
           {/* User Switch Menu */}
           {showUserDropdown && (
-            <div className="absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-xl border border-slate-200 py-1.5 z-50 animate-fade-in text-xs">
-              <div className="px-3 py-1.5 border-b border-slate-100 text-[11px] font-bold text-slate-500 uppercase">
-                {t('로그인 사용자 계정 전환', 'Switch User Account')}
+            <div className="absolute right-0 mt-2 w-72 bg-white rounded-2xl shadow-2xl border border-slate-200 py-2 z-50 animate-fade-in text-xs">
+              <div className="px-4 py-2 border-b border-slate-100">
+                <div className="font-bold text-slate-900 text-sm">{currentUser.name}</div>
+                <div className="text-[11px] text-slate-500 font-mono">{currentUser.email}</div>
+                <div className="text-[10px] text-blue-700 font-semibold mt-0.5">{currentUser.title} · {currentUser.dept}부</div>
               </div>
-              {rolesList.map((item) => (
+
+              <div className="p-1.5 border-b border-slate-100 space-y-1">
                 <button
-                  key={item.role}
                   type="button"
                   onClick={() => {
-                    setCurrentUserRole(item.role);
                     setShowUserDropdown(false);
+                    setIsPasswordModalOpen(true);
                   }}
-                  className={`w-full px-3 py-2 text-left flex items-center justify-between hover:bg-slate-50 transition-colors ${
-                    currentUser.role === item.role ? 'bg-blue-50/60 font-bold text-blue-700' : 'text-slate-700'
-                  }`}
+                  className="w-full px-3 py-2 text-left rounded-lg hover:bg-slate-50 flex items-center gap-2 text-slate-700 font-medium transition-colors"
                 >
-                  <div>
-                    <div className="text-xs">{item.label}</div>
-                    <div className="text-[10px] text-slate-400">{item.desc}</div>
-                  </div>
-                  {currentUser.role === item.role && (
-                    <CheckCircle2 className="w-3.5 h-3.5 text-blue-600" />
-                  )}
+                  <KeyRound className="w-3.5 h-3.5 text-amber-600" />
+                  <span>{t('비밀번호 변경', 'Change Password')}</span>
                 </button>
-              ))}
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowUserDropdown(false);
+                    logout();
+                  }}
+                  className="w-full px-3 py-2 text-left rounded-lg hover:bg-rose-50 flex items-center gap-2 text-rose-700 font-medium transition-colors"
+                >
+                  <LogOut className="w-3.5 h-3.5 text-rose-600" />
+                  <span>{t('로그아웃', 'Sign Out')}</span>
+                </button>
+              </div>
+
+              <div className="px-3 pt-2 pb-1 text-[10px] font-bold text-slate-400 uppercase">
+                {t('테스트 계정 전환', 'Switch Test Account')}
+              </div>
+              <div className="px-1.5 space-y-0.5">
+                {rolesList.map((item) => (
+                  <button
+                    key={item.role}
+                    type="button"
+                    onClick={() => {
+                      setCurrentUserRole(item.role);
+                      setShowUserDropdown(false);
+                    }}
+                    className={`w-full px-2.5 py-1.5 text-left rounded-lg flex items-center justify-between hover:bg-slate-50 transition-colors ${
+                      currentUser.role === item.role ? 'bg-blue-50/70 font-bold text-blue-700' : 'text-slate-700'
+                    }`}
+                  >
+                    <div>
+                      <div className="text-xs">{item.label}</div>
+                      <div className="text-[10px] text-slate-400">{item.desc}</div>
+                    </div>
+                    {currentUser.role === item.role && (
+                      <CheckCircle2 className="w-3.5 h-3.5 text-blue-600" />
+                    )}
+                  </button>
+                ))}
+              </div>
             </div>
           )}
         </div>

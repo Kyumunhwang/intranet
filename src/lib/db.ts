@@ -546,8 +546,86 @@ export function processApprovalStep(params: {
 }
 
 // -------------------------------------------------------------
-// 5. Password Reset 1234 & Admin HR (1_db_antigravity.md 핵심 로직 ①)
+// 5. Password Reset 1234 & Auth (1_db_antigravity.md 핵심 로직 ①)
 // -------------------------------------------------------------
+export function getPasswords(): Record<string, string> {
+  return readJson<Record<string, string>>('passwords.json', {});
+}
+
+export function savePasswords(passwords: Record<string, string>): void {
+  writeJson('passwords.json', passwords);
+}
+
+export function verifyLogin(email: string, passwordAttempt: string): { success: boolean; message: string; profile?: Profile } {
+  const cleanEmail = (email || '').trim().toLowerCase();
+  const profiles = getProfiles();
+  const profile = profiles.find((p) => p.email && p.email.toLowerCase() === cleanEmail);
+
+  if (!profile) {
+    return { success: false, message: '등록되지 않은 교직원 이메일입니다.' };
+  }
+
+  const passwords = getPasswords();
+  const correctPassword = passwords[cleanEmail] || '1234';
+
+  if (passwordAttempt !== correctPassword) {
+    return { success: false, message: '비밀번호가 일치하지 않습니다. (초기 비밀번호: 1234)' };
+  }
+
+  logAuditAction({
+    actor_id: profile.id,
+    actor_email: profile.email,
+    actor_name: profile.name_kr,
+    action_category: 'AUTH_LOGIN',
+    action_detail: `교직원 인트라넷 로그인 성공 (${profile.name_kr} / ${profile.subject || ''})`,
+    client_ip: '211.104.88.24',
+  });
+
+  return { success: true, message: `${profile.name_kr}님 로그인 성공`, profile };
+}
+
+export function changeTeacherPassword(
+  email: string,
+  oldPass: string,
+  newPass: string
+): { success: boolean; message: string } {
+  const cleanEmail = (email || '').trim().toLowerCase();
+  const profiles = getProfiles();
+  const profile = profiles.find((p) => p.email && p.email.toLowerCase() === cleanEmail);
+
+  if (!profile) {
+    return { success: false, message: '교직원 계정을 찾을 수 없습니다.' };
+  }
+
+  const passwords = getPasswords();
+  const currentPass = passwords[cleanEmail] || '1234';
+
+  if (oldPass !== currentPass) {
+    return { success: false, message: '현재 비밀번호가 일치하지 않습니다.' };
+  }
+
+  if (!newPass || newPass.trim().length < 4) {
+    return { success: false, message: '새 비밀번호는 최소 4자 이상 입력해 주십시오.' };
+  }
+
+  passwords[cleanEmail] = newPass.trim();
+  savePasswords(passwords);
+
+  profile.must_change_password = false;
+  writeJson('profiles.json', profiles);
+
+  logAuditAction({
+    actor_id: profile.id,
+    actor_email: profile.email,
+    actor_name: profile.name_kr,
+    action_category: 'PASSWORD_RESET',
+    action_detail: `교직원 본인 비밀번호 변경 완료 (${profile.name_kr} / ${profile.email})`,
+    client_ip: '211.104.88.24',
+  });
+
+  return { success: true, message: '비밀번호가 성공적으로 변경되었습니다.' };
+}
+
 export function resetTeacherPasswordTo1234(teacherId: string): { success: boolean; message: string } {
   const profiles = getProfiles();
   const target = profiles.find((p) => p.id === teacherId);
@@ -556,6 +634,12 @@ export function resetTeacherPasswordTo1234(teacherId: string): { success: boolea
   }
   target.must_change_password = true;
   writeJson('profiles.json', profiles);
+
+  const passwords = getPasswords();
+  if (target.email) {
+    passwords[target.email.toLowerCase()] = '1234';
+    savePasswords(passwords);
+  }
 
   logAuditAction({
     action_category: 'PASSWORD_RESET',
