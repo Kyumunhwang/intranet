@@ -1,5 +1,15 @@
 [
   {
+    "id": "log_1792814338608_bzuc",
+    "actor_id": "u8",
+    "actor_email": "jay.lee@lighthouse.org",
+    "actor_name": "이재원",
+    "action_category": "ADMIN_CHANGE",
+    "action_detail": "근태 기초 설정 및 요일/방학 근무시간 변경 [금요일: 17:00:00, 방학모드: 비활성]",
+    "client_ip": "211.104.88.24",
+    "created_at": "2026-10-24T03:58:58.608Z"
+  },
+  {
     "id": "log_1792813122360_61zo",
     "actor_id": "u5",
     "actor_email": "kyumun.hwang@gmail.com",

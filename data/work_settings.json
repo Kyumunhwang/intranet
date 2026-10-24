@@ -10,6 +10,20 @@
       "THU",
       "FRI"
     ],
-    "require_school_ip_for_attendance": true
+    "require_school_ip_for_attendance": true,
+    "day_end_times": {
+      "MON": "16:30:00",
+      "TUE": "16:30:00",
+      "WED": "16:30:00",
+      "THU": "16:30:00",
+      "FRI": "17:00:00"
+    },
+    "is_vacation_mode": false,
+    "vacation_start_time": "09:00:00",
+    "vacation_end_time": "17:00:00",
+    "vacation_period": {
+      "start": "2026-07-20",
+      "end": "2026-08-25"
+    }
   }
 ]

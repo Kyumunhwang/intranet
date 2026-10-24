@@ -129,6 +129,42 @@ export function getTeacherMultiRoles(teacherId?: string): TeacherMultiRole[] {
   return teacherId ? list.filter((r) => r.teacher_id === teacherId) : list;
 }
 
+export function getWorkSettings(): WorkSettings {
+  const list = readJson<WorkSettings[]>('work_settings.json', []);
+  return (
+    list[0] || {
+      id: 'ws1',
+      work_start_time: '08:30:00',
+      work_end_time: '16:30:00',
+      working_days: ['MON', 'TUE', 'WED', 'THU', 'FRI'],
+      require_school_ip_for_attendance: true,
+      day_end_times: {
+        MON: '16:30:00',
+        TUE: '16:30:00',
+        WED: '16:30:00',
+        THU: '16:30:00',
+        FRI: '17:00:00',
+      },
+      is_vacation_mode: false,
+      vacation_start_time: '09:00:00',
+      vacation_end_time: '17:00:00',
+      vacation_period: { start: '2026-07-20', end: '2026-08-25' },
+    }
+  );
+}
+
+export function updateWorkSettings(data: Partial<WorkSettings>): WorkSettings {
+  const current = getWorkSettings();
+  const updated = { ...current, ...data };
+  writeJson('work_settings.json', [updated]);
+  logAuditAction({
+    action_category: 'ADMIN_CHANGE',
+    action_detail: `근태 기초 설정 및 요일/방학 근무시간 변경 [금요일: ${updated.day_end_times?.FRI || '17:00'}, 방학모드: ${updated.is_vacation_mode ? '활성 (09:00~17:00)' : '비활성'}]`,
+    client_ip: '211.104.88.24',
+  });
+  return updated;
+}
+
 // -------------------------------------------------------------
 // 2. IP Verification & Attendance Logic (1_db_antigravity.md 핵심 로직 ②)
 // -------------------------------------------------------------

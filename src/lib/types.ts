@@ -94,6 +94,11 @@ export interface WorkSettings {
   work_end_time: string;
   working_days: string[];
   require_school_ip_for_attendance: boolean;
+  day_end_times?: Record<string, string>;
+  is_vacation_mode?: boolean;
+  vacation_start_time?: string;
+  vacation_end_time?: string;
+  vacation_period?: { start: string; end: string };
 }
 
 export interface StaffAttendance {

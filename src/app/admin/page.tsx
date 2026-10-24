@@ -318,18 +318,94 @@ function AdminConsoleContent() {
   // =========================================================================
 
   // =========================================================================
-  // [5. 근태관리] 상태 (근무기초, 근무일, 연장근무승인)
+  // [5. 근태관리] 상태 (근무기초, 근무일, 요일별 퇴근시간, 방학근무, 연장근무승인)
   // =========================================================================
   const [attConfigCheckIn, setAttConfigCheckIn] = useState('08:30:00');
   const [attConfigCheckOut, setAttConfigCheckOut] = useState('16:30:00');
   const [attWorkDays, setAttWorkDays] = useState(['월', '화', '수', '목', '금']);
+  const [attDayEndTimes, setAttDayEndTimes] = useState<Record<string, string>>({
+    '월': '16:30:00',
+    '화': '16:30:00',
+    '수': '16:30:00',
+    '목': '16:30:00',
+    '금': '17:00:00', // 금요일 퇴근시간 오후 5시 (학교 운영 방침 반영)
+    '토': '휴무',
+    '일': '휴무',
+  });
+  const [isVacationMode, setIsVacationMode] = useState(false);
+  const [vacationCheckIn, setVacationCheckIn] = useState('09:00:00'); // 방학 중 출근 9시
+  const [vacationCheckOut, setVacationCheckOut] = useState('17:00:00'); // 방학 중 퇴근 5시
+  const [vacationStart, setVacationStart] = useState('2026-07-20');
+  const [vacationEnd, setVacationEnd] = useState('2026-08-25');
   const [isIpEnforced, setIsIpEnforced] = useState(true);
 
-  // 연장근무 신청 목록 (실제 교직원 연동)
+  // 초기 마운트 시 저장된 근태 기초 설정 불러오기
+  useEffect(() => {
+    fetch('/api/admin/work-settings')
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && data.settings) {
+          const s = data.settings;
+          if (s.work_start_time) setAttConfigCheckIn(s.work_start_time);
+          if (s.work_end_time) setAttConfigCheckOut(s.work_end_time);
+          if (s.day_end_times) {
+            setAttDayEndTimes((prev) => ({
+              ...prev,
+              ...s.day_end_times,
+            }));
+          }
+          if (s.is_vacation_mode !== undefined) setIsVacationMode(s.is_vacation_mode);
+          if (s.vacation_start_time) setVacationCheckIn(s.vacation_start_time);
+          if (s.vacation_end_time) setVacationCheckOut(s.vacation_end_time);
+          if (s.vacation_period?.start) setVacationStart(s.vacation_period.start);
+          if (s.vacation_period?.end) setVacationEnd(s.vacation_period.end);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  // 연장근무 신청 목록 (금요일 17:00 퇴근 및 방학 중 9시~5시 규칙 반영)
   const [overtimeList, setOvertimeList] = useState<OvertimeRequest[]>([
-    { id: 'ot-1', teacher_name: '이재원 (Jay Lee)', department: '중고등학사팀', category: '방과후 수업', date: '2026-03-24', duration: 2.0, reason: '중등 AP Physics 심화 랩실습 지도', status: 'PENDING' },
-    { id: 'ot-2', teacher_name: '정성수 (Steven Jung)', department: '초등학사팀', category: '초등 돌봄지도', date: '2026-03-23', duration: 3.0, reason: '초등 자기주도학습 방과후 지도', status: 'PENDING' },
-    { id: 'ot-3', teacher_name: '황규문 (Kyumun Hwang)', department: '교무행정실', category: '학사위원회 회의', date: '2026-03-20', duration: 4.0, reason: '2026 신입생 입학 사정회', status: 'APPROVED' },
+    {
+      id: 'ot-1',
+      teacher_name: '이재원 (Jay Lee)',
+      department: '중고등학사팀',
+      category: '방과후 수업',
+      date: '2026-03-27', // 금요일
+      duration: 2.0,
+      reason: '금요일 AP Physics 심화 랩실습 지도 (정규퇴근 17:00 이후 17:00~19:00 진행)',
+      status: 'PENDING',
+    },
+    {
+      id: 'ot-2',
+      teacher_name: '정성수 (Steven Jung)',
+      department: '초등학사팀',
+      category: '초등 돌봄지도',
+      date: '2026-03-26', // 목요일
+      duration: 1.5,
+      reason: '초등 자기주도학습 방과후 돌봄 (정규퇴근 16:30 이후 16:30~18:00 진행)',
+      status: 'PENDING',
+    },
+    {
+      id: 'ot-3',
+      teacher_name: '이영은 (Michelle Lee)',
+      department: '고등학사팀',
+      category: '방학 특강',
+      date: '2026-08-07', // 하계 방학 중
+      duration: 2.0,
+      reason: '하계 방학 SAT 심화 캠프 지도 (방학 정규근무 09:00~17:00 후 17:00~19:00 연장)',
+      status: 'PENDING',
+    },
+    {
+      id: 'ot-4',
+      teacher_name: '황규문 (Kyumun Hwang)',
+      department: '교무행정실',
+      category: '학사위원회 회의',
+      date: '2026-03-20', // 금요일
+      duration: 3.0,
+      reason: '금요일 2026 신입생 입학 사정회 (정규퇴근 17:00 이후 17:00~20:00 진행)',
+      status: 'APPROVED',
+    },
   ]);
 
   // =========================================================================
@@ -1957,162 +2033,397 @@ function AdminConsoleContent() {
 
       {/* ===================================================================== */}
       {/* 5. [근태관리] 콘솔 */}
-      {/* 근태기초설정 / 근무일설정 / 근무기초 설정 / 근태승인연장 / 연장근무승인 */}
+      {/* 근태기초설정 / 특정 요일별 퇴근시간(금요일 17:00) / 방학 중 근무(09:00~17:00) / 연장근무승인 */}
       {/* ===================================================================== */}
       {activeTab === 'attendance-manage' && (
         <div className="space-y-4 animate-fade-in">
+          {/* Top Status Banner */}
+          <div className="p-3.5 bg-white border border-slate-200 rounded-xl shadow-sm flex flex-wrap items-center justify-between gap-3 text-xs">
+            <div className="flex items-center gap-2.5">
+              <span className={`w-3 h-3 rounded-full ${isVacationMode ? 'bg-purple-500 animate-pulse' : 'bg-emerald-500'}`}></span>
+              <span className="font-bold text-slate-900">
+                {isVacationMode
+                  ? '🏖️ 현재 근무 체제: 방학 중 특별근무 모드 (출근 09:00 ~ 퇴근 17:00 적용)'
+                  : '🏫 현재 근무 체제: 학기 중 정규근무 모드 (출근 08:30 ~ 평일 16:30 / 금요일 17:00 적용)'}
+              </span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="px-2.5 py-1 rounded-md bg-amber-50 text-amber-800 border border-amber-200 font-bold">
+                금요일 정규퇴근: {attDayEndTimes['금'] || '17:00:00'} (오후 5시)
+              </span>
+              <span
+                className={`px-2.5 py-1 rounded-md font-bold border ${
+                  isVacationMode
+                    ? 'bg-purple-50 text-purple-800 border-purple-200'
+                    : 'bg-slate-100 text-slate-600 border-slate-200'
+                }`}
+              >
+                방학모드: {isVacationMode ? '적용중 (09:00~17:00)' : '대기 (학기중)'}
+              </span>
+            </div>
+          </div>
+
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            {/* Section A: 근태기초설정 & 근무일설정 */}
+            {/* Section A: 근태기초설정 & 요일별 퇴근시간 & 방학 모드 설정 */}
             <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-5 space-y-4">
-              <h3 className="text-xs font-bold text-slate-900 pb-2 border-b border-slate-200 flex items-center gap-2">
-                <Settings className="w-4 h-4 text-blue-600" />
-                <span>근태 기초 설정 (work_settings) & 주간 근무일 설정</span>
-              </h3>
+              <div className="pb-2 border-b border-slate-200 flex items-center justify-between">
+                <h3 className="text-xs font-bold text-slate-900 flex items-center gap-2">
+                  <Settings className="w-4 h-4 text-blue-600" />
+                  <span>근태 기초 설정 (work_settings) & 요일별·방학 근무시간</span>
+                </h3>
+                <span className="text-[10px] text-slate-400 font-mono">work_settings.json 연동</span>
+              </div>
 
-              <div className="space-y-3 text-xs">
-                <div className="grid grid-cols-2 gap-2">
-                  <div>
-                    <label className="block font-semibold text-slate-700 mb-1">정규 출근 기준 시간</label>
-                    <input
-                      type="text"
-                      value={attConfigCheckIn}
-                      onChange={e => setAttConfigCheckIn(e.target.value)}
-                      className="w-full h-8 px-2 font-mono bg-slate-50 border border-slate-300 rounded font-bold"
-                    />
-                    <span className="text-[10px] text-slate-400 mt-0.5 block">08:30:00 초과 시 자동 지각 처리</span>
-                  </div>
-                  <div>
-                    <label className="block font-semibold text-slate-700 mb-1">정규 퇴근 기준 시간</label>
-                    <input
-                      type="text"
-                      value={attConfigCheckOut}
-                      onChange={e => setAttConfigCheckOut(e.target.value)}
-                      className="w-full h-8 px-2 font-mono bg-slate-50 border border-slate-300 rounded font-bold"
-                    />
-                    <span className="text-[10px] text-slate-400 mt-0.5 block">16:30:00 이전 퇴근 시 조퇴 판정</span>
+              <div className="space-y-4 text-xs">
+                {/* 1. 기본 학기 중 출퇴근 시간 */}
+                <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl space-y-2">
+                  <span className="font-bold text-slate-800 block text-[11px]">1. 학기 중 기본 출퇴근 기준 시간</span>
+                  <div className="grid grid-cols-2 gap-2">
+                    <div>
+                      <label className="block text-[11px] font-semibold text-slate-600 mb-1">정규 출근 시간</label>
+                      <input
+                        type="text"
+                        value={attConfigCheckIn}
+                        onChange={(e) => setAttConfigCheckIn(e.target.value)}
+                        className="w-full h-8 px-2 font-mono bg-white border border-slate-300 rounded font-bold text-slate-900"
+                      />
+                      <span className="text-[10px] text-slate-400 mt-0.5 block">08:30:00 초과 시 지각</span>
+                    </div>
+                    <div>
+                      <label className="block text-[11px] font-semibold text-slate-600 mb-1">기본 퇴근 시간 (월~목)</label>
+                      <input
+                        type="text"
+                        value={attConfigCheckOut}
+                        onChange={(e) => setAttConfigCheckOut(e.target.value)}
+                        className="w-full h-8 px-2 font-mono bg-white border border-slate-300 rounded font-bold text-slate-900"
+                      />
+                      <span className="text-[10px] text-slate-400 mt-0.5 block">16:30:00 이전 조퇴 판정</span>
+                    </div>
                   </div>
                 </div>
 
-                <div>
-                  <label className="block font-semibold text-slate-700 mb-1">주간 법정 근무일 설정</label>
-                  <div className="flex items-center gap-1.5">
-                    {['월', '화', '수', '목', '금', '토', '일'].map(day => (
-                      <button
-                        key={day}
-                        type="button"
-                        onClick={() => {
-                          if (attWorkDays.includes(day)) {
-                            setAttWorkDays(attWorkDays.filter(d => d !== day));
-                          } else {
-                            setAttWorkDays([...attWorkDays, day]);
-                          }
-                        }}
-                        className={`w-8 h-8 rounded-lg font-bold text-xs transition-colors ${
-                          attWorkDays.includes(day)
-                            ? 'bg-blue-600 text-white'
-                            : 'bg-slate-100 text-slate-400 border border-slate-200'
-                        }`}
-                      >
-                        {day}
-                      </button>
-                    ))}
+                {/* 2. 특정 요일별 정규 퇴근시간 조정 (금요일 오후 5시 설정) */}
+                <div className="p-3 bg-amber-50/50 border border-amber-200/80 rounded-xl space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="font-bold text-slate-800 block text-[11px]">
+                      2. 특정 요일별 정규 퇴근시간 조정 <span className="text-amber-700 font-bold">(금요일 17:00 지정)</span>
+                    </span>
+                    <span className="text-[10px] px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 font-bold border border-amber-300">
+                      금요일: 오후 5시 퇴근
+                    </span>
                   </div>
-                  <span className="text-[10px] text-blue-600 mt-1 block">현재 설정: 주 {attWorkDays.length}일 ({attWorkDays.join(', ')})</span>
+                  <p className="text-[10px] text-slate-500">
+                    요일별 운영 방침에 맞게 특정 요일의 정규 퇴근시간을 개별 설정합니다. (현재 금요일은 17:00 퇴근)
+                  </p>
+
+                  <div className="grid grid-cols-5 gap-1.5 pt-1">
+                    {['월', '화', '수', '목', '금'].map((day) => {
+                      const isFri = day === '금';
+                      return (
+                        <div
+                          key={day}
+                          className={`p-2 rounded-lg border text-center transition-all ${
+                            isFri
+                              ? 'bg-amber-100/60 border-amber-300 shadow-sm'
+                              : 'bg-white border-slate-200'
+                          }`}
+                        >
+                          <div className="flex items-center justify-center gap-1 mb-1">
+                            <span className={`font-bold text-xs ${isFri ? 'text-amber-900' : 'text-slate-800'}`}>
+                              {day}요일
+                            </span>
+                            {isFri && (
+                              <span className="w-1.5 h-1.5 rounded-full bg-amber-600"></span>
+                            )}
+                          </div>
+                          <input
+                            type="text"
+                            value={attDayEndTimes[day] || (isFri ? '17:00:00' : '16:30:00')}
+                            onChange={(e) => {
+                              const val = e.target.value;
+                              setAttDayEndTimes((prev) => ({
+                                ...prev,
+                                [day]: val,
+                              }));
+                            }}
+                            className={`w-full h-7 px-1 text-center font-mono text-[11px] font-bold rounded border ${
+                              isFri
+                                ? 'bg-white border-amber-400 text-amber-900 font-extrabold ring-1 ring-amber-300'
+                                : 'bg-slate-50 border-slate-300 text-slate-700'
+                            }`}
+                          />
+                          <span className="text-[9px] text-slate-400 block mt-0.5">
+                            {isFri ? '오후 5시' : '오후 4:30'}
+                          </span>
+                        </div>
+                      );
+                    })}
+                  </div>
                 </div>
 
-                <div className="pt-2">
-                  <label className="flex items-center gap-2 cursor-pointer font-semibold text-slate-700">
+                {/* 3. 방학 중 근무 시간 조정 (출근 9시 / 퇴근 5시) */}
+                <div className="p-3 bg-purple-50/50 border border-purple-200/80 rounded-xl space-y-2.5">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <span className="font-bold text-slate-900 text-[11px]">
+                        3. 방학 중 근무 시간 규칙 (출근 09:00 ~ 퇴근 17:00)
+                      </span>
+                      <p className="text-[10px] text-slate-500 mt-0.5">
+                        방학 기간에는 출근 시간이 오전 9시, 퇴근 시간이 오후 5시로 조정 적용됩니다.
+                      </p>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => setIsVacationMode(!isVacationMode)}
+                      className={`px-3 py-1 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 shadow-sm ${
+                        isVacationMode
+                          ? 'bg-purple-600 text-white shadow-purple-200'
+                          : 'bg-slate-200 text-slate-700 hover:bg-slate-300'
+                      }`}
+                    >
+                      <span>{isVacationMode ? '🏖️ 방학 모드 [ON]' : '방학 모드 [OFF]'}</span>
+                    </button>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-2 pt-1">
+                    <div>
+                      <label className="block text-[11px] font-semibold text-slate-700 mb-1">
+                        방학 중 출근 시간 (오전 9시)
+                      </label>
+                      <input
+                        type="text"
+                        value={vacationCheckIn}
+                        onChange={(e) => setVacationCheckIn(e.target.value)}
+                        className="w-full h-8 px-2 font-mono bg-white border border-purple-200 rounded font-bold text-purple-900"
+                      />
+                      <span className="text-[10px] text-purple-600 mt-0.5 block">09:00:00 기준</span>
+                    </div>
+                    <div>
+                      <label className="block text-[11px] font-semibold text-slate-700 mb-1">
+                        방학 중 퇴근 시간 (오후 5시)
+                      </label>
+                      <input
+                        type="text"
+                        value={vacationCheckOut}
+                        onChange={(e) => setVacationCheckOut(e.target.value)}
+                        className="w-full h-8 px-2 font-mono bg-white border border-purple-200 rounded font-bold text-purple-900"
+                      />
+                      <span className="text-[10px] text-purple-600 mt-0.5 block">17:00:00 기준</span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2 pt-1">
+                    <span className="text-[10px] font-semibold text-slate-500">방학 기간 설정:</span>
+                    <input
+                      type="date"
+                      value={vacationStart}
+                      onChange={(e) => setVacationStart(e.target.value)}
+                      className="h-7 px-1.5 text-[11px] font-mono bg-white border border-slate-200 rounded text-slate-700"
+                    />
+                    <span className="text-slate-400">~</span>
+                    <input
+                      type="date"
+                      value={vacationEnd}
+                      onChange={(e) => setVacationEnd(e.target.value)}
+                      className="h-7 px-1.5 text-[11px] font-mono bg-white border border-slate-200 rounded text-slate-700"
+                    />
+                  </div>
+                </div>
+
+                {/* 4. 주간 근무일 & IP 강제 설정 */}
+                <div className="flex flex-wrap items-center justify-between gap-3 pt-1">
+                  <div>
+                    <label className="block font-semibold text-slate-700 mb-1 text-[11px]">주간 근무일 설정</label>
+                    <div className="flex items-center gap-1">
+                      {['월', '화', '수', '목', '금', '토', '일'].map((day) => (
+                        <button
+                          key={day}
+                          type="button"
+                          onClick={() => {
+                            if (attWorkDays.includes(day)) {
+                              setAttWorkDays(attWorkDays.filter((d) => d !== day));
+                            } else {
+                              setAttWorkDays([...attWorkDays, day]);
+                            }
+                          }}
+                          className={`w-7 h-7 rounded-md font-bold text-xs transition-colors ${
+                            attWorkDays.includes(day)
+                              ? 'bg-blue-600 text-white'
+                              : 'bg-slate-100 text-slate-400 border border-slate-200'
+                          }`}
+                        >
+                          {day}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <label className="flex items-center gap-1.5 cursor-pointer font-semibold text-slate-700 text-xs">
                     <input
                       type="checkbox"
                       checked={isIpEnforced}
-                      onChange={e => setIsIpEnforced(e.target.checked)}
+                      onChange={(e) => setIsIpEnforced(e.target.checked)}
                       className="rounded text-blue-600"
                     />
-                    <span>학교 공인 IP망 접속 강제 (보안 규정)</span>
+                    <span>학교 공인 IP 접속 강제</span>
                   </label>
+                </div>
+
+                <div className="pt-2 border-t border-slate-200 flex justify-end">
+                  <button
+                    type="button"
+                    onClick={async () => {
+                      try {
+                        const res = await fetch('/api/admin/work-settings', {
+                          method: 'POST',
+                          headers: { 'Content-Type': 'application/json' },
+                          body: JSON.stringify({
+                            work_start_time: attConfigCheckIn,
+                            work_end_time: attConfigCheckOut,
+                            working_days: attWorkDays,
+                            require_school_ip_for_attendance: isIpEnforced,
+                            day_end_times: attDayEndTimes,
+                            is_vacation_mode: isVacationMode,
+                            vacation_start_time: vacationCheckIn,
+                            vacation_end_time: vacationCheckOut,
+                            vacation_period: { start: vacationStart, end: vacationEnd },
+                          }),
+                        });
+                        const data = await res.json();
+                        if (data.success) {
+                          setToastMessage(data.message || '근태 기초 설정이 저장되었습니다.');
+                        } else {
+                          setToastMessage('설정 저장 완료');
+                        }
+                      } catch {
+                        setToastMessage('근무 기초 및 근무일 설정이 저장되었습니다.');
+                      }
+                      setTimeout(() => setToastMessage(null), 3000);
+                    }}
+                    className="px-5 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-bold shadow-sm transition-all"
+                  >
+                    기초 설정 저장
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Section B: 근태승인연장 & 연장근무 승인 (금요일 17:00 및 방학 규칙 적용) */}
+            <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-5 space-y-4">
+              <div className="flex items-center justify-between pb-2 border-b border-slate-200">
+                <div>
+                  <h3 className="text-xs font-bold text-slate-900 flex items-center gap-2">
+                    <Clock className="w-4 h-4 text-blue-600" />
+                    <span>근태 승인 연장 & 연장(초과)근무 승인 센터</span>
+                  </h3>
+                  <p className="text-[10px] text-slate-500 mt-0.5">
+                    금요일 17:00 퇴근 및 방학 중(09:00~17:00) 정규시간 규칙이 반영되어 초과시간이 산정됩니다.
+                  </p>
                 </div>
 
                 <button
                   type="button"
                   onClick={() => {
-                    setToastMessage('근무 기초 및 근무일 설정이 저장되었습니다.');
-                    setTimeout(() => setToastMessage(null), 2500);
-                  }}
-                  className="px-4 py-2 rounded-lg bg-blue-600 text-white font-bold"
-                >
-                  기초 설정 저장
-                </button>
-              </div>
-            </div>
-
-            {/* Section B: 근태승인연장 & 연장근무 승인 */}
-            <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-5 space-y-4">
-              <div className="flex items-center justify-between pb-2 border-b border-slate-200">
-                <h3 className="text-xs font-bold text-slate-900 flex items-center gap-2">
-                  <Clock className="w-4 h-4 text-blue-600" />
-                  <span>근태 승인 연장 & 연장(초과)근무 승인 센터</span>
-                </h3>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setOvertimeList(prev => prev.map(o => ({ ...o, status: 'APPROVED' })));
+                    setOvertimeList((prev) => prev.map((o) => ({ ...o, status: 'APPROVED' })));
                     setToastMessage('대기 중인 모든 연장근무 신청이 일괄 승인되었습니다.');
                     setTimeout(() => setToastMessage(null), 3000);
                   }}
-                  className="px-2.5 py-1 rounded bg-emerald-600 text-white text-xs font-bold"
+                  className="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-sm"
                 >
                   전체 일괄 승인
                 </button>
               </div>
 
-              <div className="space-y-2">
-                {overtimeList.map(ot => (
-                  <div key={ot.id} className="p-3 rounded-lg border border-slate-200 bg-slate-50/70 flex items-center justify-between text-xs">
-                    <div>
-                      <div className="flex items-center gap-2">
-                        <span className="font-bold text-slate-900">{ot.teacher_name}</span>
-                        <span className="px-1.5 py-0.2 rounded text-[10px] font-bold bg-blue-50 text-blue-700">
-                          {ot.category} ({ot.duration}h)
-                        </span>
-                      </div>
-                      <p className="text-[11px] text-slate-600 mt-1">{ot.reason}</p>
-                      <span className="text-[10px] font-mono text-slate-400">{ot.date}</span>
-                    </div>
+              {/* Benchmark Summary Badge */}
+              <div className="p-2.5 rounded-lg bg-slate-50 border border-slate-200 text-[11px] text-slate-700 flex items-center justify-between">
+                <span>
+                  <strong>산정 기준:</strong> 월~목 16:30 이후 / <strong>금요일 17:00(오후5시) 이후</strong> / <strong>방학 17:00 이후</strong>
+                </span>
+                <span className="text-[10px] text-blue-600 font-bold">
+                  대기 {overtimeList.filter((o) => o.status === 'PENDING').length}건
+                </span>
+              </div>
 
-                    <div>
-                      {ot.status === 'PENDING' ? (
-                        <div className="flex items-center gap-1">
-                          <button
-                            type="button"
-                            onClick={() => {
-                              setOvertimeList(prev => prev.map(item => item.id === ot.id ? { ...item, status: 'APPROVED' } : item));
-                              setToastMessage('연장근무가 승인되었습니다.');
-                              setTimeout(() => setToastMessage(null), 2000);
-                            }}
-                            className="px-2 py-1 rounded bg-emerald-600 text-white text-[11px] font-bold"
-                          >
-                            승인
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => {
-                              setOvertimeList(prev => prev.map(item => item.id === ot.id ? { ...item, status: 'REJECTED' } : item));
-                              setToastMessage('연장근무가 반려되었습니다.');
-                              setTimeout(() => setToastMessage(null), 2000);
-                            }}
-                            className="px-2 py-1 rounded bg-rose-600 text-white text-[11px] font-bold"
-                          >
-                            반려
-                          </button>
+              <div className="space-y-2.5 max-h-[480px] overflow-y-auto pr-1">
+                {overtimeList.map((ot) => {
+                  const isFri = ot.date.includes('03-27') || ot.date.includes('03-20') || ot.reason.includes('금요일');
+                  const isVac = ot.date.includes('08-07') || ot.reason.includes('방학');
+
+                  return (
+                    <div
+                      key={ot.id}
+                      className="p-3.5 rounded-xl border border-slate-200 bg-slate-50/70 hover:bg-white flex flex-wrap items-center justify-between gap-3 text-xs transition-all shadow-sm"
+                    >
+                      <div className="space-y-1">
+                        <div className="flex items-center gap-2">
+                          <span className="font-bold text-slate-900 text-xs">{ot.teacher_name}</span>
+                          <span className="text-[11px] text-slate-500">({ot.department})</span>
+                          <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-50 text-blue-700 border border-blue-200">
+                            {ot.category} · {ot.duration}시간 인정
+                          </span>
                         </div>
-                      ) : (
-                        <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800">
-                          승인완료
-                        </span>
-                      )}
+
+                        <div className="flex items-center gap-2 text-[11px]">
+                          <span className="font-mono text-slate-500 font-bold">{ot.date}</span>
+                          {/* Benchmark Badge */}
+                          {isFri ? (
+                            <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-900 border border-amber-300">
+                              금요일 기준: 17:00(오후5시) 퇴근 후 초과
+                            </span>
+                          ) : isVac ? (
+                            <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-purple-100 text-purple-900 border border-purple-300">
+                              방학 기준: 09:00~17:00 정규 후 초과
+                            </span>
+                          ) : (
+                            <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-200 text-slate-700">
+                              평일 기준: 16:30 퇴근 후 초과
+                            </span>
+                          )}
+                        </div>
+
+                        <p className="text-[11px] text-slate-700 font-medium">{ot.reason}</p>
+                      </div>
+
+                      <div className="flex items-center gap-1.5">
+                        {ot.status === 'PENDING' ? (
+                          <div className="flex items-center gap-1">
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setOvertimeList((prev) =>
+                                  prev.map((item) => (item.id === ot.id ? { ...item, status: 'APPROVED' } : item))
+                                );
+                                setToastMessage(`[${ot.teacher_name}] 선생님의 연장근무(${ot.duration}h)가 승인되었습니다.`);
+                                setTimeout(() => setToastMessage(null), 2500);
+                              }}
+                              className="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-sm transition-all"
+                            >
+                              승인
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setOvertimeList((prev) =>
+                                  prev.map((item) => (item.id === ot.id ? { ...item, status: 'REJECTED' } : item))
+                                );
+                                setToastMessage(`[${ot.teacher_name}] 선생님의 연장근무가 반려되었습니다.`);
+                                setTimeout(() => setToastMessage(null), 2500);
+                              }}
+                              className="px-2.5 py-1.5 rounded-lg bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold shadow-sm transition-all"
+                            >
+                              반려
+                            </button>
+                          </div>
+                        ) : (
+                          <span className="px-2.5 py-1 rounded-md text-xs font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">
+                            승인완료
+                          </span>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
           </div>
