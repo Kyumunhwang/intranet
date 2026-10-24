@@ -392,7 +392,14 @@ function AdminConsoleContent() {
   };
 
   const handleDownloadTemplate = () => {
-    setToastMessage('교직원 일괄등록 엑셀 양식 [LGS_Staff_Import_Template.xlsx] 다운로드가 시작되었습니다.');
+    // 현재 DB의 최신 교직원 데이터가 채워진 엑셀 서식 다운로드
+    const link = document.createElement('a');
+    link.href = '/api/admin/staff/export';
+    link.setAttribute('download', `등대글로벌스쿨_교직원DB_Template_${new Date().toISOString().split('T')[0]}.xlsx`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    setToastMessage(`현재 DB 교직원 ${profiles.length}명의 실제 데이터가 포함된 엑셀 서식 다운로드가 시작되었습니다.`);
     setTimeout(() => setToastMessage(null), 3500);
   };
 
