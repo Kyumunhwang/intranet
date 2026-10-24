@@ -271,16 +271,16 @@ function SidebarNav() {
                     href={`/admin?tab=${currentGroup.tabKey}&sub=${sub.subParam}`}
                     className={`flex items-center justify-between px-3 py-2.5 rounded-lg text-xs font-semibold transition-all ${
                       isSubActive
-                        ? 'bg-amber-600 text-white shadow-md border-l-4 border-amber-300 pl-2.5'
+                        ? 'bg-amber-950/50 text-amber-100 border border-amber-800/50 border-l-4 border-l-amber-400 shadow-sm pl-2.5'
                         : 'text-slate-300 hover:text-white hover:bg-slate-800/80'
                     }`}
                   >
                     <div className="flex items-center gap-2.5 min-w-0">
-                      <SubIcon className={`w-3.5 h-3.5 shrink-0 ${isSubActive ? 'text-amber-200' : 'text-slate-400'}`} />
+                      <SubIcon className={`w-3.5 h-3.5 shrink-0 ${isSubActive ? 'text-amber-300' : 'text-slate-400'}`} />
                       <span className="truncate whitespace-nowrap">{sub.labelKo}</span>
                     </div>
                     {isSubActive && (
-                      <span className="w-1.5 h-1.5 rounded-full bg-amber-200 shrink-0"></span>
+                      <span className="w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0"></span>
                     )}
                   </Link>
                 );
@@ -314,18 +314,16 @@ export default function Sidebar() {
   return (
     <aside className="fixed left-0 top-0 h-full w-[260px] bg-sidebar-bg z-50 flex flex-col justify-between border-r border-slate-800 text-slate-300 select-none shadow-xl">
       <div className="flex flex-col flex-1 min-h-0">
-        {/* 상단 로고: 가로형 배너 로고 */}
-        <div className="h-[64px] px-3.5 flex items-center justify-between border-b border-slate-800/80 bg-slate-950/40">
-          <div className="flex items-center gap-2 min-w-0">
-            <div className="h-9 px-2 py-1 bg-white/10 rounded-lg flex items-center justify-center border border-white/15 shrink-0">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/logo/lis_logo_2026.png"
-                alt="등대글로벌스쿨 배너 로고"
-                className="h-full w-auto object-contain filter brightness-110"
-              />
-            </div>
-          </div>
+        {/* 상단 학교 로고: logo1.png 사이즈를 꽉차게 배치 */}
+        <div className="h-[84px] px-3 py-2 flex items-center justify-center border-b border-slate-800/80 bg-slate-950/60">
+          <Link href="/" className="w-full h-full flex items-center justify-center transition-transform hover:scale-[1.02]">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/logo/logo1.png"
+              alt="등대글로벌스쿨 학교 로고"
+              className="w-full h-full max-h-[72px] object-contain drop-shadow-md"
+            />
+          </Link>
         </div>
 
         {/* Navigation Section */}
@@ -336,9 +334,9 @@ export default function Sidebar() {
         </div>
       </div>
 
-      {/* 하단 프로필 섹션: 등대교육공동체 원형 심볼 로고 배치 */}
-      <div className="p-3 border-t border-slate-800/80 bg-slate-950/40 flex items-center justify-between">
-        <div className="flex items-center gap-2.5 overflow-hidden">
+      {/* 하단 프로필 섹션: 등대교육공동체 원형 심볼 + 등대글로벌스쿨 텍스트 대신 등대교육공동체 로고 배치 */}
+      <div className="p-3 border-t border-slate-800/80 bg-slate-950/50 flex items-center justify-between">
+        <div className="flex items-center gap-2.5 overflow-hidden flex-1 min-w-0">
           <div className="w-8 h-8 rounded-full bg-white p-1 flex items-center justify-center shrink-0 border border-slate-600 shadow-sm">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
@@ -347,14 +345,22 @@ export default function Sidebar() {
               className="w-full h-full object-contain"
             />
           </div>
-          <div className="flex flex-col min-w-0">
-            <span className="text-[12px] font-semibold text-slate-200 truncate">등대글로벌스쿨</span>
-            <span className="text-[10px] text-slate-400 font-mono">
+          <div className="flex flex-col min-w-0 flex-1 justify-center">
+            {/* 등대글로벌스쿨 글씨 대신에 등대교육공동체 로고 (보색 대비로 어두운 배경에서 선명하게 노출) */}
+            <div className="flex items-center py-0.5">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/logo/lighthouse_community_white.png"
+                alt="등대교육공동체"
+                className="h-5 w-auto max-w-[145px] object-contain drop-shadow-sm filter brightness-110"
+              />
+            </div>
+            <span className="text-[9px] text-slate-400 font-mono tracking-tight">
               {isAdminMode ? 'Tier-1 Admin Mode' : '2026 Academic Term'}
             </span>
           </div>
         </div>
-        <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0" title="System Online"></div>
+        <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0 ml-1" title="System Online"></div>
       </div>
     </aside>
   );

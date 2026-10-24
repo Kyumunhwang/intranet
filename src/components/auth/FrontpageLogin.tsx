@@ -77,9 +77,9 @@ export default function FrontpageLogin() {
         <div className="flex items-center gap-3">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/logo/lighthouse_logo.png"
+            src="/logo/logo1.png"
             alt="등대글로벌스쿨 로고"
-            className="w-10 h-10 object-contain drop-shadow"
+            className="w-12 h-12 object-contain drop-shadow"
           />
           <div>
             <span className="font-extrabold text-base tracking-tight text-white block">
