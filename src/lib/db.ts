@@ -204,6 +204,11 @@ export function getWorkSettings(): WorkSettings {
       working_days: ['MON', 'TUE', 'WED', 'THU', 'FRI'],
       require_school_ip_for_attendance: true,
       day_end_times: {
+        '월': '16:30:00',
+        '화': '16:30:00',
+        '수': '16:30:00',
+        '목': '16:30:00',
+        '금': '17:00:00',
         MON: '16:30:00',
         TUE: '16:30:00',
         WED: '16:30:00',
@@ -214,20 +219,100 @@ export function getWorkSettings(): WorkSettings {
       vacation_start_time: '09:00:00',
       vacation_end_time: '17:00:00',
       vacation_period: { start: '2026-07-20', end: '2026-08-25' },
+      special_dates: [],
     }
   );
 }
 
 export function updateWorkSettings(data: Partial<WorkSettings>): WorkSettings {
   const current = getWorkSettings();
-  const updated = { ...current, ...data };
+  // 학기 중 기본 퇴근 시간 변경 시 월, 화, 수, 목 자동 연동
+  const updatedDayEndTimes = { ...(current.day_end_times || {}), ...(data.day_end_times || {}) };
+  if (data.work_end_time) {
+    updatedDayEndTimes['월'] = data.work_end_time;
+    updatedDayEndTimes['화'] = data.work_end_time;
+    updatedDayEndTimes['수'] = data.work_end_time;
+    updatedDayEndTimes['목'] = data.work_end_time;
+    updatedDayEndTimes['MON'] = data.work_end_time;
+    updatedDayEndTimes['TUE'] = data.work_end_time;
+    updatedDayEndTimes['WED'] = data.work_end_time;
+    updatedDayEndTimes['THU'] = data.work_end_time;
+  }
+
+  const updated: WorkSettings = {
+    ...current,
+    ...data,
+    day_end_times: updatedDayEndTimes,
+  };
   writeJson('work_settings.json', [updated]);
   logAuditAction({
     action_category: 'ADMIN_CHANGE',
-    action_detail: `근태 기초 설정 및 요일/방학 근무시간 변경 [금요일: ${updated.day_end_times?.FRI || '17:00'}, 방학모드: ${updated.is_vacation_mode ? '활성 (09:00~17:00)' : '비활성'}]`,
+    action_detail: `근태 기초 설정 및 요일/방학/특별일 근무시간 변경 [기본퇴근: ${updated.work_end_time}, 금요일: ${updated.day_end_times?.['금'] || '17:00'}, 특별일: ${updated.special_dates?.length || 0}건]`,
     client_ip: '211.104.88.24',
   });
   return updated;
+}
+
+export function getEffectiveWorkSchedule(dateStr?: string): {
+  work_start_time: string;
+  work_end_time: string;
+  schedule_type: 'SPECIAL_DATE' | 'VACATION' | 'FRIDAY' | 'REGULAR';
+  title?: string;
+} {
+  const ws = getWorkSettings();
+  const targetDate = dateStr || new Date().toISOString().split('T')[0];
+
+  // 1. 특별 지정일 확인 (우선순위 최고)
+  if (ws.special_dates && Array.isArray(ws.special_dates)) {
+    const special = ws.special_dates.find((sd) => sd.date === targetDate);
+    if (special) {
+      return {
+        work_start_time: special.check_in_time || ws.work_start_time || '08:30:00',
+        work_end_time: special.check_out_time,
+        schedule_type: 'SPECIAL_DATE',
+        title: special.title,
+      };
+    }
+  }
+
+  // 2. 방학 모드 확인
+  if (ws.is_vacation_mode) {
+    let inVacation = true;
+    if (ws.vacation_period?.start && ws.vacation_period?.end) {
+      inVacation = targetDate >= ws.vacation_period.start && targetDate <= ws.vacation_period.end;
+    }
+    if (inVacation) {
+      return {
+        work_start_time: ws.vacation_start_time || '09:00:00',
+        work_end_time: ws.vacation_end_time || '17:00:00',
+        schedule_type: 'VACATION',
+        title: '방학 특별 근무 (09:00~17:00)',
+      };
+    }
+  }
+
+  // 3. 요일별 퇴근 시간 (금요일 17:00 등)
+  const d = new Date(targetDate);
+  const dayIndex = d.getDay(); // 0 Sun, 1 Mon, ... 5 Fri, 6 Sat
+  const dayNamesKr = ['일', '월', '화', '수', '목', '금', '토'];
+  const dayKr = dayNamesKr[dayIndex];
+
+  const customEndTime = ws.day_end_times?.[dayKr];
+  if (dayIndex === 5) {
+    return {
+      work_start_time: ws.work_start_time || '08:30:00',
+      work_end_time: customEndTime || '17:00:00',
+      schedule_type: 'FRIDAY',
+      title: '금요일 정규 근무 (오후 5시 퇴근)',
+    };
+  }
+
+  return {
+    work_start_time: ws.work_start_time || '08:30:00',
+    work_end_time: customEndTime || ws.work_end_time || '16:30:00',
+    schedule_type: 'REGULAR',
+    title: '학기 중 정규 근무',
+  };
 }
 
 // -------------------------------------------------------------

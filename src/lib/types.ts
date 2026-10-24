@@ -104,6 +104,14 @@ export interface TeacherMultiRole {
   is_primary: boolean;
 }
 
+export interface SpecialDateSchedule {
+  id: string;
+  date: string; // YYYY-MM-DD
+  check_in_time?: string;
+  check_out_time: string; // e.g. 15:00:00
+  title: string; // e.g. "개교기념일 단축근무", "가을 축제일"
+}
+
 export interface WorkSettings {
   id: string;
   work_start_time: string;
@@ -115,6 +123,7 @@ export interface WorkSettings {
   vacation_start_time?: string;
   vacation_end_time?: string;
   vacation_period?: { start: string; end: string };
+  special_dates?: SpecialDateSchedule[];
 }
 
 export interface StaffAttendance {

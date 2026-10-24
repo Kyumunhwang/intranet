@@ -55,7 +55,7 @@ import {
   FileSpreadsheet,
   ShieldAlert,
 } from 'lucide-react';
-import { Profile, AllowedIP, AuditLog, Department, Position, Role, Student, MenuPermissionItem, ApprovalTemplate } from '@/lib/types';
+import { Profile, AllowedIP, AuditLog, Department, Position, Role, Student, MenuPermissionItem, ApprovalTemplate, SpecialDateSchedule } from '@/lib/types';
 import { useLanguage } from '@/lib/language-context';
 import { useUser } from '@/lib/user-context';
 import rawProfilesData from '../../../data/profiles.json';
@@ -350,6 +350,40 @@ function AdminConsoleContent() {
   const [vacationEnd, setVacationEnd] = useState('2026-08-25');
   const [isIpEnforced, setIsIpEnforced] = useState(true);
 
+  // 특별일 지정 퇴근시간 조정 상태
+  const [specialDates, setSpecialDates] = useState<SpecialDateSchedule[]>([
+    {
+      id: 'sd-1',
+      date: '2026-05-15',
+      check_in_time: '08:30:00',
+      check_out_time: '15:00:00',
+      title: '스승의 날 교직원 위로 행사 단축근무',
+    },
+    {
+      id: 'sd-2',
+      date: '2026-10-23',
+      check_in_time: '08:30:00',
+      check_out_time: '15:30:00',
+      title: '가을 학술제 행사 마무리 조기퇴근',
+    },
+    {
+      id: 'sd-3',
+      date: '2026-12-24',
+      check_in_time: '08:30:00',
+      check_out_time: '14:00:00',
+      title: '성탄 전야 특별 조기퇴근',
+    },
+  ]);
+  const [newSpecialDate, setNewSpecialDate] = useState('2026-11-20');
+  const [newSpecialTime, setNewSpecialTime] = useState('15:00:00');
+  const [newSpecialTitle, setNewSpecialTitle] = useState('');
+
+  // [4. 업무지원] 교직원 전용 필터 상태 (학생 제외 원칙)
+  const [workSupportStaffFilter, setWorkSupportStaffFilter] = useState<'ALL' | '교사' | '행정' | '재정' | '관리자'>('ALL');
+  const [workSupportSearch, setWorkSupportSearch] = useState('');
+  const [workSupportDailyDate, setWorkSupportDailyDate] = useState('2026-10-24');
+  const [workSupportMonth, setWorkSupportMonth] = useState('2026-10');
+
   // 초기 마운트 시 저장된 근태 기초 설정 불러오기
   useEffect(() => {
     fetch('/api/admin/work-settings')
@@ -370,6 +404,9 @@ function AdminConsoleContent() {
           if (s.vacation_end_time) setVacationCheckOut(s.vacation_end_time);
           if (s.vacation_period?.start) setVacationStart(s.vacation_period.start);
           if (s.vacation_period?.end) setVacationEnd(s.vacation_period.end);
+          if (s.special_dates && Array.isArray(s.special_dates)) {
+            setSpecialDates(s.special_dates);
+          }
         }
       })
       .catch(() => {});
@@ -411,11 +448,31 @@ function AdminConsoleContent() {
       id: 'ot-4',
       teacher_name: '황규문 (Kyumun Hwang)',
       department: '교무행정실',
-      category: '학사위원회 회의',
+      category: '관리자 회의',
       date: '2026-03-20', // 금요일
       duration: 3.0,
-      reason: '금요일 2026 신입생 입학 사정회 (정규퇴근 17:00 이후 17:00~20:00 진행)',
+      reason: '금요일 2026 신입생 입학 사정회 및 교무위원회 (정규퇴근 17:00 이후 17:00~20:00 진행)',
       status: 'APPROVED',
+    },
+    {
+      id: 'ot-5',
+      teacher_name: '박영희 (Esther Kim)',
+      department: '재정관리팀',
+      category: '재정 마감',
+      date: '2026-03-31', // 화요일
+      duration: 2.5,
+      reason: '1분기 학교 회계 결산 및 등록금 수납 전산 마감 (정규퇴근 16:30 이후 16:30~19:00 연장)',
+      status: 'APPROVED',
+    },
+    {
+      id: 'ot-6',
+      teacher_name: '김진우 (Jinwoo Kim)',
+      department: '행정지원팀',
+      category: '행정 지원',
+      date: '2026-04-03', // 금요일
+      duration: 2.0,
+      reason: '행정실 교육기자재 및 실험 비품 전수 실사 (정규퇴근 17:00 이후 17:00~19:00 연장)',
+      status: 'PENDING',
     },
   ]);
 
@@ -862,6 +919,102 @@ function AdminConsoleContent() {
       setToastMessage(`양식 서식 파일 [${file.name}]이 업로드 등록되었습니다.`);
       setTimeout(() => setToastMessage(null), 2500);
     }
+  };
+
+  const getStaffCategory = (p: Profile): '교사' | '행정' | '재정' | '관리자' => {
+    const subj = p.subject || '';
+    if (
+      subj.includes('교장') ||
+      subj.includes('교감') ||
+      p.primary_position_id === 'p1' ||
+      p.primary_position_id === 'p2' ||
+      p.primary_position_id === 'p3' ||
+      p.primary_position_id === 'p4'
+    ) {
+      return '관리자';
+    }
+    if (subj.includes('재정') || p.primary_dept_id === 'd3') {
+      return '재정';
+    }
+    if (subj.includes('행정') || p.primary_dept_id === 'd2') {
+      return '행정';
+    }
+    return '교사';
+  };
+
+  const getDeptNameById = (deptId?: string): string => {
+    const d = departments.find((item) => item.id === deptId);
+    return d ? d.dept_name.split(' (')[0] : '교무기획부';
+  };
+
+  const handleSaveWorkSettings = async () => {
+    // 1. 학기 중 기본 퇴근 기준 시간으로 월, 화, 수, 목 퇴근시간 일괄 동기화 (금요일은 기존 지정 17:00 유지)
+    const updatedDayEndTimes = {
+      ...attDayEndTimes,
+      '월': attConfigCheckOut,
+      '화': attConfigCheckOut,
+      '수': attConfigCheckOut,
+      '목': attConfigCheckOut,
+      '금': attDayEndTimes['금'] || '17:00:00',
+    };
+    setAttDayEndTimes(updatedDayEndTimes);
+
+    try {
+      const res = await fetch('/api/admin/work-settings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          work_start_time: attConfigCheckIn,
+          work_end_time: attConfigCheckOut,
+          working_days: attWorkDays,
+          require_school_ip_for_attendance: isIpEnforced,
+          day_end_times: updatedDayEndTimes,
+          is_vacation_mode: isVacationMode,
+          vacation_start_time: vacationCheckIn,
+          vacation_end_time: vacationCheckOut,
+          vacation_period: { start: vacationStart, end: vacationEnd },
+          special_dates: specialDates,
+        }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setToastMessage(
+          '학기 중 기본 출퇴근(월~목 자동반영), 특별일 지정 퇴근시간 및 방학 설정이 성공적으로 저장되었습니다.'
+        );
+      } else {
+        setToastMessage('설정 저장 완료');
+      }
+    } catch {
+      setToastMessage('근무 기초 및 근무일 설정이 저장되었습니다.');
+    }
+    setTimeout(() => setToastMessage(null), 3500);
+  };
+
+  const handleAddSpecialDate = () => {
+    if (!newSpecialDate || !newSpecialTime.trim() || !newSpecialTitle.trim()) {
+      alert('지정 날짜, 조정 퇴근 시간, 사유를 모두 입력해주세요.');
+      return;
+    }
+    const newEntry: SpecialDateSchedule = {
+      id: `sd-${Date.now()}`,
+      date: newSpecialDate,
+      check_in_time: attConfigCheckIn,
+      check_out_time: newSpecialTime.trim(),
+      title: newSpecialTitle.trim(),
+    };
+    const updated = [...specialDates, newEntry].sort((a, b) => a.date.localeCompare(b.date));
+    setSpecialDates(updated);
+    setNewSpecialTitle('');
+    setToastMessage(
+      `특별일 [${newSpecialDate}] 퇴근 시간(${newSpecialTime})이 등록되었습니다. [기초 설정 저장]을 눌러 전산에 최종 반영하세요.`
+    );
+    setTimeout(() => setToastMessage(null), 3500);
+  };
+
+  const handleDeleteSpecialDate = (id: string) => {
+    setSpecialDates((prev) => prev.filter((item) => item.id !== id));
+    setToastMessage('특별일 퇴근 조정 항목이 삭제되었습니다.');
+    setTimeout(() => setToastMessage(null), 2500);
   };
 
   return (
@@ -2356,10 +2509,23 @@ function AdminConsoleContent() {
 
       {/* ===================================================================== */}
       {/* 4. [업무지원] 콘솔 */}
-      {/* 사원별근태현황 / 부서별근태집계 / 일별근태현황 / 월별근태현황 / 퇴사자근태확인 / 월별연장근무현황 */}
+      {/* 교직원(교사, 관리자, 행정, 재정) 전용 근태 집계 센터 (학생 적용 제외) */}
       {/* ===================================================================== */}
       {activeTab === 'work-support' && (
         <div className="space-y-4 animate-fade-in">
+          {/* 교직원 전용 명시 배너 */}
+          <div className="p-3.5 bg-blue-50 border border-blue-200 rounded-xl shadow-sm flex flex-wrap items-center justify-between gap-2 text-xs">
+            <div className="flex items-center gap-2">
+              <ShieldCheck className="w-4 h-4 text-blue-700" />
+              <span className="font-bold text-blue-950">
+                등대글로벌스쿨 교직원 근태 관리 센터 (교사 · 관리자 · 행정 · 재정 전담 집계)
+              </span>
+            </div>
+            <span className="px-2.5 py-0.5 rounded text-[11px] font-bold bg-white text-blue-800 border border-blue-300">
+              교직원 전용 (학생 근태 데이터 완전 분리 및 미적용)
+            </span>
+          </div>
+
           {/* Subtabs Bar */}
           <div className="flex flex-wrap items-center justify-between bg-white p-3 rounded-xl border border-slate-200 shadow-sm gap-2">
             <div className="flex flex-wrap items-center gap-1.5 text-xs">
@@ -2418,93 +2584,385 @@ function AdminConsoleContent() {
                 월별 연장근무 현황
               </button>
             </div>
+
+            {/* 교직원 직종 구분 필터 */}
+            <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-lg text-xs">
+              <span className="text-[10px] text-slate-500 font-bold px-1.5">직종 필터:</span>
+              {(['ALL', '교사', '행정', '재정', '관리자'] as const).map((cat) => (
+                <button
+                  key={cat}
+                  type="button"
+                  onClick={() => setWorkSupportStaffFilter(cat)}
+                  className={`px-2 py-0.5 rounded font-bold transition-all text-[11px] ${
+                    workSupportStaffFilter === cat
+                      ? 'bg-white text-blue-700 shadow-sm'
+                      : 'text-slate-600 hover:text-slate-900'
+                  }`}
+                >
+                  {cat === 'ALL' ? '전체 교직원' : cat}
+                </button>
+              ))}
+            </div>
           </div>
 
           <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
             {/* 1. 사원별 근태현황 */}
             {workSupportView === 'staff' && (
               <div className="space-y-3">
-                <h3 className="text-xs font-bold text-slate-900 pb-2 border-b border-slate-200">
-                  사원별 실시간 근태 및 잔여 연차 현황
-                </h3>
-                <table className="w-full text-left text-xs border-collapse">
-                  <thead>
-                    <tr className="bg-slate-50 border-b border-slate-200 text-slate-600 font-semibold">
-                      <th className="py-2 px-3">사번</th>
-                      <th className="py-2 px-3">성명</th>
-                      <th className="py-2 px-3">오늘 출퇴근 기록</th>
-                      <th className="py-2 px-3 text-center">당월 지각/조퇴</th>
-                      <th className="py-2 px-3 text-center">잔여 연차</th>
-                      <th className="py-2 px-3 text-center">출결 상태</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-100 text-slate-700">
-                    {profiles.filter(p => p.employment_status === 'ACTIVE').map(p => (
-                      <tr key={p.id} className="hover:bg-slate-50/60">
-                        <td className="py-2.5 px-3 font-mono text-slate-500">{p.employee_no}</td>
-                        <td className="py-2.5 px-3 font-bold text-slate-900">{p.name_kr}</td>
-                        <td className="py-2.5 px-3 font-mono">08:15:20 ~ 16:30:00</td>
-                        <td className="py-2.5 px-3 text-center font-mono">0건</td>
-                        <td className="py-2.5 px-3 text-center font-mono font-bold text-blue-600">{p.remaining_leave_days}일</td>
-                        <td className="py-2.5 px-3 text-center">
-                          <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-50 text-emerald-700">정상출근</span>
-                        </td>
+                <div className="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-slate-200">
+                  <h3 className="text-xs font-bold text-slate-900 flex items-center gap-2">
+                    <Users className="w-4 h-4 text-blue-600" />
+                    <span>교직원 사원별 실시간 근태 및 잔여 연차 현황 (교원·행정·재정·관리자 대상)</span>
+                  </h3>
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="text"
+                      placeholder="교직원 성명 또는 사번 검색..."
+                      value={workSupportSearch}
+                      onChange={(e) => setWorkSupportSearch(e.target.value)}
+                      className="h-7 px-2.5 text-xs bg-slate-50 border border-slate-300 rounded-lg w-52"
+                    />
+                  </div>
+                </div>
+
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left text-xs border-collapse">
+                    <thead>
+                      <tr className="bg-slate-50 border-b border-slate-200 text-slate-600 font-semibold">
+                        <th className="py-2.5 px-3">사번</th>
+                        <th className="py-2.5 px-3">교직원 성명</th>
+                        <th className="py-2.5 px-3">소속 부서</th>
+                        <th className="py-2.5 px-3">직책 / 과목</th>
+                        <th className="py-2.5 px-3 text-center">직종 구분</th>
+                        <th className="py-2.5 px-3">오늘 출퇴근 기록</th>
+                        <th className="py-2.5 px-3 text-center">당월 지각/조퇴</th>
+                        <th className="py-2.5 px-3 text-center">잔여 연차</th>
+                        <th className="py-2.5 px-3 text-center">출결 상태</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100 text-slate-700">
+                      {profiles
+                        .filter((p) => p.employment_status === 'ACTIVE')
+                        .filter((p) => workSupportStaffFilter === 'ALL' || getStaffCategory(p) === workSupportStaffFilter)
+                        .filter(
+                          (p) =>
+                            !workSupportSearch ||
+                            p.name_kr.includes(workSupportSearch) ||
+                            (p.name_en && p.name_en.toLowerCase().includes(workSupportSearch.toLowerCase())) ||
+                            p.employee_no.includes(workSupportSearch)
+                        )
+                        .map((p) => {
+                          const category = getStaffCategory(p);
+                          return (
+                            <tr key={p.id} className="hover:bg-slate-50/60">
+                              <td className="py-2.5 px-3 font-mono text-slate-500">{p.employee_no}</td>
+                              <td className="py-2.5 px-3 font-bold text-slate-900">
+                                {p.name_kr} {p.name_en && <span className="text-slate-400 font-normal">({p.name_en})</span>}
+                              </td>
+                              <td className="py-2.5 px-3">{getDeptNameById(p.primary_dept_id)}</td>
+                              <td className="py-2.5 px-3">{p.subject || '정규교원'}</td>
+                              <td className="py-2.5 px-3 text-center">
+                                <span
+                                  className={`px-2 py-0.5 rounded text-[10px] font-bold ${
+                                    category === '관리자'
+                                      ? 'bg-amber-100 text-amber-800'
+                                      : category === '재정'
+                                      ? 'bg-emerald-100 text-emerald-800'
+                                      : category === '행정'
+                                      ? 'bg-purple-100 text-purple-800'
+                                      : 'bg-blue-100 text-blue-800'
+                                  }`}
+                                >
+                                  {category}
+                                </span>
+                              </td>
+                              <td className="py-2.5 px-3 font-mono">08:15:20 ~ 16:30:00</td>
+                              <td className="py-2.5 px-3 text-center font-mono">0건</td>
+                              <td className="py-2.5 px-3 text-center font-mono font-bold text-blue-600">
+                                {p.remaining_leave_days}일
+                              </td>
+                              <td className="py-2.5 px-3 text-center">
+                                <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-50 text-emerald-700">
+                                  정상출근
+                                </span>
+                              </td>
+                            </tr>
+                          );
+                        })}
+                    </tbody>
+                  </table>
+                </div>
               </div>
             )}
 
             {/* 2. 부서별 근태집계 */}
             {workSupportView === 'dept' && (
-              <div className="space-y-3">
-                <h3 className="text-xs font-bold text-slate-900 pb-2 border-b border-slate-200">
-                  2026학년도 부서별 근태 집계 결산표
-                </h3>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                  {departments.map(d => (
-                    <div key={d.id} className="p-4 rounded-xl border border-slate-200 bg-slate-50/70">
-                      <span className="text-xs font-bold text-slate-900 block">{d.dept_name}</span>
-                      <div className="mt-2 text-2xl font-bold font-mono text-emerald-600">98.8%</div>
-                      <span className="text-[11px] text-slate-500 block mt-1">정상출근율 (지각 1건 / 휴가 2건)</span>
-                    </div>
-                  ))}
+              <div className="space-y-4">
+                <div className="pb-2 border-b border-slate-200 flex items-center justify-between">
+                  <h3 className="text-xs font-bold text-slate-900 flex items-center gap-2">
+                    <Building2 className="w-4 h-4 text-blue-600" />
+                    <span>2026학년도 교직원 부서별 실시간 근태 집계 결산표 (학생 데이터 제외)</span>
+                  </h3>
+                  <span className="text-[11px] text-slate-500 font-semibold">
+                    총 {departments.length}개 교직원 전담 부서 모니터링
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5">
+                  {departments.map((d) => {
+                    const deptStaff = profiles.filter(
+                      (p) => p.employment_status === 'ACTIVE' && p.primary_dept_id === d.id
+                    );
+                    const totalCount = deptStaff.length || 6;
+                    const presentCount = Math.max(1, totalCount - (d.id === 'd1' ? 1 : 0));
+                    const rate = ((presentCount / totalCount) * 100).toFixed(1);
+
+                    return (
+                      <div key={d.id} className="p-4 rounded-xl border border-slate-200 bg-slate-50/70 space-y-2">
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs font-bold text-slate-900">{d.dept_name.split(' (')[0]}</span>
+                          <span className="font-mono text-[10px] bg-slate-200 text-slate-700 px-1.5 py-0.5 rounded font-bold">
+                            정원 {totalCount}명
+                          </span>
+                        </div>
+                        <div className="flex items-baseline gap-2">
+                          <span className="text-2xl font-bold font-mono text-emerald-600">{rate}%</span>
+                          <span className="text-[11px] text-slate-500">
+                            출근 {presentCount}명 / 부재 {totalCount - presentCount}명
+                          </span>
+                        </div>
+                        <div className="pt-2 border-t border-slate-200/80 flex flex-wrap gap-1">
+                          {deptStaff.slice(0, 5).map((st) => (
+                            <span
+                              key={st.id}
+                              className="text-[10px] bg-white border border-slate-200 text-slate-700 px-1.5 py-0.5 rounded font-medium"
+                            >
+                              {st.name_kr}
+                            </span>
+                          ))}
+                          {deptStaff.length > 5 && (
+                            <span className="text-[10px] text-slate-400 px-1">외 {deptStaff.length - 5}명</span>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             )}
 
             {/* 3. 일별 근태현황 */}
             {workSupportView === 'daily' && (
-              <div className="space-y-3">
-                <h3 className="text-xs font-bold text-slate-900 pb-2 border-b border-slate-200">
-                  일별 근태 현황 (2026년 3월 24일 기준)
-                </h3>
-                <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg text-blue-800 text-xs">
-                  전체 재직 112명 중 출근 108명 (96.4%), 연차/출장 4명 (3.6%)
+              <div className="space-y-4">
+                <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-slate-200">
+                  <div className="flex items-center gap-2">
+                    <CalendarDays className="w-4 h-4 text-blue-600" />
+                    <div>
+                      <h3 className="text-xs font-bold text-slate-900">
+                        일별 교직원 출퇴근 현황 대장 ({workSupportDailyDate} 기준)
+                      </h3>
+                      <p className="text-[10px] text-slate-500">
+                        교사, 관리자, 행정, 재정 교직원 34명 대상 일일 출결 확인 (학생 출결 제외)
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs text-slate-600 font-semibold">조회 일자:</span>
+                    <input
+                      type="date"
+                      value={workSupportDailyDate}
+                      onChange={(e) => setWorkSupportDailyDate(e.target.value)}
+                      className="h-8 px-2 text-xs font-mono bg-white border border-slate-300 rounded-lg text-slate-800"
+                    />
+                  </div>
+                </div>
+
+                {/* KPI 요약 카드 */}
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+                  <div className="p-3 bg-slate-50 border border-slate-200 rounded-lg">
+                    <span className="text-slate-500 block text-[11px]">전체 재직 교직원</span>
+                    <strong className="text-lg text-slate-900 font-mono">
+                      {profiles.filter((p) => p.employment_status === 'ACTIVE').length}명
+                    </strong>
+                  </div>
+                  <div className="p-3 bg-emerald-50 border border-emerald-200 rounded-lg">
+                    <span className="text-emerald-700 block text-[11px]">정상 출근 교직원</span>
+                    <strong className="text-lg text-emerald-800 font-mono">
+                      {profiles.filter((p) => p.employment_status === 'ACTIVE').length - 2}명 (94.1%)
+                    </strong>
+                  </div>
+                  <div className="p-3 bg-amber-50 border border-amber-200 rounded-lg">
+                    <span className="text-amber-700 block text-[11px]">연차 / 휴가자</span>
+                    <strong className="text-lg text-amber-800 font-mono">2명 (5.9%)</strong>
+                  </div>
+                  <div className="p-3 bg-rose-50 border border-rose-200 rounded-lg">
+                    <span className="text-rose-700 block text-[11px]">지각 / 조퇴</span>
+                    <strong className="text-lg text-rose-800 font-mono">0건</strong>
+                  </div>
+                </div>
+
+                {/* 상세 일일 출결 테이블 */}
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left text-xs border-collapse">
+                    <thead>
+                      <tr className="bg-slate-50 border-b border-slate-200 text-slate-600 font-semibold">
+                        <th className="py-2 px-3">사번</th>
+                        <th className="py-2 px-3">교직원 성명</th>
+                        <th className="py-2 px-3">부서 / 직책</th>
+                        <th className="py-2 px-3 text-center">직종 구분</th>
+                        <th className="py-2 px-3 font-mono">출근 시간</th>
+                        <th className="py-2 px-3 font-mono">퇴근 시간</th>
+                        <th className="py-2 px-3 text-center">근무인정</th>
+                        <th className="py-2 px-3 text-center">당일 근태 상태</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100 text-slate-700">
+                      {profiles
+                        .filter((p) => p.employment_status === 'ACTIVE')
+                        .filter((p) => workSupportStaffFilter === 'ALL' || getStaffCategory(p) === workSupportStaffFilter)
+                        .map((p, idx) => {
+                          const isLeave = idx === 1; // sample leave
+                          const category = getStaffCategory(p);
+                          return (
+                            <tr key={p.id} className="hover:bg-slate-50/60">
+                              <td className="py-2 px-3 font-mono text-slate-500">{p.employee_no}</td>
+                              <td className="py-2 px-3 font-bold text-slate-900">{p.name_kr}</td>
+                              <td className="py-2 px-3">
+                                {getDeptNameById(p.primary_dept_id)} · {p.subject || '교원'}
+                              </td>
+                              <td className="py-2 px-3 text-center">
+                                <span
+                                  className={`px-1.5 py-0.5 rounded text-[10px] font-bold ${
+                                    category === '관리자'
+                                      ? 'bg-amber-100 text-amber-800'
+                                      : category === '재정'
+                                      ? 'bg-emerald-100 text-emerald-800'
+                                      : category === '행정'
+                                      ? 'bg-purple-100 text-purple-800'
+                                      : 'bg-blue-100 text-blue-800'
+                                  }`}
+                                >
+                                  {category}
+                                </span>
+                              </td>
+                              <td className="py-2 px-3 font-mono text-slate-800">
+                                {isLeave ? '-' : `08:1${Math.min(9, idx)}:24`}
+                              </td>
+                              <td className="py-2 px-3 font-mono text-slate-800">
+                                {isLeave ? '-' : '16:30:00 (정상)'}
+                              </td>
+                              <td className="py-2 px-3 text-center font-mono">{isLeave ? '0.0h' : '8.0h'}</td>
+                              <td className="py-2 px-3 text-center">
+                                {isLeave ? (
+                                  <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-800">
+                                    연차휴가
+                                  </span>
+                                ) : (
+                                  <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-50 text-emerald-700">
+                                    정상출근
+                                  </span>
+                                )}
+                              </td>
+                            </tr>
+                          );
+                        })}
+                    </tbody>
+                  </table>
                 </div>
               </div>
             )}
 
             {/* 4. 월별 근태현황 */}
             {workSupportView === 'monthly' && (
-              <div className="space-y-3">
-                <h3 className="text-xs font-bold text-slate-900 pb-2 border-b border-slate-200">
-                  2026년 3월 정기 월별 근태 현황 결산
-                </h3>
-                <div className="flex items-center gap-4 text-xs">
-                  <div className="p-3 bg-slate-50 border border-slate-200 rounded-lg flex-1">
-                    <span className="text-slate-500 block">총 근무일수</span>
+              <div className="space-y-4">
+                <div className="flex flex-wrap items-center justify-between gap-3 pb-2 border-b border-slate-200">
+                  <div>
+                    <h3 className="text-xs font-bold text-slate-900 flex items-center gap-2">
+                      <BarChart3 className="w-4 h-4 text-blue-600" />
+                      <span>교직원 정기 월별 근태 집계 결산 ({workSupportMonth} 정산)</span>
+                    </h3>
+                    <p className="text-[10px] text-slate-500">
+                      교직원 34명 대상 월간 총 근무일수, 출근일, 연차 사용 집계 (학생 데이터 제외)
+                    </p>
+                  </div>
+                  <input
+                    type="month"
+                    value={workSupportMonth}
+                    onChange={(e) => setWorkSupportMonth(e.target.value)}
+                    className="h-8 px-2 text-xs font-mono bg-white border border-slate-300 rounded-lg text-slate-800"
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-4 gap-3 text-xs">
+                  <div className="p-3 bg-slate-50 border border-slate-200 rounded-lg">
+                    <span className="text-slate-500 block text-[11px]">월간 총 근무일수</span>
                     <strong className="text-base text-slate-900 font-mono">22일</strong>
                   </div>
-                  <div className="p-3 bg-slate-50 border border-slate-200 rounded-lg flex-1">
-                    <span className="text-slate-500 block">평균 출근율</span>
-                    <strong className="text-base text-emerald-600 font-mono">98.4%</strong>
+                  <div className="p-3 bg-emerald-50 border border-emerald-200 rounded-lg">
+                    <span className="text-emerald-700 block text-[11px]">교직원 평균 출근율</span>
+                    <strong className="text-base text-emerald-700 font-mono">98.4%</strong>
                   </div>
-                  <div className="p-3 bg-slate-50 border border-slate-200 rounded-lg flex-1">
-                    <span className="text-slate-500 block">월간 마감 상태</span>
-                    <strong className="text-base text-blue-600">정산 진행 중</strong>
+                  <div className="p-3 bg-amber-50 border border-amber-200 rounded-lg">
+                    <span className="text-amber-700 block text-[11px]">교직원 연차 사용일수</span>
+                    <strong className="text-base text-amber-800 font-mono">14.0일</strong>
                   </div>
+                  <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                    <span className="text-blue-700 block text-[11px]">월간 마감 상태</span>
+                    <strong className="text-base text-blue-700 font-bold">정산 진행 중</strong>
+                  </div>
+                </div>
+
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left text-xs border-collapse">
+                    <thead>
+                      <tr className="bg-slate-50 border-b border-slate-200 text-slate-600 font-semibold">
+                        <th className="py-2.5 px-3">사번</th>
+                        <th className="py-2.5 px-3">교직원 성명</th>
+                        <th className="py-2.5 px-3">부서 / 직책</th>
+                        <th className="py-2.5 px-3 text-center">직종 구분</th>
+                        <th className="py-2.5 px-3 text-center font-mono">기준 근무일</th>
+                        <th className="py-2.5 px-3 text-center font-mono">실제 출근일</th>
+                        <th className="py-2.5 px-3 text-center font-mono">연차 사용</th>
+                        <th className="py-2.5 px-3 text-center font-mono">지각/조퇴</th>
+                        <th className="py-2.5 px-3 text-center font-mono">연장근무</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100 text-slate-700">
+                      {profiles
+                        .filter((p) => p.employment_status === 'ACTIVE')
+                        .filter((p) => workSupportStaffFilter === 'ALL' || getStaffCategory(p) === workSupportStaffFilter)
+                        .slice(0, 15)
+                        .map((p, idx) => {
+                          const category = getStaffCategory(p);
+                          return (
+                            <tr key={p.id} className="hover:bg-slate-50/60">
+                              <td className="py-2 px-3 font-mono text-slate-500">{p.employee_no}</td>
+                              <td className="py-2 px-3 font-bold text-slate-900">{p.name_kr}</td>
+                              <td className="py-2 px-3">
+                                {getDeptNameById(p.primary_dept_id)} · {p.subject || '교원'}
+                              </td>
+                              <td className="py-2 px-3 text-center">
+                                <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-slate-100 text-slate-700">
+                                  {category}
+                                </span>
+                              </td>
+                              <td className="py-2 px-3 text-center font-mono">22일</td>
+                              <td className="py-2 px-3 text-center font-mono font-bold text-slate-900">
+                                {idx % 3 === 0 ? '21일' : '22일'}
+                              </td>
+                              <td className="py-2 px-3 text-center font-mono text-amber-700">
+                                {idx % 3 === 0 ? '1.0일' : '0.0일'}
+                              </td>
+                              <td className="py-2 px-3 text-center font-mono text-slate-400">0건</td>
+                              <td className="py-2 px-3 text-center font-mono text-blue-600 font-bold">
+                                {idx % 2 === 0 ? '2.0h' : '0.0h'}
+                              </td>
+                            </tr>
+                          );
+                        })}
+                    </tbody>
+                  </table>
                 </div>
               </div>
             )}
@@ -2512,32 +2970,51 @@ function AdminConsoleContent() {
             {/* 5. 퇴사자 근태확인 */}
             {workSupportView === 'retired' && (
               <div className="space-y-3">
-                <h3 className="text-xs font-bold text-slate-900 pb-2 border-b border-slate-200 flex items-center justify-between">
-                  <span>퇴사자 및 계약만료 교직원 근태 이력 확인 모드</span>
-                  <span className="text-[11px] font-mono text-amber-700 bg-amber-50 px-2 py-0.5 rounded font-bold">퇴사 교원 1명 조회됨</span>
-                </h3>
+                <div className="pb-2 border-b border-slate-200 flex items-center justify-between">
+                  <h3 className="text-xs font-bold text-slate-900 flex items-center gap-2">
+                    <UserX className="w-4 h-4 text-amber-600" />
+                    <span>퇴사 및 계약만료 교직원 근태·연차 정산 보존 대장 (교직원 전용 / 학생 제외)</span>
+                  </h3>
+                  <span className="text-[11px] font-mono text-amber-800 bg-amber-50 px-2.5 py-0.5 rounded-full font-bold border border-amber-200">
+                    퇴사 교직원 1명 보존 기록 조회됨
+                  </span>
+                </div>
                 <table className="w-full text-left text-xs border-collapse">
                   <thead>
                     <tr className="bg-slate-50 border-b border-slate-200 text-slate-600 font-semibold">
                       <th className="py-2 px-3">사번</th>
-                      <th className="py-2 px-3">퇴사 교원 성명</th>
-                      <th className="py-2 px-3">최종 담당과목</th>
+                      <th className="py-2 px-3">퇴사 교직원 성명</th>
+                      <th className="py-2 px-3">최종 담당과목 / 직무</th>
+                      <th className="py-2 px-3 text-center">직종 구분</th>
                       <th className="py-2 px-3 text-center">재직 상태</th>
-                      <th className="py-2 px-3 font-mono">과거 최종 근태 기록</th>
+                      <th className="py-2 px-3 text-center">최종 연차 정산</th>
+                      <th className="py-2 px-3 font-mono">최종 출퇴근 기록</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-100 text-slate-700">
-                    {profiles.filter(p => p.employment_status === 'RESIGNED').map(p => (
-                      <tr key={p.id}>
-                        <td className="py-2.5 px-3 font-mono text-slate-500">{p.employee_no}</td>
-                        <td className="py-2.5 px-3 font-bold text-slate-900">{p.name_kr} ({p.name_en})</td>
-                        <td className="py-2.5 px-3">{p.subject}</td>
-                        <td className="py-2.5 px-3 text-center">
-                          <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-200 text-slate-700">퇴사/만료</span>
-                        </td>
-                        <td className="py-2.5 px-3 font-mono text-slate-500">2026-02-28 16:30:00 (정상퇴근)</td>
-                      </tr>
-                    ))}
+                    {profiles
+                      .filter((p) => p.employment_status === 'RESIGNED')
+                      .map((p) => (
+                        <tr key={p.id}>
+                          <td className="py-2.5 px-3 font-mono text-slate-500">{p.employee_no}</td>
+                          <td className="py-2.5 px-3 font-bold text-slate-900">
+                            {p.name_kr} ({p.name_en})
+                          </td>
+                          <td className="py-2.5 px-3">{p.subject || '중등 영어'}</td>
+                          <td className="py-2.5 px-3 text-center">
+                            <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-blue-100 text-blue-800">
+                              교사
+                            </span>
+                          </td>
+                          <td className="py-2.5 px-3 text-center">
+                            <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-200 text-slate-700">
+                              계약만료 / 퇴사
+                            </span>
+                          </td>
+                          <td className="py-2.5 px-3 text-center font-mono text-blue-700 font-bold">잔여 0일 정산완료</td>
+                          <td className="py-2.5 px-3 font-mono text-slate-500">2026-02-28 16:30:00 (정상퇴근)</td>
+                        </tr>
+                      ))}
                   </tbody>
                 </table>
               </div>
@@ -2545,13 +3022,65 @@ function AdminConsoleContent() {
 
             {/* 6. 월별 연장근무 현황 */}
             {workSupportView === 'overtime' && (
-              <div className="space-y-3">
-                <h3 className="text-xs font-bold text-slate-900 pb-2 border-b border-slate-200">
-                  2026년 3월 부서별 / 개인별 월별 연장근무(초과근무) 총계
-                </h3>
-                <div className="p-3 rounded-lg bg-blue-50 border border-blue-200 text-xs text-blue-900 flex justify-between items-center">
-                  <span>금월 총 누적 연장근무 인정 시간: <strong>342.0시간</strong></span>
-                  <span className="font-semibold text-slate-600">교원당 평균 3.1h 인정</span>
+              <div className="space-y-4">
+                <div className="pb-2 border-b border-slate-200 flex flex-wrap items-center justify-between gap-2">
+                  <div>
+                    <h3 className="text-xs font-bold text-slate-900 flex items-center gap-2">
+                      <Clock className="w-4 h-4 text-blue-600" />
+                      <span>2026학년도 교직원(교사·행정·재정·관리자) 월별 연장근무 총계 (학생 데이터 제외)</span>
+                    </h3>
+                    <p className="text-[10px] text-slate-500 mt-0.5">
+                      금요일 17:00 퇴근 및 평일 16:30 퇴근 기준 이후 발생한 교직원 초과근무 승인 내역입니다.
+                    </p>
+                  </div>
+                  <div className="p-2 bg-blue-50 border border-blue-200 rounded-lg text-xs text-blue-900 font-bold">
+                    교직원 누적 승인 시간: 342.0시간 (1인당 평균 3.1h)
+                  </div>
+                </div>
+
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left text-xs border-collapse">
+                    <thead>
+                      <tr className="bg-slate-50 border-b border-slate-200 text-slate-600 font-semibold">
+                        <th className="py-2 px-3">신청자 성명</th>
+                        <th className="py-2 px-3">소속 부서</th>
+                        <th className="py-2 px-3">구분</th>
+                        <th className="py-2 px-3">일자</th>
+                        <th className="py-2 px-3 text-center">인정 시간</th>
+                        <th className="py-2 px-3">업무 및 연장 사유</th>
+                        <th className="py-2 px-3 text-center">승인 상태</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100 text-slate-700">
+                      {overtimeList.map((ot) => (
+                        <tr key={ot.id} className="hover:bg-slate-50/60">
+                          <td className="py-2.5 px-3 font-bold text-slate-900">{ot.teacher_name}</td>
+                          <td className="py-2.5 px-3">{ot.department}</td>
+                          <td className="py-2.5 px-3">
+                            <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-slate-100 text-slate-700">
+                              {ot.category}
+                            </span>
+                          </td>
+                          <td className="py-2.5 px-3 font-mono">{ot.date}</td>
+                          <td className="py-2.5 px-3 text-center font-mono font-bold text-blue-700">
+                            {ot.duration.toFixed(1)}시간
+                          </td>
+                          <td className="py-2.5 px-3 text-slate-600">{ot.reason}</td>
+                          <td className="py-2.5 px-3 text-center">
+                            <span
+                              className={`px-2 py-0.5 rounded text-[10px] font-bold ${
+                                ot.status === 'APPROVED'
+                                  ? 'bg-emerald-100 text-emerald-800'
+                                  : 'bg-amber-100 text-amber-800'
+                              }`}
+                            >
+                              {ot.status === 'APPROVED' ? '승인 완료' : '결재 대기'}
+                            </span>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
                 </div>
               </div>
             )}
@@ -2605,7 +3134,12 @@ function AdminConsoleContent() {
               <div className="space-y-4 text-xs">
                 {/* 1. 기본 학기 중 출퇴근 시간 */}
                 <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl space-y-2">
-                  <span className="font-bold text-slate-800 block text-[11px]">1. 학기 중 기본 출퇴근 기준 시간</span>
+                  <div className="flex items-center justify-between">
+                    <span className="font-bold text-slate-800 block text-[11px]">1. 학기 중 기본 출퇴근 기준 시간</span>
+                    <span className="text-[10px] px-1.5 py-0.5 rounded bg-blue-100 text-blue-800 font-bold border border-blue-200">
+                      월·화·수·목 자동 연동
+                    </span>
+                  </div>
                   <div className="grid grid-cols-2 gap-2">
                     <div>
                       <label className="block text-[11px] font-semibold text-slate-600 mb-1">정규 출근 시간</label>
@@ -2622,11 +3156,27 @@ function AdminConsoleContent() {
                       <input
                         type="text"
                         value={attConfigCheckOut}
-                        onChange={(e) => setAttConfigCheckOut(e.target.value)}
-                        className="w-full h-8 px-2 font-mono bg-white border border-slate-300 rounded font-bold text-slate-900"
+                        onChange={(e) => {
+                          const val = e.target.value;
+                          setAttConfigCheckOut(val);
+                          setAttDayEndTimes((prev) => ({
+                            ...prev,
+                            '월': val,
+                            '화': val,
+                            '수': val,
+                            '목': val,
+                          }));
+                        }}
+                        className="w-full h-8 px-2 font-mono bg-white border border-slate-300 rounded font-bold text-blue-700"
                       />
-                      <span className="text-[10px] text-slate-400 mt-0.5 block">16:30:00 이전 조퇴 판정</span>
+                      <span className="text-[10px] text-slate-400 mt-0.5 block">{attConfigCheckOut} 이전 조퇴 판정</span>
                     </div>
+                  </div>
+                  <div className="text-[10px] text-blue-700 bg-blue-50 border border-blue-200 rounded px-2.5 py-1 font-medium flex items-center gap-1.5">
+                    <span>⚡</span>
+                    <span>
+                      기본 퇴근 시간을 변경하고 저장하면 학기 중 <strong>월, 화, 수, 목요일의 정규 퇴근시간</strong>이 자동으로 변경 연동됩니다. (금요일은 17:00 별도 유지)
+                    </span>
                   </div>
                 </div>
 
@@ -2666,7 +3216,7 @@ function AdminConsoleContent() {
                           </div>
                           <input
                             type="text"
-                            value={attDayEndTimes[day] || (isFri ? '17:00:00' : '16:30:00')}
+                            value={attDayEndTimes[day] || (isFri ? '17:00:00' : attConfigCheckOut)}
                             onChange={(e) => {
                               const val = e.target.value;
                               setAttDayEndTimes((prev) => ({
@@ -2681,7 +3231,7 @@ function AdminConsoleContent() {
                             }`}
                           />
                           <span className="text-[9px] text-slate-400 block mt-0.5">
-                            {isFri ? '오후 5시' : '오후 4:30'}
+                            {isFri ? '오후 5시' : (attDayEndTimes[day] || attConfigCheckOut).slice(0, 5)}
                           </span>
                         </div>
                       );
@@ -2759,7 +3309,104 @@ function AdminConsoleContent() {
                   </div>
                 </div>
 
-                {/* 4. 주간 근무일 & IP 강제 설정 */}
+                {/* 4. 특별한 날 지정 퇴근시간 조정 (학교 행사 / 특별일 조기퇴근 설정) */}
+                <div className="p-3 bg-emerald-50/50 border border-emerald-200/80 rounded-xl space-y-2.5">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <span className="font-bold text-slate-900 text-[11px] flex items-center gap-1.5">
+                        <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+                        <span>4. 특별한 날 지정 퇴근시간 조정 (조기퇴근 / 단축근무)</span>
+                      </span>
+                      <p className="text-[10px] text-slate-500 mt-0.5">
+                        스승의 날, 학술제, 축제 등 특별한 날을 지정하여 해당 일자의 퇴근 시간을 개별 조정합니다.
+                      </p>
+                    </div>
+                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold border border-emerald-300">
+                      등록 {specialDates.length}건
+                    </span>
+                  </div>
+
+                  {/* Registration Inputs */}
+                  <div className="p-2.5 bg-white border border-emerald-200 rounded-lg space-y-2">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                      <div>
+                        <label className="block text-[10px] font-semibold text-slate-600 mb-0.5">지정 일자</label>
+                        <input
+                          type="date"
+                          value={newSpecialDate}
+                          onChange={(e) => setNewSpecialDate(e.target.value)}
+                          className="w-full h-7 px-2 text-xs font-mono bg-slate-50 border border-slate-300 rounded font-semibold text-slate-800"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-[10px] font-semibold text-slate-600 mb-0.5">조정 퇴근 시간</label>
+                        <input
+                          type="text"
+                          value={newSpecialTime}
+                          onChange={(e) => setNewSpecialTime(e.target.value)}
+                          placeholder="15:00:00"
+                          className="w-full h-7 px-2 text-xs font-mono bg-slate-50 border border-slate-300 rounded font-bold text-emerald-700"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-[10px] font-semibold text-slate-600 mb-0.5">지정 사유 / 행사명</label>
+                        <input
+                          type="text"
+                          value={newSpecialTitle}
+                          onChange={(e) => setNewSpecialTitle(e.target.value)}
+                          placeholder="예: 스승의 날 단축근무"
+                          className="w-full h-7 px-2 text-xs bg-slate-50 border border-slate-300 rounded text-slate-800"
+                        />
+                      </div>
+                    </div>
+                    <div className="flex justify-end">
+                      <button
+                        type="button"
+                        onClick={handleAddSpecialDate}
+                        className="px-3 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded text-xs font-bold shadow-sm transition-all flex items-center gap-1"
+                      >
+                        <span>+ 특별일 퇴근시간 등록</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* List of Special Dates */}
+                  <div className="space-y-1.5 max-h-40 overflow-y-auto pr-1">
+                    {specialDates.length === 0 ? (
+                      <div className="p-3 text-center text-slate-400 text-[11px] bg-white rounded border border-dashed border-slate-200">
+                        등록된 특별 조정일이 없습니다.
+                      </div>
+                    ) : (
+                      specialDates.map((sd) => (
+                        <div
+                          key={sd.id}
+                          className="p-2 bg-white border border-emerald-100 rounded-lg flex items-center justify-between gap-2 text-xs shadow-xs"
+                        >
+                          <div className="flex items-center gap-2">
+                            <span className="font-mono font-bold text-slate-900 bg-emerald-50 px-1.5 py-0.5 rounded text-[11px] border border-emerald-200">
+                              {sd.date}
+                            </span>
+                            <span className="font-medium text-slate-700 text-[11px]">{sd.title}</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <span className="font-mono font-bold text-emerald-700 text-[11px] bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                              퇴근 {sd.check_out_time}
+                            </span>
+                            <button
+                              type="button"
+                              onClick={() => handleDeleteSpecialDate(sd.id)}
+                              className="px-1.5 py-0.5 text-[10px] text-red-600 hover:text-red-800 hover:bg-red-50 rounded border border-red-200 font-semibold transition-colors"
+                            >
+                              삭제
+                            </button>
+                          </div>
+                        </div>
+                      ))
+                    )}
+                  </div>
+                </div>
+
+                {/* 5. 주간 근무일 & IP 강제 설정 */}
                 <div className="flex flex-wrap items-center justify-between gap-3 pt-1">
                   <div>
                     <label className="block font-semibold text-slate-700 mb-1 text-[11px]">주간 근무일 설정</label>
@@ -2801,34 +3448,7 @@ function AdminConsoleContent() {
                 <div className="pt-2 border-t border-slate-200 flex justify-end">
                   <button
                     type="button"
-                    onClick={async () => {
-                      try {
-                        const res = await fetch('/api/admin/work-settings', {
-                          method: 'POST',
-                          headers: { 'Content-Type': 'application/json' },
-                          body: JSON.stringify({
-                            work_start_time: attConfigCheckIn,
-                            work_end_time: attConfigCheckOut,
-                            working_days: attWorkDays,
-                            require_school_ip_for_attendance: isIpEnforced,
-                            day_end_times: attDayEndTimes,
-                            is_vacation_mode: isVacationMode,
-                            vacation_start_time: vacationCheckIn,
-                            vacation_end_time: vacationCheckOut,
-                            vacation_period: { start: vacationStart, end: vacationEnd },
-                          }),
-                        });
-                        const data = await res.json();
-                        if (data.success) {
-                          setToastMessage(data.message || '근태 기초 설정이 저장되었습니다.');
-                        } else {
-                          setToastMessage('설정 저장 완료');
-                        }
-                      } catch {
-                        setToastMessage('근무 기초 및 근무일 설정이 저장되었습니다.');
-                      }
-                      setTimeout(() => setToastMessage(null), 3000);
-                    }}
+                    onClick={handleSaveWorkSettings}
                     className="px-5 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-bold shadow-sm transition-all"
                   >
                     기초 설정 저장
