@@ -1,5 +1,25 @@
 [
   {
+    "id": "log_1792801665989_sipg",
+    "actor_id": "u20",
+    "actor_email": "lee.michelleye@gmail.com",
+    "actor_name": "이영은",
+    "action_category": "AUTH_LOGIN",
+    "action_detail": "교직원 인트라넷 로그인 성공 (이영은 / 교사)",
+    "client_ip": "211.104.88.24",
+    "created_at": "2026-10-24T00:27:45.989Z"
+  },
+  {
+    "id": "log_1792801446679_61dx",
+    "actor_id": "u8",
+    "actor_email": "lis.jaelee@gmail.com",
+    "actor_name": "이재원",
+    "action_category": "AUTH_LOGIN",
+    "action_detail": "교직원 인트라넷 로그인 성공 (이재원 / 교사)",
+    "client_ip": "211.104.88.24",
+    "created_at": "2026-10-24T00:24:06.679Z"
+  },
+  {
     "id": "log_1792801365946_rx2f",
     "actor_id": "u8",
     "actor_email": "jay.lee@lighthouse.org",

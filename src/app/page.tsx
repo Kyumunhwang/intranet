@@ -355,34 +355,34 @@ function DashboardContent() {
       </div>
 
       {/* 2. Middle Row: Student Attendance Confirm (7 status options) + Today Schedule */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Left: Student Daily Attendance Confirm (Span 2) */}
-        <div className="lg:col-span-2 bg-surface-white rounded-xl border border-slate-200/90 shadow-sm flex flex-col">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
+        {/* Left: Student Daily Attendance Confirm (Wider: Span 8 on lg, Span 9 on xl) */}
+        <div className="lg:col-span-8 xl:col-span-9 bg-surface-white rounded-xl border border-slate-200/90 shadow-sm flex flex-col">
           {/* Header */}
-          <div className="p-4 border-b border-slate-200 flex flex-wrap items-center justify-between gap-3 bg-slate-50/50 rounded-t-xl">
-            <div className="flex items-center gap-3">
+          <div className="p-3.5 border-b border-slate-200 flex flex-wrap items-center justify-between gap-3 bg-slate-50/50 rounded-t-xl">
+            <div className="flex items-center gap-2.5">
               <div className="p-1.5 rounded-lg bg-blue-100 text-blue-700">
                 <CheckCircle2 className="w-4 h-4" />
               </div>
               <div>
-                <h2 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+                <h2 className="text-xs sm:text-sm font-bold text-slate-900 flex items-center gap-2">
                   <span>{t('반별 학생 출결 리스트 및 일일 Confirm', 'Student Daily Attendance')}</span>
                   {confirmData?.is_confirmed ? (
-                    <span className="px-2 py-0.5 rounded text-[11px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200 flex items-center gap-1">
+                    <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200 flex items-center gap-1">
                       <span className="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
                       {t('Confirm 완료', 'Confirmed')} ({confirmData.confirmed_at})
                     </span>
                   ) : (
-                    <span className="px-2 py-0.5 rounded text-[11px] font-bold bg-amber-100 text-amber-800 border border-amber-200">
+                    <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-200">
                       {t('미확정', 'Pending')}
                     </span>
                   )}
                 </h2>
-                <p className="text-[11px] text-slate-500 mt-0.5">
+                <p className="text-[10px] text-slate-500 mt-0.5">
                   {currentTeacherInfo?.teacherName ? (
                     <span>담임: <strong>{currentTeacherInfo.teacherName}</strong> · </span>
                   ) : null}
-                  <span>출석, 지각, 결석, 병결, 조퇴, 무단조퇴, 무단결석 중 선택 후 Confirm 버튼을 누르면 확정됩니다.</span>
+                  <span>출석, 지각, 결석, 병결, 조퇴, 무단조퇴, 무단결석 중 선택 후 Confirm 확정</span>
                 </p>
               </div>
             </div>
@@ -393,7 +393,7 @@ function DashboardContent() {
                 aria-label="학년 선택"
                 value={selectedGrade}
                 onChange={(e) => setSelectedGrade(e.target.value)}
-                className="h-8 px-2.5 text-xs bg-white border border-slate-300 rounded-lg text-slate-800 font-bold focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                className="h-7 px-2 text-[11px] bg-white border border-slate-300 rounded-lg text-slate-800 font-bold focus:ring-1 focus:ring-blue-500 focus:outline-none"
               >
                 {SCHOOL_GRADES.map((g) => {
                   const teacher = GRADE_TEACHER_MAP[g]?.teacherName;
@@ -409,7 +409,7 @@ function DashboardContent() {
                 type="button"
                 onClick={handleConfirmAttendance}
                 disabled={isConfirming || currentGradeStudents.length === 0}
-                className="h-8 px-3.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white text-xs font-bold flex items-center gap-1.5 shadow-sm transition-all"
+                className="h-7 px-3 rounded-lg bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white text-[11px] font-bold flex items-center gap-1 shadow-sm transition-all whitespace-nowrap"
               >
                 <CheckCircle2 className="w-3.5 h-3.5" />
                 <span>{isConfirming ? t('확정중...', 'Saving...') : t('오늘 출결 최종 Confirm', 'Confirm Attendance')}</span>
@@ -418,30 +418,30 @@ function DashboardContent() {
           </div>
 
           {confirmSuccessMsg && (
-            <div className="bg-emerald-50 border-b border-emerald-200 px-4 py-2 text-xs font-semibold text-emerald-800 flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+            <div className="bg-emerald-50 border-b border-emerald-200 px-4 py-1.5 text-xs font-semibold text-emerald-800 flex items-center gap-2">
+              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
               <span>{confirmSuccessMsg}</span>
             </div>
           )}
 
-          {/* Compact Students Table with 7 options */}
+          {/* Compact Students Table with 7 options in single line */}
           <div className="overflow-x-auto flex-1">
-            <table className="w-full text-left border-collapse text-xs">
+            <table className="w-full text-left border-collapse text-[11px]">
               <thead>
-                <tr className="bg-slate-100/70 border-b border-slate-200 text-slate-600 font-semibold text-[11px]">
-                  <th className="py-2.5 px-3 w-28">{t('학번', 'ID')}</th>
-                  <th className="py-2.5 px-3 w-40">{t('성명', 'Name')}</th>
-                  <th className="py-2.5 px-3 w-16 text-center">{t('학년', 'Grade')}</th>
-                  <th className="py-2.5 px-3 text-center">
+                <tr className="bg-slate-100/70 border-b border-slate-200 text-slate-600 font-semibold text-[10px]">
+                  <th className="py-2 px-2.5 w-24">{t('학번', 'ID')}</th>
+                  <th className="py-2 px-2.5 w-32">{t('성명', 'Name')}</th>
+                  <th className="py-2 px-1 w-14 text-center">{t('학년', 'Grade')}</th>
+                  <th className="py-2 px-2 text-center whitespace-nowrap">
                     {t('출결 상태 선택 (7개 항목: 출석, 지각, 결석, 병결, 조퇴, 무단조퇴, 무단결석)', 'Status Options')}
                   </th>
-                  <th className="py-2.5 px-3 w-48">{t('메모', 'Memo')}</th>
+                  <th className="py-2 px-2.5 w-36">{t('메모', 'Memo')}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 text-slate-700">
                 {currentGradeStudents.length === 0 ? (
                   <tr>
-                    <td colSpan={5} className="py-8 text-center text-slate-400">
+                    <td colSpan={5} className="py-8 text-center text-slate-400 text-xs">
                       {t(`[${selectedGrade} 학년] 등록된 학생이 없습니다.`, `No students in ${selectedGrade}.`)}
                     </td>
                   </tr>
@@ -452,19 +452,19 @@ function DashboardContent() {
 
                     return (
                       <tr key={student.id} className="hover:bg-slate-50/70 transition-colors">
-                        <td className="py-2 px-3 font-mono font-semibold text-slate-600 text-xs">
+                        <td className="py-1.5 px-2.5 font-mono font-semibold text-slate-600 text-[11px] whitespace-nowrap">
                           {student.student_no}
                         </td>
-                        <td className="py-2 px-3">
-                          <div className="font-bold text-slate-900 text-xs">{student.name}</div>
+                        <td className="py-1.5 px-2.5 whitespace-nowrap">
+                          <div className="font-bold text-slate-900 text-[11px]">{student.name}</div>
                         </td>
-                        <td className="py-2 px-3 text-center">
-                          <span className="px-2 py-0.5 rounded bg-blue-50 text-blue-700 border border-blue-200 font-mono font-bold text-xs">
+                        <td className="py-1.5 px-1 text-center whitespace-nowrap">
+                          <span className="px-1.5 py-0.2 rounded bg-blue-50 text-blue-700 border border-blue-200 font-mono font-bold text-[10px]">
                             {student.grade}
                           </span>
                         </td>
-                        <td className="py-1.5 px-3">
-                          <div className="flex flex-wrap items-center justify-center gap-1">
+                        <td className="py-1.5 px-2 whitespace-nowrap">
+                          <div className="flex items-center justify-center gap-1 flex-nowrap whitespace-nowrap">
                             {statusOptions.map((opt) => {
                               const isSelected = status === opt.value;
                               const label = lang === 'ko' ? opt.labelKo : opt.labelEn;
@@ -474,7 +474,7 @@ function DashboardContent() {
                                   key={opt.value}
                                   type="button"
                                   onClick={() => handleStatusChange(student.id, opt.value)}
-                                  className={`px-2 py-0.5 rounded text-[11px] font-semibold transition-all ${
+                                  className={`px-1.5 py-0.5 rounded text-[10px] font-semibold whitespace-nowrap transition-all ${
                                     isSelected
                                       ? `${opt.color} shadow-xs font-bold scale-105`
                                       : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
@@ -486,13 +486,13 @@ function DashboardContent() {
                             })}
                           </div>
                         </td>
-                        <td className="py-1.5 px-3">
+                        <td className="py-1.5 px-2.5">
                           <input
                             type="text"
                             value={comment}
                             onChange={(e) => handleCommentChange(student.id, e.target.value)}
-                            placeholder={t('사유 및 메모 입력', 'Enter note')}
-                            className="w-full h-7 px-2 text-xs bg-slate-50 border border-slate-200 rounded text-slate-800 placeholder-slate-400 focus:bg-white focus:border-primary-container focus:outline-none"
+                            placeholder={t('메모 입력', 'Note')}
+                            className="w-full h-6 px-2 text-[10px] bg-slate-50 border border-slate-200 rounded text-slate-800 placeholder-slate-400 focus:bg-white focus:border-blue-500 focus:outline-none"
                           />
                         </td>
                       </tr>
@@ -503,21 +503,21 @@ function DashboardContent() {
             </table>
           </div>
 
-          <div className="p-3 border-t border-slate-200 bg-slate-50/70 rounded-b-xl flex flex-wrap items-center justify-between text-xs text-slate-600 font-medium gap-2">
-            <div className="flex items-center gap-3">
-              <span>{t(`[${selectedGrade} 학년 총원: ${stats.total}명]`, `Total: ${stats.total}`)}</span>
-              <span className="text-emerald-700 font-semibold">{t(`출석 ${stats.present}`, `Present ${stats.present}`)}</span>
-              {stats.late > 0 && <span className="text-amber-700 font-semibold">{t(`지각 ${stats.late}`, `Late ${stats.late}`)}</span>}
-              {stats.sick > 0 && <span className="text-indigo-700 font-semibold">{t(`병결 ${stats.sick}`, `Sick ${stats.sick}`)}</span>}
-              {stats.early > 0 && <span className="text-sky-700 font-semibold">{t(`조퇴 ${stats.early}`, `Early ${stats.early}`)}</span>}
-              {stats.absent > 0 && <span className="text-rose-700 font-semibold">{t(`결석 ${stats.absent}`, `Absent ${stats.absent}`)}</span>}
+          <div className="p-2.5 border-t border-slate-200 bg-slate-50/70 rounded-b-xl flex flex-wrap items-center justify-between text-[11px] text-slate-600 font-medium gap-2">
+            <div className="flex items-center gap-2.5">
+              <span>{t(`[${selectedGrade} 총원: ${stats.total}명]`, `Total: ${stats.total}`)}</span>
+              <span className="text-emerald-700 font-bold">{t(`출석 ${stats.present}`, `Present ${stats.present}`)}</span>
+              {stats.late > 0 && <span className="text-amber-700 font-bold">{t(`지각 ${stats.late}`, `Late ${stats.late}`)}</span>}
+              {stats.sick > 0 && <span className="text-indigo-700 font-bold">{t(`병결 ${stats.sick}`, `Sick ${stats.sick}`)}</span>}
+              {stats.early > 0 && <span className="text-sky-700 font-bold">{t(`조퇴 ${stats.early}`, `Early ${stats.early}`)}</span>}
+              {stats.absent > 0 && <span className="text-rose-700 font-bold">{t(`결석 ${stats.absent}`, `Absent ${stats.absent}`)}</span>}
             </div>
-            <span className="text-[11px] text-slate-400 font-mono">08:50 (Live)</span>
+            <span className="text-[10px] text-slate-400 font-mono">08:50 (Live)</span>
           </div>
         </div>
 
-        {/* Right: Today Academic Schedule (Span 1) */}
-        <div className="bg-surface-white rounded-xl border border-slate-200/90 shadow-sm flex flex-col justify-between">
+        {/* Right: Today Academic Schedule (Span 4 on lg, Span 3 on xl) */}
+        <div className="lg:col-span-4 xl:col-span-3 bg-surface-white rounded-xl border border-slate-200/90 shadow-sm flex flex-col justify-between">
           <div>
             <div className="p-4 border-b border-slate-200 flex items-center justify-between bg-slate-50/50 rounded-t-xl">
               <div className="flex items-center gap-2">

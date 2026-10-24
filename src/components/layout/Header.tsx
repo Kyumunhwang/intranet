@@ -6,7 +6,6 @@ import { usePathname } from 'next/navigation';
 import {
   LogIn,
   LogOut,
-  Search,
   Bell,
   Lock,
   CheckCircle2,
@@ -73,29 +72,8 @@ export default function Header({ currentIp = '211.104.88.24', isSchoolIp = true 
 
   return (
     <header className="fixed top-0 left-[250px] right-0 h-[64px] bg-surface-white border-b border-slate-200 z-40 flex items-center justify-between px-5 shadow-sm">
-      {/* Left: School IP Badge & Attendance Quick Buttons */}
+      {/* Left: Attendance Quick Buttons */}
       <div className="flex items-center gap-3">
-        {/* School IP Badge */}
-        <div
-          className={`flex items-center gap-1.5 px-2.5 py-1 rounded-md border text-[11px] font-medium whitespace-nowrap ${
-            isSchoolIp
-              ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
-              : 'bg-rose-50 text-rose-700 border-rose-200'
-          }`}
-        >
-          <span
-            className={`w-2 h-2 rounded-full inline-block ${
-              isSchoolIp ? 'bg-status-success animate-pulse' : 'bg-status-danger'
-            }`}
-          ></span>
-          <span className="font-semibold">
-            {isSchoolIp ? t('학교 공인 IP 인증됨', 'School IP Verified') : t('외부 접속 IP', 'External IP')}
-          </span>
-          <span className="font-mono text-[10px] opacity-80">{currentIp}</span>
-        </div>
-
-        <div className="h-4 w-[1px] bg-slate-200"></div>
-
         {/* Quick Attendance Buttons */}
         <div className="flex items-center gap-2">
           <button
@@ -141,7 +119,7 @@ export default function Header({ currentIp = '211.104.88.24', isSchoolIp = true 
         )}
       </div>
 
-      {/* Right: Language Toggle, Search, User Profile Switcher, Admin Console */}
+      {/* Right: Language Toggle, User Profile Switcher, Admin Console */}
       <div className="flex items-center gap-3">
         {/* Language Switcher */}
         <button
@@ -152,19 +130,6 @@ export default function Header({ currentIp = '211.104.88.24', isSchoolIp = true 
           <Languages className="w-3.5 h-3.5 text-blue-600" />
           <span>{lang === 'ko' ? '한국어' : 'English'}</span>
         </button>
-
-        {/* Global Search */}
-        <div className="relative flex items-center w-52">
-          <input
-            type="text"
-            placeholder={t('통합검색...', 'Search...')}
-            className="w-full h-8 pl-8 pr-10 text-[11px] bg-slate-50 border border-slate-200 rounded-lg text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-primary-container focus:bg-white transition-all font-sans"
-          />
-          <Search className="w-3.5 h-3.5 text-slate-400 absolute left-2.5" />
-          <kbd className="absolute right-2 px-1 py-0.2 rounded bg-slate-200/70 border border-slate-300 text-slate-500 text-[9px] font-mono">
-            ⌘K
-          </kbd>
-        </div>
 
         {/* User Account Switcher Dropdown (실제 계정 로그인 전환) */}
         <div className="relative">

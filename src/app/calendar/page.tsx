@@ -18,11 +18,50 @@ export default function CalendarPage() {
   const [viewMode, setViewMode] = useState<'CALENDAR' | 'CARD'>('CALENDAR');
   const [filterCategory, setFilterCategory] = useState<'ALL' | 'ACADEMIC' | 'DEPT' | 'PERSONAL'>('ALL');
 
+  // 연도 및 월 선택 상태
+  const [currentYear, setCurrentYear] = useState<number>(2026);
+  const [currentMonth, setCurrentMonth] = useState<number>(10);
+
+  const handlePrevMonth = () => {
+    if (currentMonth === 1) {
+      setCurrentYear(currentYear - 1);
+      setCurrentMonth(12);
+    } else {
+      setCurrentMonth(currentMonth - 1);
+    }
+  };
+
+  const handleNextMonth = () => {
+    if (currentMonth === 12) {
+      setCurrentYear(currentYear + 1);
+      setCurrentMonth(1);
+    } else {
+      setCurrentMonth(currentMonth + 1);
+    }
+  };
+
+  const handleToday = () => {
+    const today = new Date();
+    setCurrentYear(today.getFullYear());
+    setCurrentMonth(today.getMonth() + 1);
+  };
+
+  const yearOptions = [2024, 2025, 2026, 2027, 2028, 2029, 2030];
+  const monthOptions = Array.from({ length: 12 }, (_, i) => i + 1);
+
+  // 선택된 연월에 따른 날짜 및 시작 요일 동적 계산
+  const firstDayOfWeek = new Date(currentYear, currentMonth - 1, 1).getDay(); // 0: 일요일 ~ 6: 토요일
+  const totalDaysInMonth = new Date(currentYear, currentMonth, 0).getDate();
+  const daysInMonth = Array.from({ length: totalDaysInMonth }, (_, i) => i + 1);
+  const leadingBlanks = Array.from({ length: firstDayOfWeek }, (_, i) => i);
+
   const events = [
     {
       id: 'e1',
       title: '2026학년도 1학기 신입생 오리엔테이션',
       date: '2026-10-23',
+      year: 2026,
+      month: 10,
       day: 23,
       time: '09:00 - 12:00',
       category: 'ACADEMIC',
@@ -35,6 +74,8 @@ export default function CalendarPage() {
       id: 'e2',
       title: '중고등부 교과협의회 및 학사점검',
       date: '2026-10-23',
+      year: 2026,
+      month: 10,
       day: 23,
       time: '14:30 - 16:00',
       category: 'DEPT',
@@ -47,6 +88,8 @@ export default function CalendarPage() {
       id: 'e3',
       title: '과학 탐구보고서 심사회의',
       date: '2026-10-26',
+      year: 2026,
+      month: 10,
       day: 26,
       time: '15:00 - 17:00',
       category: 'DEPT',
@@ -59,6 +102,8 @@ export default function CalendarPage() {
       id: 'e4',
       title: '전교직원 정기 월례회의',
       date: '2026-10-30',
+      year: 2026,
+      month: 10,
       day: 30,
       time: '16:00 - 17:30',
       category: 'ACADEMIC',
@@ -69,13 +114,14 @@ export default function CalendarPage() {
     },
   ];
 
-  const filtered =
-    filterCategory === 'ALL' ? events : events.filter((e) => e.category === filterCategory);
+  const currentMonthEvents = events.filter(
+    (ev) => ev.year === currentYear && ev.month === currentMonth
+  );
 
-  // 2026년 10월: 10월 1일은 목요일 (Day 4)
-  // 31일까지 있음. 빈 날짜 4칸 + 1~31일
-  const daysInMonth = Array.from({ length: 31 }, (_, i) => i + 1);
-  const leadingBlanks = Array.from({ length: 4 }, (_, i) => i);
+  const filtered =
+    filterCategory === 'ALL'
+      ? currentMonthEvents
+      : currentMonthEvents.filter((e) => e.category === filterCategory);
 
   return (
     <div className="space-y-5">
@@ -171,24 +217,73 @@ export default function CalendarPage() {
       {viewMode === 'CALENDAR' ? (
         /* Calendar Grid View */
         <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6 space-y-4">
-          {/* Month Header */}
-          <div className="flex items-center justify-between pb-3 border-b border-slate-200">
+          {/* Month Header with Year & Month Dropdown Selectors */}
+          <div className="flex flex-wrap items-center justify-between pb-3 border-b border-slate-200 gap-3">
             <div className="flex items-center gap-3">
-              <span className="text-lg font-bold text-slate-900 font-mono">
-                2026년 10월 (October 2026)
+              <div className="flex items-center gap-2">
+                {/* Year Selector */}
+                <select
+                  aria-label="연도 선택"
+                  value={currentYear}
+                  onChange={(e) => setCurrentYear(Number(e.target.value))}
+                  className="h-8 px-2.5 bg-slate-50 border border-slate-300 rounded-lg text-slate-800 font-bold text-sm focus:bg-white focus:border-blue-500 focus:outline-none shadow-xs"
+                >
+                  {yearOptions.map((y) => (
+                    <option key={y} value={y}>
+                      {y}년
+                    </option>
+                  ))}
+                </select>
+
+                {/* Month Selector */}
+                <select
+                  aria-label="월 선택"
+                  value={currentMonth}
+                  onChange={(e) => setCurrentMonth(Number(e.target.value))}
+                  className="h-8 px-2.5 bg-slate-50 border border-slate-300 rounded-lg text-slate-800 font-bold text-sm focus:bg-white focus:border-blue-500 focus:outline-none shadow-xs"
+                >
+                  {monthOptions.map((m) => (
+                    <option key={m} value={m}>
+                      {m}월
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <span className="text-sm font-bold text-slate-900 font-mono hidden sm:inline">
+                ({new Date(currentYear, currentMonth - 1).toLocaleString('en-US', { month: 'long' })} {currentYear})
               </span>
+
               <span className="px-2 py-0.5 rounded text-[11px] font-semibold bg-blue-50 text-blue-700 border border-blue-200">
-                1학기
+                {currentMonth >= 3 && currentMonth <= 8 ? '1학기' : '2학기 / 동계'}
               </span>
             </div>
-            <div className="flex items-center gap-1 text-xs">
-              <button aria-label="이전 달" className="p-1 rounded hover:bg-slate-100 text-slate-600">
+
+            {/* Prev, Next, Today Buttons */}
+            <div className="flex items-center gap-1.5 text-xs">
+              <button
+                type="button"
+                onClick={handlePrevMonth}
+                aria-label="이전 달"
+                className="h-8 px-2.5 rounded-lg border border-slate-200 hover:bg-slate-100 text-slate-600 flex items-center gap-1 font-medium transition-colors"
+              >
                 <ChevronLeft className="w-4 h-4" />
+                <span className="hidden sm:inline">이전 달</span>
               </button>
-              <button className="px-2.5 py-1 font-semibold rounded bg-slate-100 text-slate-700">
+              <button
+                type="button"
+                onClick={handleToday}
+                className="h-8 px-3 font-bold rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors"
+              >
                 {t('오늘', 'Today')}
               </button>
-              <button aria-label="다음 달" className="p-1 rounded hover:bg-slate-100 text-slate-600">
+              <button
+                type="button"
+                onClick={handleNextMonth}
+                aria-label="다음 달"
+                className="h-8 px-2.5 rounded-lg border border-slate-200 hover:bg-slate-100 text-slate-600 flex items-center gap-1 font-medium transition-colors"
+              >
+                <span className="hidden sm:inline">다음 달</span>
                 <ChevronRight className="w-4 h-4" />
               </button>
             </div>
@@ -218,7 +313,12 @@ export default function CalendarPage() {
             {/* Days in Month */}
             {daysInMonth.map((dayNum) => {
               const dayEvents = filtered.filter((ev) => ev.day === dayNum);
-              const isToday = dayNum === 23;
+              const now = new Date();
+              const isToday =
+                (currentYear === now.getFullYear() &&
+                  currentMonth === now.getMonth() + 1 &&
+                  dayNum === now.getDate()) ||
+                (currentYear === 2026 && currentMonth === 10 && dayNum === 23);
 
               return (
                 <div
