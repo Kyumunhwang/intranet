@@ -190,11 +190,11 @@ function SidebarNav() {
     {
       id: 'leave-manage',
       tabKey: 'leave-manage',
-      labelKo: '[연차관리]',
-      labelEn: 'Leave Master',
+      labelKo: '[연차관리] (최고관리자)',
+      labelEn: 'Leave Master (Super)',
       icon: Award,
       subItems: [
-        { id: 'lm-adjust', labelKo: '연차조정 (가감)', labelEn: 'Leave Adjustment', subParam: 'adjust', icon: Award },
+        { id: 'lm-adjust', labelKo: '최고관리자 연차조정 (가감)', labelEn: 'Leave Adjustment', subParam: 'adjust', icon: Award },
         { id: 'lm-batch', labelKo: '연차일괄등록 (+15일)', labelEn: 'Batch Leave Grant', subParam: 'batch', icon: Plus },
       ],
     },

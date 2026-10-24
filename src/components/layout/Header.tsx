@@ -67,7 +67,8 @@ export default function Header({ currentIp = '211.104.88.24', isSchoolIp = true 
     { role: 'TEACHER', label: '이재원 (Jay Lee)', desc: '정규교사 / M8 담임' },
     { role: 'DEPT_HEAD', label: '황규문 (Kyumun Hwang)', desc: '교감 / 1차 결재권자' },
     { role: 'PRINCIPAL', label: '김바울 (Paul Kim)', desc: '교장 / 최종 결재권자' },
-    { role: 'ADMIN', label: '하지현 (Jihyun Ha)', desc: '행정실 / 시스템 관리자' },
+    { role: 'ADMIN', label: '이환희 (Hwanhee Lee)', desc: '재정팀 / 일반관리자' },
+    { role: 'SUPER_ADMIN', label: '황규문 (Kyumun Hwang)', desc: '교감 / 최고관리자 (Super Admin)' },
   ];
 
   return (
@@ -153,7 +154,9 @@ export default function Header({ currentIp = '211.104.88.24', isSchoolIp = true 
                     ? '1차결재자'
                     : currentUser.role === 'PRINCIPAL'
                     ? '최종결재자'
-                    : '관리자'}
+                    : currentUser.role === 'SUPER_ADMIN'
+                    ? '최고관리자'
+                    : '일반관리자'}
                 </span>
               </div>
               <span className="text-[10px] text-slate-400 leading-tight mt-0.5">

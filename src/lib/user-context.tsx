@@ -4,7 +4,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import { Profile } from './types';
 import rawProfilesData from '../../data/profiles.json';
 
-export type UserRole = 'TEACHER' | 'DEPT_HEAD' | 'PRINCIPAL' | 'ADMIN';
+export type UserRole = 'TEACHER' | 'DEPT_HEAD' | 'PRINCIPAL' | 'ADMIN' | 'SUPER_ADMIN';
 
 export interface UserProfile {
   id: string;
@@ -53,9 +53,19 @@ export const USERS: Record<UserRole, UserProfile> = {
     homeroom_grade: '',
   },
   ADMIN: {
+    id: 'u6',
+    name: '이환희',
+    role: 'ADMIN',
+    title: '재정팀장 / 일반관리자',
+    dept: '행정',
+    email: 'lhh7192@gmail.com',
+    employee_no: 'LIS-2026-006',
+    homeroom_grade: '',
+  },
+  SUPER_ADMIN: {
     id: 'u5',
     name: '황규문',
-    role: 'ADMIN',
+    role: 'SUPER_ADMIN',
     title: '교감 / 총괄관리자 (최고관리자)',
     dept: '중고등',
     email: 'kyumun.hwang@gmail.com',
@@ -67,12 +77,14 @@ export const USERS: Record<UserRole, UserProfile> = {
 // Profile 객체를 UserProfile로 변환
 export function profileToUserProfile(profile: Profile): UserProfile {
   let role: UserRole = 'TEACHER';
-  if (profile.primary_position_id === 'p1') {
+  if (profile.primary_role_id === 'r1') {
+    role = 'SUPER_ADMIN';
+  } else if (profile.primary_role_id === 'r2') {
+    role = 'ADMIN';
+  } else if (profile.primary_position_id === 'p1') {
     role = 'PRINCIPAL';
   } else if (profile.primary_position_id === 'p2') {
     role = 'DEPT_HEAD';
-  } else if (profile.primary_role_id === 'r1' || profile.primary_role_id === 'r2') {
-    role = 'ADMIN';
   }
 
   let deptName = '중고등';

@@ -1,5 +1,25 @@
 [
   {
+    "id": "log_1792804249186_oxaq",
+    "actor_id": "u8",
+    "actor_email": "kyumun.hwang@gmail.com",
+    "actor_name": "황규문",
+    "action_category": "LEAVE_ADJUSTMENT",
+    "action_detail": "[최고관리자 연차 차감] 대상: 이재원(LIS-2026-008), 변동: -1일 (16일 → 15일), 사유: 정기 휴가 사용에 따른 연차 공제, 조정일자: 2026-10-24, 처리 최고관리자: 황규문",
+    "client_ip": "211.104.88.24",
+    "created_at": "2026-10-24T01:10:49.186Z"
+  },
+  {
+    "id": "log_1792804242143_5d0h",
+    "actor_id": "u8",
+    "actor_email": "kyumun.hwang@gmail.com",
+    "actor_name": "황규문",
+    "action_category": "LEAVE_ADJUSTMENT",
+    "action_detail": "[최고관리자 연차 가산] 대상: 이재원(LIS-2026-008), 변동: +1일 (15일 → 16일), 사유: 2026 하반기 신입생 캠프 지도 보상 연차 가산, 조정일자: 2026-10-24, 처리 최고관리자: 황규문",
+    "client_ip": "211.104.88.24",
+    "created_at": "2026-10-24T01:10:42.143Z"
+  },
+  {
     "id": "log_1792801665989_sipg",
     "actor_id": "u20",
     "actor_email": "lee.michelleye@gmail.com",

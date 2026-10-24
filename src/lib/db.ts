@@ -141,7 +141,7 @@ export function logAuditAction(params: {
   actor_id?: string;
   actor_email?: string;
   actor_name?: string;
-  action_category: 'AUTH_LOGIN' | 'ATTENDANCE_CLICK' | 'APPROVAL_ACT' | 'ADMIN_CHANGE' | 'PASSWORD_RESET' | 'DATA_DELETE';
+  action_category: 'AUTH_LOGIN' | 'ATTENDANCE_CLICK' | 'APPROVAL_ACT' | 'ADMIN_CHANGE' | 'PASSWORD_RESET' | 'DATA_DELETE' | 'LEAVE_ADJUSTMENT';
   action_detail: string;
   client_ip: string;
 }): AuditLog {
@@ -668,10 +668,12 @@ export function saveProfile(profile: Partial<Profile>): Profile {
       employee_no: `LIS-2026-${String(profiles.length + 1).padStart(3, '0')}`,
       email: profile.email || 'teacher@lighthouse.org',
       name_kr: profile.name_kr || '신규교사',
+      name_en: profile.name_en || 'New Staff',
       employment_type: profile.employment_type || 'REGULAR',
       primary_dept_id: profile.primary_dept_id || 'd5',
       primary_position_id: profile.primary_position_id || 'p8',
       primary_role_id: profile.primary_role_id || 'r4',
+      subject: profile.subject || '일반교과',
       employment_status: 'ACTIVE',
       remaining_leave_days: 15.0,
       must_change_password: true,
@@ -682,6 +684,46 @@ export function saveProfile(profile: Partial<Profile>): Profile {
   }
   writeJson('profiles.json', profiles);
   return updated;
+}
+
+export function adjustLeaveBySuperAdmin(params: {
+  staffId: string;
+  adjustType: 'ADD' | 'DEDUCT';
+  amount: number;
+  reasonMemo: string;
+  adjustedDate: string;
+  superAdminName: string;
+  superAdminEmail: string;
+  clientIp?: string;
+}): { success: boolean; message: string; updatedStaff?: Profile; auditLog?: AuditLog } {
+  const profiles = getProfiles();
+  const staff = profiles.find((p) => p.id === params.staffId);
+  if (!staff) {
+    return { success: false, message: '해당 교직원을 찾을 수 없습니다.' };
+  }
+
+  const prevDays = Number(staff.remaining_leave_days || 0);
+  const diff = params.adjustType === 'ADD' ? params.amount : -params.amount;
+  const newDays = Math.max(0, Number((prevDays + diff).toFixed(1)));
+
+  staff.remaining_leave_days = newDays;
+  writeJson('profiles.json', profiles);
+
+  const sign = params.adjustType === 'ADD' ? `+${params.amount}` : `-${params.amount}`;
+  const log = logAuditAction({
+    actor_name: params.superAdminName,
+    actor_email: params.superAdminEmail,
+    action_category: 'LEAVE_ADJUSTMENT',
+    action_detail: `[최고관리자 연차 ${params.adjustType === 'ADD' ? '가산' : '차감'}] 대상: ${staff.name_kr}(${staff.employee_no}), 변동: ${sign}일 (${prevDays}일 → ${newDays}일), 사유: ${params.reasonMemo}, 조정일자: ${params.adjustedDate}, 처리 최고관리자: ${params.superAdminName}`,
+    client_ip: params.clientIp || '211.104.88.24',
+  });
+
+  return {
+    success: true,
+    message: `[${staff.name_kr}] 교직원의 연차가 ${sign}일 조정(확정)되었습니다. (잔여: ${newDays}일)`,
+    updatedStaff: staff,
+    auditLog: log,
+  };
 }
 
 // -------------------------------------------------------------

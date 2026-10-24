@@ -241,7 +241,7 @@ export interface AuditLog {
   actor_id?: string;
   actor_email?: string;
   actor_name?: string;
-  action_category: 'AUTH_LOGIN' | 'ATTENDANCE_CLICK' | 'APPROVAL_ACT' | 'ADMIN_CHANGE' | 'PASSWORD_RESET' | 'DATA_DELETE';
+  action_category: 'AUTH_LOGIN' | 'ATTENDANCE_CLICK' | 'APPROVAL_ACT' | 'ADMIN_CHANGE' | 'PASSWORD_RESET' | 'DATA_DELETE' | 'LEAVE_ADJUSTMENT';
   action_detail: string;
   client_ip: string;
   created_at: string;
