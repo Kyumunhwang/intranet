@@ -314,15 +314,17 @@ export default function Sidebar() {
   return (
     <aside className="fixed left-0 top-0 h-full w-[260px] bg-sidebar-bg z-50 flex flex-col justify-between border-r border-slate-800 text-slate-300 select-none shadow-xl">
       <div className="flex flex-col flex-1 min-h-0">
-        {/* 상단 학교 로고: logo1.png 사이즈를 꽉차게 배치 */}
-        <div className="h-[84px] px-3 py-2 flex items-center justify-center border-b border-slate-800/80 bg-slate-950/60">
-          <Link href="/" className="w-full h-full flex items-center justify-center transition-transform hover:scale-[1.02]">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/logo/logo1.png"
-              alt="등대글로벌스쿨 학교 로고"
-              className="w-full h-full max-h-[72px] object-contain drop-shadow-md"
-            />
+        {/* 상단 학교 로고: 원형 모형 + 크기는 작게 (Lead Architect 요청 반영) */}
+        <div className="h-[68px] px-3 py-2 flex items-center justify-center border-b border-slate-800/80 bg-slate-950/60">
+          <Link href="/" className="flex items-center justify-center transition-transform hover:scale-105" title="등대글로벌스쿨 인트라넷 홈">
+            <div className="w-12 h-12 rounded-full bg-white p-1 flex items-center justify-center border-2 border-slate-700/80 shadow-md ring-2 ring-blue-500/20 overflow-hidden">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/logo/logo1.png"
+                alt="등대글로벌스쿨 학교 로고"
+                className="w-full h-full object-contain rounded-full"
+              />
+            </div>
           </Link>
         </div>
 
@@ -334,33 +336,23 @@ export default function Sidebar() {
         </div>
       </div>
 
-      {/* 하단 프로필 섹션: 등대교육공동체 원형 심볼 + 등대글로벌스쿨 텍스트 대신 등대교육공동체 로고 배치 */}
-      <div className="p-3 border-t border-slate-800/80 bg-slate-950/50 flex items-center justify-between">
-        <div className="flex items-center gap-2.5 overflow-hidden flex-1 min-w-0">
-          <div className="w-8 h-8 rounded-full bg-white p-1 flex items-center justify-center shrink-0 border border-slate-600 shadow-sm">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/logo/lighthouse_logo.png"
-              alt="등대교육공동체 심볼 로고"
-              className="w-full h-full object-contain"
-            />
-          </div>
-          <div className="flex flex-col min-w-0 flex-1 justify-center">
-            {/* 등대글로벌스쿨 글씨 대신에 등대교육공동체 로고 (보색 대비로 어두운 배경에서 선명하게 노출) */}
-            <div className="flex items-center py-0.5">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/logo/lighthouse_community_white.png"
-                alt="등대교육공동체"
-                className="h-5 w-auto max-w-[145px] object-contain drop-shadow-sm filter brightness-110"
-              />
-            </div>
-            <span className="text-[9px] text-slate-400 font-mono tracking-tight">
-              {isAdminMode ? 'Tier-1 Admin Mode' : '2026 Academic Term'}
-            </span>
+      {/* 하단 섹션: 네비게이션바 로고 80% 꽉차게 배치 (등대교육공동체 로고) */}
+      <div className="p-3 border-t border-slate-800/80 bg-slate-950/70 flex flex-col items-center justify-center gap-2">
+        <div className="w-[80%] flex items-center justify-center py-0.5">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/logo/lighthouse_community_white.png"
+            alt="등대교육공동체 로고"
+            className="w-full h-auto max-h-[46px] object-contain drop-shadow-md filter brightness-110 transition-transform hover:scale-105"
+          />
+        </div>
+        <div className="w-full flex items-center justify-between px-2 text-[10px] text-slate-400 font-mono border-t border-slate-800/50 pt-1.5">
+          <span>{isAdminMode ? '🛡️ Tier-1 Admin' : '2026 Academic Term'}</span>
+          <div className="flex items-center gap-1.5">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" title="System Online"></span>
+            <span className="text-[9px] text-emerald-400 font-semibold">ONLINE</span>
           </div>
         </div>
-        <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0 ml-1" title="System Online"></div>
       </div>
     </aside>
   );
